@@ -7,5 +7,8 @@
     <string name="title_activity_status_list">StatusList</string>
     <string name="txtHeaderDelays">Delays</string>
     <string name="txtHeaderSecurity">Security</string>
+    <string name="txtWeather"></string>
+    <string name="txtAirportCode"></string>
+    <string name="txtHeaderWeather">Weather</string>
 
 </resources>
