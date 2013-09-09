@@ -10,5 +10,11 @@
     <string name="txtWeather"></string>
     <string name="txtAirportCode"></string>
     <string name="txtHeaderWeather">Weather</string>
+    <string name="txtTransitAnnotation">Disclaimer about transit times</string>
+    <string name="txtSecurityDetailsButton">Security details</string>
+    <string name="txtHeaderTransit1">Driving</string>
+    <string name="txtTransitTime1">25 min</string>
+    <string name="txtHeaderTransit2">Transit</string>
+    <string name="txtTransitTime2">34 min</string>
 
 </resources>
