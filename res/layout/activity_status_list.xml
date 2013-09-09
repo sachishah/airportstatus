@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".StatusListActivity" >
     
-    <LinearLayout
+   <LinearLayout
         android:id="@+id/layoutAirportName"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txtAirportCode" />
+
     </LinearLayout>
 
     <TextView
@@ -39,7 +40,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tvHeaderDelays" >
     </ListView>
-    
+
     <TextView
         android:id="@+id/tvHeaderSecurity"
         android:layout_width="wrap_content"
@@ -74,5 +75,61 @@
         android:layout_below="@+id/tvHeaderWeather"
         android:text="@string/txtWeather"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <RelativeLayout
+        android:id="@+id/layoutTransitTimes"
+        android:layout_below="@id/tvWeather"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+        <LinearLayout
+            android:id="@+id/layoutTransit1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+            android:layout_alignParentLeft="true">
+            <TextView
+                android:id="@+id/txtHeaderTransit1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="Driving" />
+            <TextView
+				android:id="@+id/txtTransitValue1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="25min" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/layoutTransit2"
+            android:layout_below="@id/layoutTransit1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true" >
+            <TextView
+                android:id="@+id/txtHeaderTransit2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="Transit" />
+            <TextView
+                android:id="@+id/txtTransitValue2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="4min" />
+        </LinearLayout>
+        <TextView
+            	android:id="@+id/txtTransitAnnotation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_below="@id/layoutTransit2"
+                android:text="Disclaimer about transit times" />
+        </RelativeLayout>
 
 </RelativeLayout>
