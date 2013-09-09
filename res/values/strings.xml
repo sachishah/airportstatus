@@ -16,5 +16,6 @@
     <string name="txtTransitTime1">25 min</string>
     <string name="txtHeaderTransit2">Transit</string>
     <string name="txtTransitTime2">34 min</string>
+    <string name="title_activity_security_wait_time">SecurityWaitTimeActivity</string>
 
 </resources>
