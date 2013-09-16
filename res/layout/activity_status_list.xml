@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".StatusListActivity" >
     
-    <LinearLayout
+   <LinearLayout
         android:id="@+id/layoutAirportName"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txtAirportCode" />
+
     </LinearLayout>
 
     <TextView
@@ -39,7 +40,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tvHeaderDelays" >
     </ListView>
-    
+
     <TextView
         android:id="@+id/tvHeaderSecurity"
         android:layout_width="wrap_content"
@@ -53,9 +54,9 @@
         android:id="@+id/btnSecurityWaitTimes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvHeaderSecurity"
         android:layout_alignParentLeft="true"
-        android:text="Button" />
+        android:layout_below="@id/tvHeaderSecurity"
+        android:text="@string/txtSecurityDetailsButton" />
     
     <TextView
         android:id="@+id/tvHeaderWeather"
@@ -74,5 +75,68 @@
         android:layout_below="@+id/tvHeaderWeather"
         android:text="@string/txtWeather"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <RelativeLayout
+        android:id="@+id/layoutTransitTimes"
+        android:layout_below="@id/tvWeather"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+        <LinearLayout
+            android:id="@+id/layoutTransit1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+            android:layout_alignParentLeft="true">
+
+            <TextView
+                android:id="@+id/tvHeaderTransit1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/txtHeaderTransit1" />
+
+            <TextView
+                android:id="@+id/tvTransitValue1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/txtTransitTime1" />
+
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/layoutTransit2"
+            android:layout_below="@id/layoutTransit1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true" >
+
+            <TextView
+                android:id="@+id/tvHeaderTransit2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/txtHeaderTransit2" />
+
+            <TextView
+                android:id="@+id/tvTransitValue2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/txtTransitTime2" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTransitAnnotation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layoutTransit2"
+            android:layout_gravity="center_vertical"
+            android:text="@string/txtTransitAnnotation" />
+
+        </RelativeLayout>
 
 </RelativeLayout>
