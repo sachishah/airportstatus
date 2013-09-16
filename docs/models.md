@@ -63,7 +63,12 @@ AirportStatusModel
 
 TSA
 ===
-
+Docs
+----
+https://www.dhs.gov/mytsa-api-documentation
 
 Google Directions
 =================
+Docs
+----
+https://developers.google.com/maps/documentation/directions/
