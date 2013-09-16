@@ -10,6 +10,7 @@ public class StatusListActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_status_list);
+		String code = getIntent().getStringExtra("airport_code");
 	}
 
 	@Override
