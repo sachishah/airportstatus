@@ -4,41 +4,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AirportStatus extends BaseModel {
-	public boolean getDelay() {
-        return getBoolean("delay");
+	
+	public String getName() {
+		return getString("name");
+	}
+	
+	public String getAvgDelay() {
+    	return getStatusValue("avgDelay");
     }
-
+	
+    public String getTemp() {
+    	return getWeatherValue("temp");
+    }
+	
+	public String getWeather() {
+    	return getWeatherValue("weather");
+    }
+	
     public String getIATA() {
         return getString("IATA");
     }
 
-    public String getName() {
-        return getString("name");
+	public boolean getDelay() {
+        return getBoolean("delay");
     }
-    
-    public String getWeather() {
-    	return getWeatherValue("weather");
-    }
-    
-    public String getUpdateTime() {
-    	try {
-			return getWeatherObject().getJSONObject("meta").getString("updated");
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return "";
-		}
-    }
-    
-    public String getTemp() {
-    	return getWeatherValue("temp");
-    }
-    
-    public String getWind() {
-    	return getWeatherValue("wind");
-    }
-    
-    public String getReason() {
-    	return getStatusValue("reason");
+
+    public String getDelayType() {
+    	return getStatusValue("type");
     }
     
     public String getClosureBegin() {
@@ -49,12 +41,16 @@ public class AirportStatus extends BaseModel {
     	return getStatusValue("closureEnd");
     }
     
-    public String getAvgDelay() {
-    	return getStatusValue("avgDelay");
+    public String getEndTime() {
+    	return getStatusValue("endTime");
     }
     
-    public String getType() {
-    	return getStatusValue("type");
+    public String getMaxDelay() {
+    	return getStatusValue("maxDelay");
+    }
+    
+    public String getMinDelay() {
+    	return getStatusValue("minDelay");
     }
 
     public static AirportStatus fromJson(JSONObject json) {
