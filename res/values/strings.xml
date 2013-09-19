@@ -5,13 +5,15 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_status_list">StatusList</string>
+    <string name="airportCodeHint">Enter an airport code or city...</string>
     <string name="txtHeaderDelays">Delays</string>
     <string name="txtHeaderSecurity">Security</string>
     <string name="txtWeather"></string>
     <string name="txtAirportCode"></string>
     <string name="txtHeaderWeather">Weather</string>
-    <string name="txtTransitAnnotation">Disclaimer about transit times</string>
-    <string name="txtSecurityDetailsButton">Security details</string>
+    <string name="txtTransitAnnotation">[Travel times are retrieved from Google Maps]</string>
+    <string name="txtSecurityDetailsButton">Screening Wait Times</string>
+    <string name="txtHeaderTransit">Travel Time</string>
     <string name="txtHeaderTransit1">Driving</string>
     <string name="txtTransitTime1">25 min</string>
     <string name="txtHeaderTransit2">Transit</string>

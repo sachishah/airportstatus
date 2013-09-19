@@ -3,6 +3,8 @@
     package="com.example.airportstatus"
     android:versionCode="1"
     android:versionName="1.0" >
+    
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -25,6 +27,10 @@
         <activity
             android:name="com.example.airportstatus.SecurityWaitTimeActivity"
             android:label="@string/title_activity_security_wait_time" >
+        </activity>
+        <activity
+            android:name="com.example.airportstatus.StatusListActivity"
+            android:label="@string/title_activity_status_list" >
         </activity>
     </application>
 

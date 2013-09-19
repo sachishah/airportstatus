@@ -10,8 +10,9 @@
 
     <AutoCompleteTextView
         android:id="@+id/tvAirportCode"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/airportCodeHint"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp" />
@@ -20,9 +21,9 @@
         android:id="@+id/btnGo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="90dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="140dp"
         android:onClick="onClick"
         android:text="@string/go" />
 
