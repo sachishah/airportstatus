@@ -1,19 +1,19 @@
 package com.example.airportstatus;
 
-import java.util.ArrayList;
-
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.airportstatus.models.AirportStatus;
 import com.loopj.android.http.AsyncHttpClient;
@@ -21,23 +21,24 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class StatusListActivity extends Activity {
 	
-	TextView airportCode;
+	String code;
 	TextView weather;
-	ListView delays;
+	TextView delays;
 	Button securityWaitTimes;
 	AirportStatus airportStatus;
-	ArrayList<String> delayList = new ArrayList<String>();
-	ArrayAdapter<String> adapter;
 
+	@SuppressLint("DefaultLocale")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_status_list);
+		code = getIntent().getStringExtra("airport_code").toUpperCase();
+		setupActionBar();
 		setupViews();
-		String code = getIntent().getStringExtra("airport_code");
-		airportCode.setText(code);
-		//adapter
-		loadResults(code);
+		if (isCodeValid()) 
+			loadResults();
+		else
+			Toast.makeText(this, "Airport code not found", Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -51,39 +52,65 @@ public class StatusListActivity extends Activity {
 		startActivity(new Intent(this, SecurityWaitTimeActivity.class));
 	}
 	
+	private boolean isCodeValid() {
+		return true;
+	}
+	
+	@SuppressLint("NewApi")
+	private void setupActionBar() {
+		ActionBar bar = getActionBar();
+		bar.setTitle("Airport Status: " + code);
+		bar.setDisplayHomeAsUpEnabled(true);
+	}
+	
+	@SuppressLint("InlinedApi")
 	private void setupViews() {
-		airportCode = (TextView) findViewById(R.id.tvAirportCode);
 		weather = (TextView) findViewById(R.id.tvWeather);
 		securityWaitTimes = (Button) findViewById(R.id.btnSecurityWaitTimes);
-		delays = (ListView) findViewById(R.id.lvDelays);
-
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, delayList);
-		delays.setAdapter(adapter);
+		securityWaitTimes.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+		delays = (TextView) findViewById(R.id.tvDelays);
  	}
 	
-	private void loadResults(String code) {
+	private void loadResults() {
 		AsyncHttpClient client = new AsyncHttpClient();
 	    client.get("http://services.faa.gov/airport/status/" + Uri.encode(code) + "?format=application/json", 
 	    			new JsonHttpResponseHandler() {
 	   		@Override
 	   		public void onSuccess(JSONObject response) {
 	    		airportStatus = AirportStatus.fromJson(response);
-	    		weather.setText(airportStatus.getWeather());
+	    		weather.setText(airportStatus.getWeather() + " (visibility: " + airportStatus.getVisibility() + ")");
 	    		if(!airportStatus.getDelay())
-	    			delayList.add("None reported");
+	    			delays.setText("None reported");
 	    		else {
-	    			delayList.add("Average Delay: " + airportStatus.getAvgDelay());
-	    			delayList.add("Delay Type: " + airportStatus.getDelayType());
+	    			String result = "Average Delay: " + airportStatus.getAvgDelay();
+	    			result += "\nDelay Type: " + airportStatus.getDelayType();
 	    			String closureBegin = airportStatus.getClosureBegin();
 	    			if (closureBegin != "") {
-	    				delayList.add("Closure Begin Time: " + closureBegin);
-	    				delayList.add("Closure End Time: " + airportStatus.getClosureEnd());
+	    				result += "\nClosure Begin Time: " + closureBegin;
+	    				result += "\nClosure End Time: " + airportStatus.getClosureEnd();
 	    			} else {
-	    				delayList.add("End Time: " + airportStatus.getEndTime());
+	    				result += "\nEnd Time: " + airportStatus.getEndTime();
 	    			}
+	    			delays.setText(result);
 	    		}
 	   		}
+	   		
+	   		@Override
+			public void onFailure(Throwable e, JSONObject obj) {
+	   			Toast.makeText(getParent(), obj.toString(), Toast.LENGTH_SHORT).show();
+			}
 	   	});
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case android.R.id.home:
+	    	finish();
+	        return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
 	}
 
 }

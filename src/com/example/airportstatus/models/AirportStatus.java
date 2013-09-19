@@ -12,15 +12,15 @@ public class AirportStatus extends BaseModel {
 	public String getAvgDelay() {
     	return getStatusValue("avgDelay");
     }
-	
-    public String getTemp() {
-    	return getWeatherValue("temp");
-    }
-	
+
 	public String getWeather() {
-    	return getWeatherValue("weather");
+    	return getWeatherValue();
     }
 	
+	public String getVisibility() {
+		return getVisibilityValue();
+	}
+
     public String getIATA() {
         return getString("IATA");
     }
@@ -69,15 +69,24 @@ public class AirportStatus extends BaseModel {
     	return getJSON("weather");
     }
     
-    private String getWeatherValue(String name) {
+    private String getWeatherValue() {
     	try {
-    		return getWeatherObject().getString(name);
+    		return getWeatherObject().getString("weather");
     	} catch (JSONException e) {
 			e.printStackTrace();
 			return "";
 		}
     }
     
+    private String getVisibilityValue() {
+    	try {
+    		return getWeatherObject().getString("visibility");
+    	} catch (JSONException e) {
+			e.printStackTrace();
+			return "";
+		}
+    }
+
     private String getStatusValue(String name) {
     	try {
     		return getJSON("status").getString(name);
