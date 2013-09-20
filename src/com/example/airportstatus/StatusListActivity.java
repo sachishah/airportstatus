@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.airportstatus.models.AirportStatus;
+import com.example.airportstatus.models.TravelTimeEstimate;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -24,6 +25,7 @@ public class StatusListActivity extends Activity {
 	String code;
 	TextView weather;
 	TextView delays;
+	TextView drivingTimeEstimate, transitTimeEstimate;
 	Button securityWaitTimes;
 	AirportStatus airportStatus;
 
@@ -69,6 +71,8 @@ public class StatusListActivity extends Activity {
 		securityWaitTimes = (Button) findViewById(R.id.btnSecurityWaitTimes);
 		securityWaitTimes.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
 		delays = (TextView) findViewById(R.id.tvDelays);
+		drivingTimeEstimate = (TextView) findViewById(R.id.tvTransitValue1);
+		transitTimeEstimate = (TextView) findViewById(R.id.tvTransitValue2);
  	}
 	
 	private void loadResults() {
@@ -92,6 +96,9 @@ public class StatusListActivity extends Activity {
 	    				result += "\nEnd Time: " + airportStatus.getEndTime();
 	    			}
 	    			delays.setText(result);
+	    			
+	    			drivingTimeEstimate.setText(getDrivingTimeEstimate());
+	    			transitTimeEstimate.setText(getTransitTimeEstimate());
 	    		}
 	   		}
 	   		
@@ -111,6 +118,14 @@ public class StatusListActivity extends Activity {
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
+	}
+	
+	private String getDrivingTimeEstimate() {
+		return TravelTimeEstimate.getDrivingTime();
+	}
+	
+	private String getTransitTimeEstimate() {
+		return TravelTimeEstimate.getTransitTime();
 	}
 
 }
