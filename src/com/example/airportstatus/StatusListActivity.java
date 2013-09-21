@@ -1,5 +1,6 @@
 package com.example.airportstatus;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
@@ -8,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -97,8 +99,8 @@ public class StatusListActivity extends Activity {
 	    			}
 	    			delays.setText(result);
 	    			
-	    			drivingTimeEstimate.setText(getDrivingTimeEstimate());
-	    			transitTimeEstimate.setText(getTransitTimeEstimate());
+	    			
+	    			
 	    		}
 	   		}
 	   		
@@ -107,6 +109,20 @@ public class StatusListActivity extends Activity {
 	   			Toast.makeText(getParent(), obj.toString(), Toast.LENGTH_SHORT).show();
 			}
 	   	});
+	    
+	    getDrivingTimeEstimate(code, new JsonHttpResponseHandler() {
+	    	@Override
+	    	public void onSuccess(JSONObject response) {
+	    		int totalTripMins = TravelTimeEstimate.parseDirections(response);
+	    		drivingTimeEstimate.setText(TravelTimeEstimate.getFormattedDuration(totalTripMins));
+	    	}
+	    	
+	    	@Override
+	    	public void onFailure(Throwable error) {
+	    		Toast.makeText(getBaseContext(), "Directions don't work", Toast.LENGTH_SHORT).show();
+	    	}
+			
+		});
 	}
 	
 	@Override
@@ -120,12 +136,7 @@ public class StatusListActivity extends Activity {
 	    }
 	}
 	
-	private String getDrivingTimeEstimate() {
-		return TravelTimeEstimate.getDrivingTime();
+	private void getDrivingTimeEstimate(String destination, JsonHttpResponseHandler handler) {
+		TravelTimeEstimate.getDrivingTime(destination, handler);
 	}
-	
-	private String getTransitTimeEstimate() {
-		return TravelTimeEstimate.getTransitTime();
-	}
-
 }
