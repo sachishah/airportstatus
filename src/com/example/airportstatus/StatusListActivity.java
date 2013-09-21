@@ -112,11 +112,25 @@ public class StatusListActivity extends Activity {
 			}
 	   	});
 	    
-	    getDrivingTimeEstimate(getCurrentLocation().toString(), code, new JsonHttpResponseHandler() {
+	    AirportStatusLocation now = getCurrentLocation();
+	    getDrivingTimeEstimate(now.toString(), code, new JsonHttpResponseHandler() {
 	    	@Override
 	    	public void onSuccess(JSONObject response) {
 	    		int totalTripMins = TravelTimeEstimate.parseDirections(response);
 	    		drivingTimeEstimate.setText(TravelTimeEstimate.getFormattedDuration(totalTripMins));
+	    	}
+	    	
+	    	@Override
+	    	public void onFailure(Throwable error) {
+	    		Toast.makeText(getBaseContext(), "Directions don't work", Toast.LENGTH_SHORT).show();
+	    	}
+		});
+	    
+	    getTransitTimeEstimate(now.toString(), code, new JsonHttpResponseHandler() {
+	    	@Override
+	    	public void onSuccess(JSONObject response) {
+	    		int totalTripMins = TravelTimeEstimate.parseDirections(response);
+	    		transitTimeEstimate.setText(TravelTimeEstimate.getFormattedDuration(totalTripMins));
 	    	}
 	    	
 	    	@Override
@@ -161,5 +175,9 @@ public class StatusListActivity extends Activity {
 	
 	private void getDrivingTimeEstimate(String origin, String destination, JsonHttpResponseHandler handler) {
 		TravelTimeEstimate.getDrivingTime(origin, destination, handler);
+	}
+	
+	private void getTransitTimeEstimate(String origin, String destination, JsonHttpResponseHandler handler) {
+		TravelTimeEstimate.getTransitTime(origin, destination, handler);
 	}
 }
