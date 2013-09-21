@@ -1,10 +1,10 @@
 package com.example.airportstatus.models;
 
-public class Location extends BaseModel {
+public class AirportStatusLocation extends BaseModel {
 	private double latitude;
 	private double longitude;
 	
-	public Location(double latitude, double longitude) {
+	public AirportStatusLocation(double latitude, double longitude) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}

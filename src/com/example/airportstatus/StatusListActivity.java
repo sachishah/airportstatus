@@ -1,12 +1,15 @@
 package com.example.airportstatus;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.airportstatus.models.AirportStatus;
+import com.example.airportstatus.models.AirportStatusLocation;
 import com.example.airportstatus.models.TravelTimeEstimate;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -98,9 +102,7 @@ public class StatusListActivity extends Activity {
 	    				result += "\nEnd Time: " + airportStatus.getEndTime();
 	    			}
 	    			delays.setText(result);
-	    			
-	    			
-	    			
+	    		
 	    		}
 	   		}
 	   		
@@ -110,7 +112,7 @@ public class StatusListActivity extends Activity {
 			}
 	   	});
 	    
-	    getDrivingTimeEstimate(code, new JsonHttpResponseHandler() {
+	    getDrivingTimeEstimate(getCurrentLocation().toString(), code, new JsonHttpResponseHandler() {
 	    	@Override
 	    	public void onSuccess(JSONObject response) {
 	    		int totalTripMins = TravelTimeEstimate.parseDirections(response);
@@ -121,7 +123,6 @@ public class StatusListActivity extends Activity {
 	    	public void onFailure(Throwable error) {
 	    		Toast.makeText(getBaseContext(), "Directions don't work", Toast.LENGTH_SHORT).show();
 	    	}
-			
 		});
 	}
 	
@@ -136,7 +137,29 @@ public class StatusListActivity extends Activity {
 	    }
 	}
 	
-	private void getDrivingTimeEstimate(String destination, JsonHttpResponseHandler handler) {
-		TravelTimeEstimate.getDrivingTime(destination, handler);
+	private AirportStatusLocation getCurrentLocation() {
+		try {
+			SharedPreferences settings = getSharedPreferences(AirportStatusActivity.PREFS_NAME, 0);
+			double lat = (double) settings.getFloat(AirportStatusActivity.PREFS_LATITUDE, -1);
+			double lon = (double) settings.getFloat(AirportStatusActivity.PREFS_LONGITUDE, -1);
+			if (lat < 0 || lon < 0) {
+				throw new Exception("No location preferences have been set");
+			}
+			return new AirportStatusLocation(lat, lon);
+		} catch (Exception e) {
+			Log.e("LOCATION_PREFERENCES_ERROR", e.getMessage());
+			LocationManager m = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+			Location current = m.getLastKnownLocation(Context.LOCATION_SERVICE);
+			if (current == null) {
+				return new AirportStatusLocation(37.123, -122.123);
+			}
+			
+			// TODO: FIX LOCAL PREFERENCE RETRIEVAL
+			return new AirportStatusLocation(current.getLatitude(), current.getLongitude());
+		}	
+	}
+	
+	private void getDrivingTimeEstimate(String origin, String destination, JsonHttpResponseHandler handler) {
+		TravelTimeEstimate.getDrivingTime(origin, destination, handler);
 	}
 }

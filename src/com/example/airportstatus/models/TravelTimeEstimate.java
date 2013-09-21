@@ -4,8 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.example.airportstatus.AirportStatusActivity;
 import com.example.airportstatus.GoogleClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -16,18 +18,12 @@ public class TravelTimeEstimate {
 	private static String ALTERNATIVE_ROUTES = "false";
 	private static String DEVICE_SENSOR = "true";
 	
-	public static void getDrivingTime(String destination, AsyncHttpResponseHandler handler) {
+	public static void getDrivingTime(String origin, String destination, AsyncHttpResponseHandler handler) {
 		RequestParams params = new RequestParams();
 		params.put("alternatives", ALTERNATIVE_ROUTES);
 		params.put("sensor", DEVICE_SENSOR);
 		params.put("mode", MODE_DRIVING);
-		
-		// using location
-		// try to get Place location from local storage
-		// if not existent, get Place from query
-		
-		Location origin = new Location(37.76030, -122.41051); // my house
-		params.put("origin", origin.toString());
+		params.put("origin", origin);
 		
 		// TODO: improve destination resolution with cached lat/long coords
 		params.put("destination", destination);
@@ -78,7 +74,12 @@ public class TravelTimeEstimate {
 		int hrs = minutes / 60;
 		int mins = minutes % 60;
 		if (hrs > 0) {
-			return hrs + " hours, " + mins + " mins";
+			String hourString = "hour";
+			if (hrs != 1) {
+				hourString += "s";
+			}
+			
+			return hrs + " " + hourString + ", " + mins + " mins";
 		}
 		return mins + " mins";
 	}
