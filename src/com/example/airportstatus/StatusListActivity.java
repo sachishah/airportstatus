@@ -116,28 +116,41 @@ public class StatusListActivity extends Activity {
 	    getDrivingTimeEstimate(current.toString(), code, new JsonHttpResponseHandler() {
 	    	@Override
 	    	public void onSuccess(JSONObject response) {
-	    		int totalTripMins = TravelTimeEstimate.parseDirections(response);
-	    		drivingTimeEstimate.setText(TravelTimeEstimate.getFormattedDuration(totalTripMins));
+	    		displayResponse(drivingTimeEstimate, response);
 	    	}
 	    	
 	    	@Override
 	    	public void onFailure(Throwable error) {
-	    		Toast.makeText(getBaseContext(), "Directions don't work", Toast.LENGTH_SHORT).show();
+	    		displayFailureResponse();
 	    	}
 		});
 	    
 	    getTransitTimeEstimate(current.toString(), code, new JsonHttpResponseHandler() {
 	    	@Override
 	    	public void onSuccess(JSONObject response) {
-	    		int totalTripMins = TravelTimeEstimate.parseDirections(response);
-	    		transitTimeEstimate.setText(TravelTimeEstimate.getFormattedDuration(totalTripMins));
+	    		displayResponse(transitTimeEstimate, response);
 	    	}
 	    	
 	    	@Override
 	    	public void onFailure(Throwable error) {
-	    		Toast.makeText(getBaseContext(), "Directions don't work", Toast.LENGTH_SHORT).show();
+	    		displayFailureResponse();
 	    	}
 		});
+	}
+	
+	private void displayResponse(TextView container, JSONObject response) {
+		int totalTripMins;
+		try {
+			totalTripMins = TravelTimeEstimate.parseDirections(response);
+			container.setText(TravelTimeEstimate.getFormattedDuration(totalTripMins));
+		} catch (Exception e) {
+			Log.e("ROUTE_ERROR", e.getMessage());
+			container.setText(R.string.tvTravelTimeError);
+		}
+	}
+	
+	private void displayFailureResponse() {
+		Toast.makeText(getBaseContext(), "Directions don't work", Toast.LENGTH_SHORT).show();
 	}
 	
 	@Override

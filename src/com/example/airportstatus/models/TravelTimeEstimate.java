@@ -41,7 +41,7 @@ public class TravelTimeEstimate {
 		GoogleClient.getDirections(params, handler);
 	}
 	
-	public static int parseDirections(JSONObject response) {
+	public static int parseDirections(JSONObject response) throws Exception {
 		/**
 		 * Parses the response for the first route.
 		 * Adds up the durations of the legs in the route.
@@ -67,7 +67,9 @@ public class TravelTimeEstimate {
 							Log.e("DURATION", "Could not read duration from route leg");
 						}
 					}
-				}
+				} 
+			} else {
+				throw new Exception("No route data");
 			}
 		} catch (JSONException e) {
 			Log.e("JSONException", e.getMessage());
