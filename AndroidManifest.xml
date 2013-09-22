@@ -3,7 +3,7 @@
     package="com.example.airportstatus"
     android:versionCode="1"
     android:versionName="1.0" >
-    
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-sdk
@@ -31,6 +31,14 @@
         <activity
             android:name="com.example.airportstatus.StatusListActivity"
             android:label="@string/title_activity_status_list" >
+        </activity>
+        <activity
+            android:name="com.example.airportstatus.QueryActivity"
+            android:label="@string/title_activity_query"
+            android:parentActivityName="com.example.airportstatus.AirportStatusActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.airportstatus.AirportStatusActivity" />
         </activity>
     </application>
 

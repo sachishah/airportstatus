@@ -20,5 +20,7 @@
     <string name="txtTransitTime2">34 min</string>
     <string name="title_activity_security_wait_time">SecurityWaitTimeActivity</string>
     <string name="go">Go</string>
+    <string name="title_activity_query">QueryActivity</string>
+    <string name="txtWaiting">YOU MUST WAIT</string>
 
 </resources>
