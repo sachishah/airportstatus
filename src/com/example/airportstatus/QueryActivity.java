@@ -1,14 +1,21 @@
 package com.example.airportstatus;
 
-import android.os.Bundle;
+import java.util.Observable;
+import java.util.Observer;
+
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
-import android.annotation.TargetApi;
-import android.os.Build;
 
-public class QueryActivity extends Activity {
+public class QueryActivity extends Activity implements Observer {
+	private NetworkTaskCollection myTasks;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +23,7 @@ public class QueryActivity extends Activity {
 		setContentView(R.layout.activity_query);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		setupNetworkQueries();
 	}
 
 	/**
@@ -51,5 +59,36 @@ public class QueryActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	protected void setupNetworkQueries() {
+		myTasks = new NetworkTaskCollection();
+		myTasks.addObserver(this);
+		myTasks.addTask(new AsyncTask<Void, Void, Boolean>() {
 
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				Log.d("TASK", "Task is running");
+				return true;
+			}
+			
+			@Override
+			protected void onPostExecute(Boolean result) {
+				Log.d("TASK", "Task completed");
+				myTasks.checkTaskStatus();
+			}
+		});
+	}
+
+	@Override
+	public void update(Observable observable, Object bundleData) {
+		if ((Boolean) bundleData == true) {
+			Intent i = new Intent(this, StatusListActivity.class);
+	    	i.putExtra("airport_code", "SFO");
+	    	startActivity(i);
+			return;
+		} 
+		
+		// Otherwise, go back to the starting activity and show an error
+		
+	}
 }
