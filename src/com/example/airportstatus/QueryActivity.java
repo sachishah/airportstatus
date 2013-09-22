@@ -64,7 +64,6 @@ public class QueryActivity extends Activity implements Observer {
 		myTasks = new NetworkTaskCollection();
 		myTasks.addObserver(this);
 		myTasks.addTask(new AsyncTask<Void, Void, Boolean>() {
-
 			@Override
 			protected Boolean doInBackground(Void... params) {
 				Log.d("TASK", "Task is running");
@@ -74,14 +73,37 @@ public class QueryActivity extends Activity implements Observer {
 			@Override
 			protected void onPostExecute(Boolean result) {
 				Log.d("TASK", "Task completed");
+				myTasks.markTaskComplete();
 				myTasks.checkTaskStatus();
 			}
 		});
-	}
+		
+
+		myTasks.addTask(new AsyncTask<Void, Void, Boolean>() {
+			@Override
+			protected Boolean doInBackground(Void... params) {
+				Log.d("TASK", "Task is running");
+				return true;
+			}
+			
+			@Override
+			protected void onPostExecute(Boolean result) {
+				Log.d("TASK", "Second task completed with result " + result.toString());
+				myTasks.markTaskComplete();
+				myTasks.checkTaskStatus();
+			}
+		});
+		
+		myTasks.startAll();
+	} 
 
 	@Override
 	public void update(Observable observable, Object bundleData) {
-		if ((Boolean) bundleData == true) {
+		Log.d("TASK COMPLETE", bundleData.toString());
+		
+		// Test here that the value returned from the observed NetworkTaskCollection 
+		// is the one that signals success
+		if (bundleData.toString().equals("SWEET")) {
 			Intent i = new Intent(this, StatusListActivity.class);
 	    	i.putExtra("airport_code", "SFO");
 	    	startActivity(i);
