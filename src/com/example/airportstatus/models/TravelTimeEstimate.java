@@ -52,16 +52,13 @@ public class TravelTimeEstimate {
 		try {
 			if (response.getString("status").equals("OK")) {
 				JSONArray routes = response.getJSONArray("routes");
-				Log.d("all routes", routes.toString());
 				if (routes.length() > 0) {
 					JSONObject bestRoute = routes.getJSONObject(0);
 					JSONArray routeLegs = bestRoute.getJSONArray("legs");
 					
 					for (int i = 0; i < routeLegs.length(); i++) {
 						try {
-							Log.d("LEG", routeLegs.getJSONObject(i).getJSONObject("duration").toString());
 							long seconds = routeLegs.getJSONObject(i).getJSONObject("duration").getLong("value");
-							
 							if (seconds % 60 > 0) {
 								// Round up seconds to match Google's error rounding
 								seconds += 60 - (seconds % 60);
