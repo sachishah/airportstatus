@@ -11,7 +11,7 @@
     <string name="txtWeather"></string>
     <string name="txtAirportCode"></string>
     <string name="txtHeaderWeather">Weather</string>
-    <string name="txtTransitAnnotation">[Travel times are retrieved from Google Maps]</string>
+    <string name="txtTransitAnnotation">Travel times are retrieved from Google Maps</string>
     <string name="txtSecurityDetailsButton">Screening Wait Times</string>
     <string name="txtHeaderTransit">Travel Time</string>
     <string name="txtHeaderTransit1">Driving</string>
@@ -19,6 +19,7 @@
     <string name="txtHeaderTransit2">Transit</string>
     <string name="txtTransitTime2">34 min</string>
     <string name="title_activity_security_wait_time">SecurityWaitTimeActivity</string>
+    <string name="tvTravelTimeError">No route available</string>
     <string name="go">Go</string>
 
 </resources>

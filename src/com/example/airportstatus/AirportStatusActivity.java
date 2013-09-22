@@ -2,8 +2,14 @@ package com.example.airportstatus;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -15,11 +21,21 @@ public class AirportStatusActivity extends Activity {
 
 	Button btnGo;
 	AutoCompleteTextView tvAirportCode;
+	LocationManager locationManager;
+	LocationListener locationListener;
+	SharedPreferences locationPrefs;
+	
+	public static final String PREFS_NAME = "AirportStatusPrefs";
+	public static final String PREFS_LATITUDE = "LAT";
+	public static final String PREFS_LONGITUDE= "LON";
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_airport_status);
+        setupLocationStorage();
+        setupLocationListener();
+
         setupButton();
         setupTextView();
     }
@@ -29,6 +45,13 @@ public class AirportStatusActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.airport_status, menu);
         return true;
+    }
+    
+    @Override
+    public void onDestroy() {
+    	super.onDestroy();
+    	locationManager.removeUpdates(locationListener);
+    	
     }
     
     public void onClick(View v) {
@@ -52,4 +75,42 @@ public class AirportStatusActivity extends Activity {
     	tvAirportCode = (AutoCompleteTextView) findViewById(R.id.tvAirportCode);
     	tvAirportCode.setAdapter(adapter);
     }
+    
+    private void setupLocationStorage() {
+        locationPrefs = getSharedPreferences(PREFS_NAME, 0);    	
+    }
+    
+    private void setupLocationListener() {
+    	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+    	locationListener = new LocationListener() {
+    		@Override
+    		public void onLocationChanged(Location location) {
+    			SharedPreferences locationPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+    			SharedPreferences.Editor editor = locationPrefs.edit();
+    			editor.putFloat(PREFS_LATITUDE, (float) location.getLatitude());
+    			editor.putFloat(PREFS_LONGITUDE, (float) location.getLongitude());
+    			editor.commit();
+    		}
+
+			@Override
+			public void onProviderDisabled(String provider) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onProviderEnabled(String provider) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onStatusChanged(String provider, int status,
+					Bundle extras) {
+				// TODO Auto-generated method stub
+			}
+    	};
+    	
+    	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 0, locationListener);
+    }
+    
+    
 }
