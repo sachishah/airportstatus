@@ -1,5 +1,7 @@
 package com.example.airportstatus;
 
+import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -9,7 +11,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -55,7 +56,7 @@ public class AirportStatusActivity extends Activity {
     }
     
     public void onClick(View v) {
-    	String code = tvAirportCode.getText().toString();
+    	String code = AirportCodes.IATA_CODES.get((String)tvAirportCode.getText().toString());
     	Toast.makeText(this, "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
     	Intent i = new Intent(this, StatusListActivity.class);
     	i.putExtra("airport_code", code);
@@ -69,7 +70,7 @@ public class AirportStatusActivity extends Activity {
     }
 
     private void setupTextView() {
-    	String [] codes = new String [] { "SFO", "SJC", "OAK" };
+    	ArrayList<String> codes = new ArrayList<String> (AirportCodes.IATA_CODES.keySet());
     	ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, codes);
     	tvAirportCode = (AutoCompleteTextView) findViewById(R.id.tvAirportCode);
