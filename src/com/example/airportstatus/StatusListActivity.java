@@ -165,7 +165,7 @@ public class StatusListActivity extends Activity {
 			LocationManager m = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 			Location current = m.getLastKnownLocation(Context.LOCATION_SERVICE);
 			if (current == null) {
-				return new AirportStatusLocation(37.123, -122.123);
+				return new AirportStatusLocation(37.76030, -122.41051);
 			}
 			
 			// TODO: FIX LOCAL PREFERENCE RETRIEVAL

@@ -52,6 +52,7 @@ public class TravelTimeEstimate {
 		try {
 			if (response.getString("status").equals("OK")) {
 				JSONArray routes = response.getJSONArray("routes");
+				Log.d("all routes", routes.toString());
 				if (routes.length() > 0) {
 					JSONObject bestRoute = routes.getJSONObject(0);
 					JSONArray routeLegs = bestRoute.getJSONArray("legs");
