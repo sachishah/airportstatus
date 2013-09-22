@@ -56,11 +56,16 @@ public class AirportStatusActivity extends Activity {
     }
     
     public void onClick(View v) {
-    	String code = AirportCodes.IATA_CODES.get((String)tvAirportCode.getText().toString());
-    	Toast.makeText(this, "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
-    	Intent i = new Intent(this, StatusListActivity.class);
-    	i.putExtra("airport_code", code);
-    	startActivity(i);
+    	String textEntered = (String)tvAirportCode.getText().toString();
+    	String code = AirportCodes.IATA_CODES.get(textEntered);
+    	if (code != null) {
+	    	Toast.makeText(this, "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
+	    	Intent i = new Intent(this, StatusListActivity.class);
+	    	i.putExtra("airport_code", code);
+	    	startActivity(i);
+    	} else {
+    		Toast.makeText(this,  "Could not find airport code " + textEntered, Toast.LENGTH_SHORT).show();
+    	}
     }
 
     @SuppressLint("InlinedApi")
