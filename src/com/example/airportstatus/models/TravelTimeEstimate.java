@@ -92,10 +92,9 @@ public class TravelTimeEstimate {
 	}
 	
 	public static String getAugmentedCurrentTime(int secondsAhead) {
-		Calendar c = Calendar.getInstance();
 		// Destination URL expects time in seconds,
-		// so getTimeInMillis must be divided by 1000 
+		// so currentTimeMillis must be divided by 1000 
 		// to provide the correct time precision
-		return String.valueOf((c.getTimeInMillis() / 1000) + secondsAhead);
+		return String.valueOf((System.currentTimeMillis() / 1000) + secondsAhead);
 	}
 }
