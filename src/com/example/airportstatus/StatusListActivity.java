@@ -112,8 +112,8 @@ public class StatusListActivity extends Activity {
 			}
 	   	});
 	    
-	    AirportStatusLocation now = getCurrentLocation();
-	    getDrivingTimeEstimate(now.toString(), code, new JsonHttpResponseHandler() {
+	    AirportStatusLocation current = getCurrentLocation();
+	    getDrivingTimeEstimate(current.toString(), code, new JsonHttpResponseHandler() {
 	    	@Override
 	    	public void onSuccess(JSONObject response) {
 	    		int totalTripMins = TravelTimeEstimate.parseDirections(response);
@@ -126,7 +126,7 @@ public class StatusListActivity extends Activity {
 	    	}
 		});
 	    
-	    getTransitTimeEstimate(now.toString(), code, new JsonHttpResponseHandler() {
+	    getTransitTimeEstimate(current.toString(), code, new JsonHttpResponseHandler() {
 	    	@Override
 	    	public void onSuccess(JSONObject response) {
 	    		int totalTripMins = TravelTimeEstimate.parseDirections(response);
@@ -153,9 +153,10 @@ public class StatusListActivity extends Activity {
 	
 	private AirportStatusLocation getCurrentLocation() {
 		try {
-			SharedPreferences settings = getSharedPreferences(AirportStatusActivity.PREFS_NAME, 0);
+			SharedPreferences settings = getSharedPreferences(AirportStatusActivity.PREFS_NAME, MODE_PRIVATE);
 			double lat = (double) settings.getFloat(AirportStatusActivity.PREFS_LATITUDE, -1);
 			double lon = (double) settings.getFloat(AirportStatusActivity.PREFS_LONGITUDE, -1);
+				
 			if (lat < 0 || lon < 0) {
 				throw new Exception("No location preferences have been set");
 			}
@@ -163,14 +164,22 @@ public class StatusListActivity extends Activity {
 		} catch (Exception e) {
 			Log.e("LOCATION_PREFERENCES_ERROR", e.getMessage());
 			LocationManager m = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-			Location current = m.getLastKnownLocation(Context.LOCATION_SERVICE);
+			Location current = m.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 			if (current == null) {
 				return new AirportStatusLocation(37.76030, -122.41051);
 			}
 			
-			// TODO: FIX LOCAL PREFERENCE RETRIEVAL
+			updateLastLocationPreferences(current.getLatitude(), current.getLongitude());
 			return new AirportStatusLocation(current.getLatitude(), current.getLongitude());
 		}	
+	}
+	
+	private void updateLastLocationPreferences(double lat, double lon) {
+		SharedPreferences locationPrefs = getSharedPreferences(AirportStatusActivity.PREFS_NAME, MODE_PRIVATE);
+		SharedPreferences.Editor editor = locationPrefs.edit();
+		editor.putFloat(AirportStatusActivity.PREFS_LATITUDE, (float) lat);
+		editor.putFloat(AirportStatusActivity.PREFS_LONGITUDE, (float) lon);
+		editor.commit();
 	}
 	
 	private void getDrivingTimeEstimate(String origin, String destination, JsonHttpResponseHandler handler) {

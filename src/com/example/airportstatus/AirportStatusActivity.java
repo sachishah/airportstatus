@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -84,7 +85,7 @@ public class AirportStatusActivity extends Activity {
     	locationListener = new LocationListener() {
     		@Override
     		public void onLocationChanged(Location location) {
-    			SharedPreferences locationPrefs = getSharedPreferences(PREFS_NAME, 0);
+    			SharedPreferences locationPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
     			SharedPreferences.Editor editor = locationPrefs.edit();
     			editor.putFloat(PREFS_LATITUDE, (float) location.getLatitude());
     			editor.putFloat(PREFS_LONGITUDE, (float) location.getLongitude());

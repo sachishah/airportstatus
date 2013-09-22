@@ -1,7 +1,5 @@
 package com.example.airportstatus.models;
 
-import java.util.Calendar;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
