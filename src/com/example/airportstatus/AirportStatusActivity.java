@@ -1,8 +1,15 @@
 package com.example.airportstatus;
 
+import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -15,11 +22,21 @@ public class AirportStatusActivity extends Activity {
 
 	Button btnGo;
 	AutoCompleteTextView tvAirportCode;
+	LocationManager locationManager;
+	LocationListener locationListener;
+	SharedPreferences locationPrefs;
+	
+	public static final String PREFS_NAME = "AirportStatusPrefs";
+	public static final String PREFS_LATITUDE = "LAT";
+	public static final String PREFS_LONGITUDE= "LON";
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_airport_status);
+        setupLocationStorage();
+        setupLocationListener();
+
         setupButton();
         setupTextView();
     }
@@ -31,13 +48,24 @@ public class AirportStatusActivity extends Activity {
         return true;
     }
     
-    public void onClick(View v) {
-    	String code = tvAirportCode.getText().toString();
-    	Toast.makeText(this, "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
+    @Override
+    public void onDestroy() {
+    	super.onDestroy();
+    	locationManager.removeUpdates(locationListener);
     	
-    	Intent i = new Intent(this, QueryActivity.class);
-    	i.putExtra("airport_code", code);
-    	startActivity(i);
+    }
+    
+    public void onClick(View v) {
+    	String textEntered = (String)tvAirportCode.getText().toString();
+    	String code = AirportCodes.IATA_CODES.get(textEntered);
+    	if (code != null) {
+	    	Toast.makeText(this, "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
+	    	Intent i = new Intent(this, StatusListActivity.class);
+	    	i.putExtra("airport_code", code);
+	    	startActivity(i);
+    	} else {
+    		Toast.makeText(this,  "Could not find airport code " + textEntered, Toast.LENGTH_SHORT).show();
+    	}
     }
 
     @SuppressLint("InlinedApi")
@@ -47,10 +75,48 @@ public class AirportStatusActivity extends Activity {
     }
 
     private void setupTextView() {
-    	String [] codes = new String [] { "SFO", "SJC", "OAK" };
+    	ArrayList<String> codes = new ArrayList<String> (AirportCodes.IATA_CODES.keySet());
     	ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, codes);
     	tvAirportCode = (AutoCompleteTextView) findViewById(R.id.tvAirportCode);
     	tvAirportCode.setAdapter(adapter);
     }
+    
+    private void setupLocationStorage() {
+        locationPrefs = getSharedPreferences(PREFS_NAME, 0);    	
+    }
+    
+    private void setupLocationListener() {
+    	locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+    	locationListener = new LocationListener() {
+    		@Override
+    		public void onLocationChanged(Location location) {
+    			SharedPreferences locationPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+    			SharedPreferences.Editor editor = locationPrefs.edit();
+    			editor.putFloat(PREFS_LATITUDE, (float) location.getLatitude());
+    			editor.putFloat(PREFS_LONGITUDE, (float) location.getLongitude());
+    			editor.commit();
+    		}
+
+			@Override
+			public void onProviderDisabled(String provider) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onProviderEnabled(String provider) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onStatusChanged(String provider, int status,
+					Bundle extras) {
+				// TODO Auto-generated method stub
+			}
+    	};
+    	
+    	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 0, locationListener);
+    }
+    
+    
 }
