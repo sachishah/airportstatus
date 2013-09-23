@@ -34,6 +34,8 @@ public class StatusListActivity extends Activity {
 	TextView drivingTimeEstimate, transitTimeEstimate;
 	Button securityWaitTimes;
 	AirportStatus airportStatus;
+	
+	private static String KEY_TRAVEL_TIME_DRIVING = "travelTimeDriving";
 
 	@SuppressLint("DefaultLocale")
 	@Override
@@ -43,10 +45,12 @@ public class StatusListActivity extends Activity {
 		code = getIntent().getStringExtra("airport_code").toUpperCase();
 		setupActionBar();
 		setupViews();
-		if (isCodeValid()) 
-			loadResults();
-		else
+		if (isCodeValid()) {
+			setTemplateData(getIntent());
+			// loadResults();
+		} else {
 			Toast.makeText(this, "Airport code not found", Toast.LENGTH_LONG).show();
+		}
 	}
 
 	@Override
@@ -69,6 +73,18 @@ public class StatusListActivity extends Activity {
 		ActionBar bar = getActionBar();
 		bar.setTitle("Airport Status: " + code);
 		bar.setDisplayHomeAsUpEnabled(true);
+	}
+	
+	private void setTemplateData(Intent intent) {
+		try {
+			if (!intent.hasExtra(KEY_TRAVEL_TIME_DRIVING)) {
+				throw new NullPointerException(KEY_TRAVEL_TIME_DRIVING);
+			}
+		
+			drivingTimeEstimate.setText(intent.getStringExtra(KEY_TRAVEL_TIME_DRIVING));
+		} catch (Exception e) {
+			Log.e("INVALID_INTENT_EXTRA", e.getMessage());
+		}
 	}
 	
 	@SuppressLint("InlinedApi")
@@ -145,7 +161,7 @@ public class StatusListActivity extends Activity {
 			container.setText(TravelTimeEstimate.getFormattedDuration(totalTripMins));
 		} catch (Exception e) {
 			Log.e("ROUTE_ERROR", e.getMessage());
-			container.setText(R.string.tvTravelTimeError);
+			container.setText(R.string.txtTravelTimeError);
 		}
 	}
 	

@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -56,7 +57,7 @@ public class AirportStatusActivity extends Activity {
     }
     
     public void onClick(View v) {
-    	String textEntered = (String)tvAirportCode.getText().toString();
+    	String textEntered = (String) tvAirportCode.getText().toString();
     	String code = AirportCodes.IATA_CODES.get(textEntered);
     	if (code != null) {
 	    	Toast.makeText(this, "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
