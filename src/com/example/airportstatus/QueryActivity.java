@@ -27,7 +27,6 @@ import android.view.MenuItem;
 public class QueryActivity extends Activity implements Observer {
 	private NetworkTaskCollection myTasks;
 	private String airportCode;
-	private Bundle result;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +91,7 @@ public class QueryActivity extends Activity implements Observer {
 						int totalTripMins;
 						try {
 							totalTripMins = TravelTimeEstimate.parseDirections(response);
-							myTasks.setResult(StatusKeys.KEY_TRAVEL_TIME_DRIVING, TravelTimeEstimate.getFormattedDuration(totalTripMins));
-							myTasks.markTaskComplete();
-							myTasks.checkTaskStatus();
+							myTasks.finishWithResult(StatusKeys.KEY_TRAVEL_TIME_DRIVING, TravelTimeEstimate.getFormattedDuration(totalTripMins));
 						} catch (Exception e) {
 							// !!!
 							Log.e("NETWORK_TASKS", "what the crap");
@@ -119,9 +116,7 @@ public class QueryActivity extends Activity implements Observer {
 						int totalTripMins;
 						try {
 							totalTripMins = TravelTimeEstimate.parseDirections(response);
-							myTasks.setResult(StatusKeys.KEY_TRAVEL_TIME_TRANSIT, TravelTimeEstimate.getFormattedDuration(totalTripMins));
-							myTasks.markTaskComplete();
-							myTasks.checkTaskStatus();
+							myTasks.finishWithResult(StatusKeys.KEY_TRAVEL_TIME_TRANSIT, TravelTimeEstimate.getFormattedDuration(totalTripMins));
 						} catch (Exception e) {
 							// !!!
 							Log.e("NETWORK_TASKS", "what the crap");
@@ -139,6 +134,44 @@ public class QueryActivity extends Activity implements Observer {
 		
 		
 /*
+ * 
+ * 
+ * 
+ * 
+ * 
+	
+		AsyncHttpClient client = new AsyncHttpClient();
+	    client.get("http://services.faa.gov/airport/status/" + Uri.encode(code) + "?format=application/json", 
+	    			new JsonHttpResponseHandler() {
+	   		@Override
+	   		public void onSuccess(JSONObject response) {
+	    		airportStatus = AirportStatus.fromJson(response);
+	    		weather.setText(airportStatus.getWeather() + " (visibility: " + airportStatus.getVisibility() + ")");
+	    		if(!airportStatus.getDelay())
+	    			delays.setText("None reported");
+	    		else {
+	    			String result = "Average Delay: " + airportStatus.getAvgDelay();
+	    			result += "\nDelay Type: " + airportStatus.getDelayType();
+	    			String closureBegin = airportStatus.getClosureBegin();
+	    			if (closureBegin != "") {
+	    				result += "\nClosure Begin Time: " + closureBegin;
+	    				result += "\nClosure End Time: " + airportStatus.getClosureEnd();
+	    			} else {
+	    				result += "\nEnd Time: " + airportStatus.getEndTime();
+	    			}
+	    			delays.setText(result);
+	    		
+	    		}
+	   		}
+	   		
+	   		@Override
+			public void onFailure(Throwable e, JSONObject obj) {
+	   			Toast.makeText(getParent(), obj.toString(), Toast.LENGTH_SHORT).show();
+			}
+	   	});
+		
+		
+		
 		myTasks.addTask(new AsyncTask<Void, Void, Boolean>() {
 			@Override
 			protected Boolean doInBackground(Void... params) {

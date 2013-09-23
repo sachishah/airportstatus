@@ -21,10 +21,6 @@ public class NetworkTaskCollection extends Observable {
 		myTasks.add(task);
 	}
 	
-	public void markTaskComplete() {
-		completedTaskCount += 1;
-	}
-	
 	public void startAll() {
 		for (NetworkTask t : myTasks) {
 			t.setHandler();
@@ -32,11 +28,21 @@ public class NetworkTaskCollection extends Observable {
 		}
 	}
 	
-	public void setResult(String key, String value) {
+	public void finishWithResult(String key, String value) {
+		this.setResult(key, value);
+		this.markTaskComplete();
+		this.checkTaskStatus();
+	}
+
+	private void markTaskComplete() {
+		completedTaskCount += 1;
+	}
+	
+	private void setResult(String key, String value) {
 		this.result.putString(key, value);
 	}
 	
-	public void checkTaskStatus() {
+	private void checkTaskStatus() {
 		Log.d("TASK", "Checking task status");
 		boolean allComplete = false;
 		if (this.completedTaskCount == myTasks.size()) {
