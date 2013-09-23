@@ -1,5 +1,9 @@
 package com.example.airportstatus;
 
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
@@ -22,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.airportstatus.models.AirportStatus;
 import com.example.airportstatus.models.AirportStatusLocation;
+import com.example.airportstatus.models.Checkpoint;
 import com.example.airportstatus.models.TravelTimeEstimate;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -57,8 +62,14 @@ public class StatusListActivity extends Activity {
 	}
 	
 	public void onSecurityWaitTimeClick(View v) {
-		startActivity(new Intent(this, SecurityWaitTimeActivity.class));
+		
+		Intent i = new Intent(this, SecurityWaitTimeActivity.class);
+    	i.putExtra("airport_code", code);
+    	startActivity(i);
+		
 	}
+	
+	
 	
 	private boolean isCodeValid() {
 		return true;
