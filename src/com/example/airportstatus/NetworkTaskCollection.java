@@ -2,19 +2,22 @@ package com.example.airportstatus;
 
 import java.util.ArrayList;
 import java.util.Observable;
-import android.os.AsyncTask;
+
+import android.os.Bundle;
 import android.util.Log;
 
 public class NetworkTaskCollection extends Observable {
+	private Bundle result;
 	private int completedTaskCount;
-	private ArrayList<AsyncTask> myTasks;
+	private ArrayList<NetworkTask> myTasks;
 	
 	public NetworkTaskCollection() {
-		myTasks = new ArrayList<AsyncTask>();
-		completedTaskCount = myTasks.size();
+		result = new Bundle();
+		myTasks = new ArrayList<NetworkTask>();
+		completedTaskCount = 0;
 	}
 	
-	public void addTask(AsyncTask<Void, Void, Boolean> task) {
+	public void addTask(NetworkTask task) {
 		myTasks.add(task);
 	}
 	
@@ -23,23 +26,30 @@ public class NetworkTaskCollection extends Observable {
 	}
 	
 	public void startAll() {
-		for (AsyncTask<Void, Void, Boolean> t : myTasks) {
+		for (NetworkTask t : myTasks) {
+			t.setHandler();
 			t.execute();
 		}
-		
+	}
+	
+	public void setResult(String key, String value) {
+		this.result.putString(key, value);
 	}
 	
 	public void checkTaskStatus() {
+		Log.d("TASK", "Checking task status");
 		boolean allComplete = false;
 		if (this.completedTaskCount == myTasks.size()) {
 			allComplete = true;
 		}
 		
-		if (allComplete) {
+		if (allComplete) {		
 			myTasks.clear();
 			Log.d("TASK", "All tasks have finished");
+			this.result.putBoolean("success", true);
 			setChanged();
-			notifyObservers(new String("SWEET"));
+			notifyObservers(this.result);
 		}
 	}
+	
 }

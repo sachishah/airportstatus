@@ -35,14 +35,12 @@ public class StatusListActivity extends Activity {
 	Button securityWaitTimes;
 	AirportStatus airportStatus;
 	
-	private static String KEY_TRAVEL_TIME_DRIVING = "travelTimeDriving";
-
 	@SuppressLint("DefaultLocale")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_status_list);
-		code = getIntent().getStringExtra("airport_code").toUpperCase();
+		code = getIntent().getBundleExtra("data").getString("airportCode").toUpperCase();
 		setupActionBar();
 		setupViews();
 		if (isCodeValid()) {
@@ -77,11 +75,8 @@ public class StatusListActivity extends Activity {
 	
 	private void setTemplateData(Intent intent) {
 		try {
-			if (!intent.hasExtra(KEY_TRAVEL_TIME_DRIVING)) {
-				throw new NullPointerException(KEY_TRAVEL_TIME_DRIVING);
-			}
-		
-			drivingTimeEstimate.setText(intent.getStringExtra(KEY_TRAVEL_TIME_DRIVING));
+			Bundle data = intent.getBundleExtra("data");
+			drivingTimeEstimate.setText(data.getString(StatusKeys.KEY_TRAVEL_TIME_DRIVING));
 		} catch (Exception e) {
 			Log.e("INVALID_INTENT_EXTRA", e.getMessage());
 		}
@@ -96,7 +91,7 @@ public class StatusListActivity extends Activity {
 		drivingTimeEstimate = (TextView) findViewById(R.id.tvTransitValue1);
 		transitTimeEstimate = (TextView) findViewById(R.id.tvTransitValue2);
  	}
-	
+	/*
 	private void loadResults() {
 		AsyncHttpClient client = new AsyncHttpClient();
 	    client.get("http://services.faa.gov/airport/status/" + Uri.encode(code) + "?format=application/json", 
@@ -153,12 +148,11 @@ public class StatusListActivity extends Activity {
 	    	}
 		});
 	}
-	
+	*/
 	private void displayResponse(TextView container, JSONObject response) {
 		int totalTripMins;
 		try {
-			totalTripMins = TravelTimeEstimate.parseDirections(response);
-			container.setText(TravelTimeEstimate.getFormattedDuration(totalTripMins));
+			
 		} catch (Exception e) {
 			Log.e("ROUTE_ERROR", e.getMessage());
 			container.setText(R.string.txtTravelTimeError);
@@ -180,39 +174,8 @@ public class StatusListActivity extends Activity {
 	    }
 	}
 	
-	private AirportStatusLocation getCurrentLocation() {
-		try {
-			SharedPreferences settings = getSharedPreferences(AirportStatusActivity.PREFS_NAME, MODE_PRIVATE);
-			double lat = (double) settings.getFloat(AirportStatusActivity.PREFS_LATITUDE, -1);
-			double lon = (double) settings.getFloat(AirportStatusActivity.PREFS_LONGITUDE, -1);
-				
-			if (lat < 0 || lon < 0) {
-				throw new Exception("No location preferences have been set");
-			}
-			return new AirportStatusLocation(lat, lon);
-		} catch (Exception e) {
-			Log.e("LOCATION_PREFERENCES_ERROR", e.getMessage());
-			LocationManager m = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-			Location current = m.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			if (current == null) {
-				return new AirportStatusLocation(37.76030, -122.41051);
-			}
-			
-			updateLastLocationPreferences(current.getLatitude(), current.getLongitude());
-			return new AirportStatusLocation(current.getLatitude(), current.getLongitude());
-		}	
-	}
-	
-	private void updateLastLocationPreferences(double lat, double lon) {
-		SharedPreferences locationPrefs = getSharedPreferences(AirportStatusActivity.PREFS_NAME, MODE_PRIVATE);
-		SharedPreferences.Editor editor = locationPrefs.edit();
-		editor.putFloat(AirportStatusActivity.PREFS_LATITUDE, (float) lat);
-		editor.putFloat(AirportStatusActivity.PREFS_LONGITUDE, (float) lon);
-		editor.commit();
-	}
-	
 	private void getDrivingTimeEstimate(String origin, String destination, JsonHttpResponseHandler handler) {
-		TravelTimeEstimate.getDrivingTime(origin, destination, handler);
+		
 	}
 	
 	private void getTransitTimeEstimate(String origin, String destination, JsonHttpResponseHandler handler) {

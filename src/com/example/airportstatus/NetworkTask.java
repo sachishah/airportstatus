@@ -1,18 +1,11 @@
 package com.example.airportstatus;
 
-import java.util.HashMap;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
-import android.os.AsyncTask;
-
-public class NetworkTask extends AsyncTask<HashMap, Void, Boolean> {
-	@Override
-	protected Boolean doInBackground(HashMap... params) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+public abstract class NetworkTask {
+	public JsonHttpResponseHandler handler;
 	
-	@Override
-	protected void onPostExecute(Boolean result) {
-		
-	}
+	public abstract void setHandler();
+	
+	public abstract void execute();
 }

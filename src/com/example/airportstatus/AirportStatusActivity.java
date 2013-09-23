@@ -61,7 +61,7 @@ public class AirportStatusActivity extends Activity {
     	String code = AirportCodes.IATA_CODES.get(textEntered);
     	if (code != null) {
 	    	Toast.makeText(this, "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
-	    	Intent i = new Intent(this, StatusListActivity.class);
+	    	Intent i = new Intent(this, QueryActivity.class);
 	    	i.putExtra("airport_code", code);
 	    	startActivity(i);
     	} else {
