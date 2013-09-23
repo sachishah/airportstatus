@@ -80,12 +80,9 @@ public class QueryActivity extends Activity implements Observer {
 		// NetworkTaskCollection is Observable
 		// NetworkTask has success handler that pushes data to bundle
 		
-		
-		
-		
+		final AirportStatusLocation currentLocation = getCurrentLocation();
 		myTasks = new NetworkTaskCollection();
 		myTasks.addObserver(this);
-		
 		myTasks.addTask(new NetworkTask() {
 			@Override
 			public void setHandler() {
@@ -109,8 +106,34 @@ public class QueryActivity extends Activity implements Observer {
 			
 			@Override
 			public void execute() {
-				String origin = getCurrentLocation().toString();
-				TravelTimeEstimate.getDrivingTime(origin, airportCode, this.handler);
+				TravelTimeEstimate.getDrivingTime(currentLocation.toString(), airportCode, this.handler);
+			}
+		});
+		
+		myTasks.addTask(new NetworkTask() {
+			@Override
+			public void setHandler() {
+				this.handler = new JsonHttpResponseHandler() {
+					@Override
+					public void onSuccess(JSONObject response) {
+						int totalTripMins;
+						try {
+							totalTripMins = TravelTimeEstimate.parseDirections(response);
+							myTasks.setResult(StatusKeys.KEY_TRAVEL_TIME_TRANSIT, TravelTimeEstimate.getFormattedDuration(totalTripMins));
+							myTasks.markTaskComplete();
+							myTasks.checkTaskStatus();
+						} catch (Exception e) {
+							// !!!
+							Log.e("NETWORK_TASKS", "what the crap");
+							e.printStackTrace();
+						}
+					}
+				};
+			}
+			
+			@Override
+			public void execute() {
+				TravelTimeEstimate.getTransitTime(currentLocation.toString(), airportCode, this.handler);
 			}
 		});
 		
@@ -182,15 +205,4 @@ public class QueryActivity extends Activity implements Observer {
 		editor.putFloat(AirportStatusActivity.PREFS_LONGITUDE, (float) lon);
 		editor.commit();
 	}
-	
-	private class HttpResponseTask extends AsyncTask<Void, Void, Bundle> {
-
-		@Override
-		protected Bundle doInBackground(Void... arg0) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		
-	} 
 }

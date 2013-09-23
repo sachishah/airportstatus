@@ -77,6 +77,7 @@ public class StatusListActivity extends Activity {
 		try {
 			Bundle data = intent.getBundleExtra("data");
 			drivingTimeEstimate.setText(data.getString(StatusKeys.KEY_TRAVEL_TIME_DRIVING));
+			transitTimeEstimate.setText(data.getString(StatusKeys.KEY_TRAVEL_TIME_TRANSIT));
 		} catch (Exception e) {
 			Log.e("INVALID_INTENT_EXTRA", e.getMessage());
 		}
@@ -149,19 +150,6 @@ public class StatusListActivity extends Activity {
 		});
 	}
 	*/
-	private void displayResponse(TextView container, JSONObject response) {
-		int totalTripMins;
-		try {
-			
-		} catch (Exception e) {
-			Log.e("ROUTE_ERROR", e.getMessage());
-			container.setText(R.string.txtTravelTimeError);
-		}
-	}
-	
-	private void displayFailureResponse() {
-		Toast.makeText(getBaseContext(), "Directions don't work", Toast.LENGTH_SHORT).show();
-	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -172,13 +160,5 @@ public class StatusListActivity extends Activity {
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
-	}
-	
-	private void getDrivingTimeEstimate(String origin, String destination, JsonHttpResponseHandler handler) {
-		
-	}
-	
-	private void getTransitTimeEstimate(String origin, String destination, JsonHttpResponseHandler handler) {
-		TravelTimeEstimate.getTransitTime(origin, destination, handler);
 	}
 }
