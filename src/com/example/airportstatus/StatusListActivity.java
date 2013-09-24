@@ -73,16 +73,6 @@ public class StatusListActivity extends Activity {
 		bar.setDisplayHomeAsUpEnabled(true);
 	}
 	
-	private void setTemplateData(Intent intent) {
-		try {
-			Bundle data = intent.getBundleExtra("data");
-			drivingTimeEstimate.setText(data.getString(StatusKeys.KEY_TRAVEL_TIME_DRIVING));
-			transitTimeEstimate.setText(data.getString(StatusKeys.KEY_TRAVEL_TIME_TRANSIT));
-		} catch (Exception e) {
-			Log.e("INVALID_INTENT_EXTRA", e.getMessage());
-		}
-	}
-	
 	@SuppressLint("InlinedApi")
 	private void setupViews() {
 		weather = (TextView) findViewById(R.id.tvWeather);
@@ -92,64 +82,6 @@ public class StatusListActivity extends Activity {
 		drivingTimeEstimate = (TextView) findViewById(R.id.tvTransitValue1);
 		transitTimeEstimate = (TextView) findViewById(R.id.tvTransitValue2);
  	}
-	/*
-	private void loadResults() {
-		AsyncHttpClient client = new AsyncHttpClient();
-	    client.get("http://services.faa.gov/airport/status/" + Uri.encode(code) + "?format=application/json", 
-	    			new JsonHttpResponseHandler() {
-	   		@Override
-	   		public void onSuccess(JSONObject response) {
-	    		airportStatus = AirportStatus.fromJson(response);
-	    		weather.setText(airportStatus.getWeather() + " (visibility: " + airportStatus.getVisibility() + ")");
-	    		if(!airportStatus.getDelay())
-	    			delays.setText("None reported");
-	    		else {
-	    			String result = "Average Delay: " + airportStatus.getAvgDelay();
-	    			result += "\nDelay Type: " + airportStatus.getDelayType();
-	    			String closureBegin = airportStatus.getClosureBegin();
-	    			if (closureBegin != "") {
-	    				result += "\nClosure Begin Time: " + closureBegin;
-	    				result += "\nClosure End Time: " + airportStatus.getClosureEnd();
-	    			} else {
-	    				result += "\nEnd Time: " + airportStatus.getEndTime();
-	    			}
-	    			delays.setText(result);
-	    		
-	    		}
-	   		}
-	   		
-	   		@Override
-			public void onFailure(Throwable e, JSONObject obj) {
-	   			Toast.makeText(getParent(), obj.toString(), Toast.LENGTH_SHORT).show();
-			}
-	   	});
-	    
-	    AirportStatusLocation current = getCurrentLocation();
-	    getDrivingTimeEstimate(current.toString(), code, new JsonHttpResponseHandler() {
-	    	@Override
-	    	public void onSuccess(JSONObject response) {
-	    		displayResponse(drivingTimeEstimate, response);
-	    	}
-	    	
-	    	@Override
-	    	public void onFailure(Throwable error) {
-	    		displayFailureResponse();
-	    	}
-		});
-	    
-	    getTransitTimeEstimate(current.toString(), code, new JsonHttpResponseHandler() {
-	    	@Override
-	    	public void onSuccess(JSONObject response) {
-	    		displayResponse(transitTimeEstimate, response);
-	    	}
-	    	
-	    	@Override
-	    	public void onFailure(Throwable error) {
-	    		displayFailureResponse();
-	    	}
-		});
-	}
-	*/
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -160,5 +92,17 @@ public class StatusListActivity extends Activity {
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
+	}
+	
+	private void setTemplateData(Intent intent) {
+		try {
+			Bundle data = intent.getBundleExtra("data");
+			drivingTimeEstimate.setText(data.getString(StatusKeys.TRAVEL_TIME_DRIVING));
+			transitTimeEstimate.setText(data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
+			delays.setText(data.getString(StatusKeys.DELAYS));
+			weather.setText(data.getString(StatusKeys.WEATHER));
+		} catch (Exception e) {
+			Log.e("INVALID_INTENT_EXTRA", e.getMessage());
+		}
 	}
 }

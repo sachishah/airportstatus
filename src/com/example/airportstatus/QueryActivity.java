@@ -5,10 +5,6 @@ import java.util.Observer;
 
 import org.json.JSONObject;
 
-import com.example.airportstatus.models.AirportStatusLocation;
-import com.example.airportstatus.models.TravelTimeEstimate;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -16,13 +12,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.airportstatus.models.AirportStatusLocation;
+import com.example.airportstatus.models.TravelTimeEstimate;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class QueryActivity extends Activity implements Observer {
 	private NetworkTaskCollection myTasks;
@@ -91,12 +90,17 @@ public class QueryActivity extends Activity implements Observer {
 						int totalTripMins;
 						try {
 							totalTripMins = TravelTimeEstimate.parseDirections(response);
-							myTasks.finishWithResult(StatusKeys.KEY_TRAVEL_TIME_DRIVING, TravelTimeEstimate.getFormattedDuration(totalTripMins));
+							myTasks.finishWithResult(StatusKeys.TRAVEL_TIME_DRIVING, TravelTimeEstimate.getFormattedDuration(totalTripMins));
 						} catch (Exception e) {
-							// !!!
-							Log.e("NETWORK_TASKS", "what the crap");
+							myTasks.finishOneTask();
+							Log.e("TASK", "Task failed 1");							
 							e.printStackTrace();
 						}
+					}
+					
+					@Override
+					public void onFailure(Throwable error, JSONObject obj) {
+						myTasks.finishOneTask();
 					}
 				};
 			}
@@ -116,12 +120,17 @@ public class QueryActivity extends Activity implements Observer {
 						int totalTripMins;
 						try {
 							totalTripMins = TravelTimeEstimate.parseDirections(response);
-							myTasks.finishWithResult(StatusKeys.KEY_TRAVEL_TIME_TRANSIT, TravelTimeEstimate.getFormattedDuration(totalTripMins));
+							myTasks.finishWithResult(StatusKeys.TRAVEL_TIME_TRANSIT, TravelTimeEstimate.getFormattedDuration(totalTripMins));
 						} catch (Exception e) {
-							// !!!
-							Log.e("NETWORK_TASKS", "what the crap");
+							myTasks.finishOneTask();
+							Log.e("TASK", "Task failed 2 ");							
 							e.printStackTrace();
 						}
+					}
+					
+					@Override
+					public void onFailure(Throwable error, JSONObject obj) {
+						myTasks.finishOneTask();
 					}
 				};
 			}
@@ -131,59 +140,48 @@ public class QueryActivity extends Activity implements Observer {
 				TravelTimeEstimate.getTransitTime(currentLocation.toString(), airportCode, this.handler);
 			}
 		});
-		
-		
-/*
- * 
- * 
- * 
- * 
- * 
-	
-		AsyncHttpClient client = new AsyncHttpClient();
-	    client.get("http://services.faa.gov/airport/status/" + Uri.encode(code) + "?format=application/json", 
-	    			new JsonHttpResponseHandler() {
-	   		@Override
-	   		public void onSuccess(JSONObject response) {
-	    		airportStatus = AirportStatus.fromJson(response);
-	    		weather.setText(airportStatus.getWeather() + " (visibility: " + airportStatus.getVisibility() + ")");
-	    		if(!airportStatus.getDelay())
-	    			delays.setText("None reported");
-	    		else {
-	    			String result = "Average Delay: " + airportStatus.getAvgDelay();
-	    			result += "\nDelay Type: " + airportStatus.getDelayType();
-	    			String closureBegin = airportStatus.getClosureBegin();
-	    			if (closureBegin != "") {
-	    				result += "\nClosure Begin Time: " + closureBegin;
-	    				result += "\nClosure End Time: " + airportStatus.getClosureEnd();
-	    			} else {
-	    				result += "\nEnd Time: " + airportStatus.getEndTime();
-	    			}
-	    			delays.setText(result);
-	    		
-	    		}
-	   		}
-	   		
-	   		@Override
-			public void onFailure(Throwable e, JSONObject obj) {
-	   			Toast.makeText(getParent(), obj.toString(), Toast.LENGTH_SHORT).show();
-			}
-	   	});
-		
-		
-		
-		myTasks.addTask(new AsyncTask<Void, Void, Boolean>() {
+		/*
+		 * Add this back in when we have an API that's not giving so much trouble.
+		myTasks.addTask(new NetworkTask() {
 			@Override
-			protected Boolean doInBackground(Void... params) {
-				Log.d("TASK", "Task is running");
-				return true;
+			public void setHandler() {
+				this.handler = new JsonHttpResponseHandler() {
+					@Override
+					public void onSuccess(JSONObject response) {
+						AirportStatus airportStatus = AirportStatus.fromJson(response);
+						myTasks.addResult(StatusKeys.WEATHER, airportStatus.getWeather() + " (visibility: " + airportStatus.getVisibility() + ")");
+						
+						String delays;
+			    		if (!airportStatus.getDelay()) {
+			    			delays = "None reported";
+			    		} else {
+			    			delays = "Average Delay: " + airportStatus.getAvgDelay();
+			    			delays += "\nDelay Type: " + airportStatus.getDelayType();
+			    			String closureBegin = airportStatus.getClosureBegin();
+			    			if (closureBegin != "") {
+			    				delays += "\nClosure Begin Time: " + closureBegin;
+			    				delays += "\nClosure End Time: " + airportStatus.getClosureEnd();
+			    			} else {
+			    				delays += "\nEnd Time: " + airportStatus.getEndTime();
+			    			}
+			    		}
+			    		myTasks.finishWithResult(StatusKeys.DELAYS, delays);
+					}
+					
+					@Override
+					public void onFailure(Throwable error, JSONObject obj) {
+						myTasks.addResult(StatusKeys.WEATHER, "");
+						myTasks.finishWithResult(StatusKeys.DELAYS, "");
+						Log.e("FAA_API_ERROR", obj.toString());
+					}
+				};
 			}
 			
 			@Override
-			protected void onPostExecute(Boolean result) {
-				Log.d("TASK", "Second task completed with result " + result.toString());
-				myTasks.markTaskComplete();
-				myTasks.checkTaskStatus();
+			public void execute() {
+				AsyncHttpClient client = new AsyncHttpClient();
+				client.setTimeout(10 * 1000);
+				client.get("http://services.faa.gov/airport/status/" + Uri.encode(airportCode) + "?format=application/json", this.handler);
 			}
 		});
 		*/

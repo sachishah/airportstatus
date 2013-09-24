@@ -1,5 +1,6 @@
 package com.example.airportstatus;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -26,6 +27,15 @@ public class NetworkTaskCollection extends Observable {
 			t.setHandler();
 			t.execute();
 		}
+	}
+	
+	public void addResult(String key, String value) {
+		this.setResult(key, value);
+	} 
+	
+	public void finishOneTask() {
+		this.markTaskComplete();
+		this.checkTaskStatus();
 	}
 	
 	public void finishWithResult(String key, String value) {
