@@ -113,7 +113,7 @@
                 android:layout_height="20dp"
                 android:padding="2dp"
                 android:clickable="true"
-                android:onClick="onClickTransitMapButton"
+                android:onClick="onClickDrivingMapButton"
                 android:contentDescription="@string/txtDrivingMapButton"
                 android:src="@drawable/ic_right_arrow" />
         </LinearLayout>

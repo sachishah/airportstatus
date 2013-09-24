@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.airportstatus.GoogleClient;
@@ -96,5 +97,18 @@ public class TravelTimeEstimate {
 		// so currentTimeMillis must be divided by 1000 
 		// to provide the correct time precision
 		return String.valueOf((System.currentTimeMillis() / 1000) + secondsAhead);
+	}
+	
+	public static String getDrivingMapUrl(String origin, String destination) {
+		return GoogleClient.getMapsUrl() +
+				"saddr=" + Uri.encode(origin) +
+				"&daddr=" + Uri.encode(destination);
+	}
+	
+	public static String getTransitMapUrl(String origin, String destination) {
+		return GoogleClient.getMapsUrl() +
+				"dirflg=" + Uri.encode("r") +
+				"&saddr=" + Uri.encode(origin) +
+				"&daddr=" + Uri.encode(destination);
 	}
 }
