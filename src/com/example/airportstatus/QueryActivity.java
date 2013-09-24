@@ -26,6 +26,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 public class QueryActivity extends Activity implements Observer {
 	private NetworkTaskCollection myTasks;
 	private String airportCode;
+	private AirportStatusLocation currentLocation;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class QueryActivity extends Activity implements Observer {
 		setContentView(R.layout.activity_query);
 		
 		airportCode = getIntent().getStringExtra("airport_code");
+		currentLocation = getCurrentLocation();
 		
 		// Show the Up button in the action bar.
 		setupActionBar();
@@ -78,7 +80,7 @@ public class QueryActivity extends Activity implements Observer {
 		// NetworkTaskCollection is Observable
 		// NetworkTask has success handler that pushes data to bundle
 		
-		final AirportStatusLocation currentLocation = getCurrentLocation();
+		
 		myTasks = new NetworkTaskCollection();
 		myTasks.addObserver(this);
 		myTasks.addTask(new NetworkTask() {
@@ -196,6 +198,7 @@ public class QueryActivity extends Activity implements Observer {
 		// is the one that signals success
 		if (bundle.containsKey("success")) {
 			Intent i = new Intent(this, StatusListActivity.class);
+			bundle.putString("origin", currentLocation.toString());
 			bundle.putString("airportCode", airportCode);
 			i.putExtra("data", bundle);
 	    	startActivity(i);

@@ -1,15 +1,9 @@
 package com.example.airportstatus;
 
-import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,10 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.airportstatus.models.AirportStatus;
-import com.example.airportstatus.models.AirportStatusLocation;
 import com.example.airportstatus.models.TravelTimeEstimate;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class StatusListActivity extends Activity {
 	
@@ -34,13 +25,15 @@ public class StatusListActivity extends Activity {
 	TextView drivingTimeEstimate, transitTimeEstimate;
 	Button securityWaitTimes;
 	AirportStatus airportStatus;
+	Bundle intentData;
 	
 	@SuppressLint("DefaultLocale")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_status_list);
-		code = getIntent().getBundleExtra("data").getString("airportCode").toUpperCase();
+		intentData = getIntent().getBundleExtra("data");
+		code = intentData.getString("airportCode").toUpperCase();
 		setupActionBar();
 		setupViews();
 		if (isCodeValid()) {
@@ -104,5 +97,34 @@ public class StatusListActivity extends Activity {
 		} catch (Exception e) {
 			Log.e("INVALID_INTENT_EXTRA", e.getMessage());
 		}
+	}
+	
+	public void onClickDrivingMapButton(View v) {
+		if (!intentData.containsKey("origin")) {
+			Toast.makeText(getApplicationContext(), "Missing origin data", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		String origin = intentData.getString("origin");
+		launchMapIntent(TravelTimeEstimate.getDrivingMapUrl(origin, code));
+	}
+	
+	public void onClickTransitMapButton(View v) {
+		if (!intentData.containsKey("origin")) {
+			Toast.makeText(getApplicationContext(), "Missing origin data", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		String origin = intentData.getString("origin");
+		launchMapIntent(TravelTimeEstimate.getTransitMapUrl(origin, code));
+	}
+	
+	private void launchMapIntent(String url) {
+		try {
+			
+		} catch (Exception e) {
+			Log.e("MAP_LAUNCHER", e.getMessage());
+			Toast.makeText(getApplicationContext(), R.string.txtRoutingError, Toast.LENGTH_SHORT).show();
+		}
+		Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+		startActivity(intent);
 	}
 }
