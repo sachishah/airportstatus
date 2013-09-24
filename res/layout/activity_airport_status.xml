@@ -8,24 +8,33 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/bg_repeat"
     tools:context=".AirportStatusActivity" >
-
-    <AutoCompleteTextView
-        android:id="@+id/tvAirportCode"
+    
+    <RelativeLayout
+        
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/airportCodeHint"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp" />
+        android:background="@drawable/bg_white_rounded"
+        android:layout_margin="10dp"
+        android:padding="8dp"
+        android:layout_centerHorizontal="true" >
+        
+        <AutoCompleteTextView
+	        android:id="@+id/tvAirportCode"
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        android:hint="@string/airportCodeHint"
+	        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+	        android:textAppearance="?android:attr/textAppearanceSmall"/>
     
-    <Button
-        android:id="@+id/btnGo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="140dp"
-        android:onClick="onClick"
-        android:text="@string/go" />
+	    <Button
+	        android:id="@+id/btnGo"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_centerHorizontal="true"
+	        android:layout_below="@id/tvAirportCode"
+	        android:onClick="onClick"
+	        android:text="@string/go" />
+    </RelativeLayout>
 
 </RelativeLayout>
