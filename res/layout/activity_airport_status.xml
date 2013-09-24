@@ -2,39 +2,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_repeat"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/bg_repeat"
     tools:context=".AirportStatusActivity" >
+
+    <RelativeLayout
+        android:id="@+id/layoutCenterContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        >
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/img_logo" />
     
     <RelativeLayout
-        
+        android:id="@+id/layoutSearchContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_white_rounded"
+        android:layout_below="@+id/imgLogo"
+        android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
-        android:padding="8dp"
-        android:layout_centerHorizontal="true" >
-        
+        android:background="@drawable/bg_white_rounded"
+        android:padding="8dp" >
+
         <AutoCompleteTextView
-	        android:id="@+id/tvAirportCode"
-	        android:layout_width="match_parent"
-	        android:layout_height="50dp"
-	        android:hint="@string/airportCodeHint"
-	        android:layout_alignParentTop="true"
-	        android:layout_centerHorizontal="true"
-	        android:textAppearance="?android:attr/textAppearanceSmall"/>
-    
-	    <Button
-	        android:id="@+id/btnGo"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerHorizontal="true"
-	        android:layout_below="@id/tvAirportCode"
-	        android:onClick="onClick"
-	        android:text="@string/go" />
+            android:id="@+id/tvAirportCode"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:hint="@string/airportCodeHint"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <Button
+            android:id="@+id/btnGo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvAirportCode"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:onClick="onClick"
+            android:text="@string/go" />
     </RelativeLayout>
+        </RelativeLayout>
+    
+
 
 </RelativeLayout>
