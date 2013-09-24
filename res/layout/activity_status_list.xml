@@ -96,7 +96,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="0.5"
+                android:layout_weight="0.3"
                 android:text="@string/txtHeaderTransit1" />
 
             <TextView
@@ -107,6 +107,15 @@
                 android:layout_weight="0.5"
                 android:text="@string/txtTravelTimeError" />
 
+            <ImageView
+                android:id="@+id/imgDrivingMapButton"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:padding="2dp"
+                android:clickable="true"
+                android:onClick="onClickDrivingMapButton"
+                android:contentDescription="@string/txtDrivingMapButton"
+                android:src="@drawable/ic_right_arrow" />
         </LinearLayout>
         
         <LinearLayout
@@ -121,7 +130,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="0.5"
+                android:layout_weight="0.3"
                 android:text="@string/txtHeaderTransit2" />
 
             <TextView
@@ -131,6 +140,16 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.5"
                 android:text="@string/txtTravelTimeError" />
+            
+            <ImageView
+                android:id="@+id/imgTransitMapButton"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:padding="2dp"
+                android:clickable="true"
+                android:onClick="onClickTransitMapButton"
+                android:src="@drawable/ic_right_arrow"
+                android:contentDescription="@string/txtTransitMapButton" />
         </LinearLayout>
 
         <TextView
