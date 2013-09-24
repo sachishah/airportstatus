@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.5"
-                android:text="@string/txtTransitTime1" />
+                android:text="@string/txtTravelTimeError" />
 
         </LinearLayout>
         
@@ -130,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.5"
-                android:text="@string/txtTransitTime2" />
+                android:text="@string/txtTravelTimeError" />
         </LinearLayout>
 
         <TextView
