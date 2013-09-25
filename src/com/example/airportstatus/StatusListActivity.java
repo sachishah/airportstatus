@@ -153,7 +153,6 @@ public class StatusListActivity extends Activity {
 			Favorite newFavorite = new Favorite();
 			newFavorite.setAirportCode(code);
 			newFavorite.save();
-			
 		}
 		this.setFavoritedStatus();
 	}

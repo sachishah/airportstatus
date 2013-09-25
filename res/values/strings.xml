@@ -27,5 +27,6 @@
 
     <string name="txtTransitMapButton">Button to navigate to Google Maps transit directions</string>
     <string name="txtDrivingMapButton">Button to navigate to Google Maps driving directions</string>
+    <string name="txtFavoritesPlaceholder">Favorites</string>
 
 </resources>
