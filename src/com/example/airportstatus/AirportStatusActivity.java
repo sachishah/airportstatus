@@ -3,6 +3,8 @@ package com.example.airportstatus;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +13,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,7 +20,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class AirportStatusActivity extends Activity {
+import com.example.airportstatus.models.Favorite;
+
+public class AirportStatusActivity extends Activity implements OnNavigationListener {
 
 	Button btnGo;
 	AutoCompleteTextView tvAirportCode;
@@ -37,7 +40,24 @@ public class AirportStatusActivity extends Activity {
         setContentView(R.layout.activity_airport_status);
         setupLocationStorage();
         setupLocationListener();
+        
+        /// DROP DOWN STUFF
+        
+        // Set up the action bar to show a dropdown list.
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        
+        ArrayList<Favorite> dropdownValues = Favorite.getAll();
+        /*
+        // Specify a SpinnerAdapter to populate the dropdown list.
+        FavoritesAdapter adapter = new FavoritesAdapter(actionBar.getThemedContext(), dropdownValues);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+        // Set up the dropdown list navigation in the action bar.
+        actionBar.setListNavigationCallbacks(adapter, this);
+        /// END DROP DOWN STUFF
+		*/
         setupButton();
         setupTextView();
     }
@@ -118,6 +138,12 @@ public class AirportStatusActivity extends Activity {
     	
     	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 0, locationListener);
     }
+
+	@Override
+	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
     
     
 }
