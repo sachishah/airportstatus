@@ -11,10 +11,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.airportstatus.models.AirportStatus;
+import com.example.airportstatus.models.Favorite;
 import com.example.airportstatus.models.TravelTimeEstimate;
 
 public class StatusListActivity extends Activity {
@@ -24,6 +26,7 @@ public class StatusListActivity extends Activity {
 	TextView delays;
 	TextView drivingTimeEstimate, transitTimeEstimate;
 	Button securityWaitTimes;
+	ImageView favoriteStatus;
 	AirportStatus airportStatus;
 	Bundle intentData;
 	
@@ -74,6 +77,7 @@ public class StatusListActivity extends Activity {
 		delays = (TextView) findViewById(R.id.tvDelays);
 		drivingTimeEstimate = (TextView) findViewById(R.id.tvTransitValue1);
 		transitTimeEstimate = (TextView) findViewById(R.id.tvTransitValue2);
+		favoriteStatus = (ImageView) findViewById(R.id.ivFavorite);
  	}
 	
 	@Override
@@ -129,6 +133,14 @@ public class StatusListActivity extends Activity {
 	}
 	
 	public void onFavoriteAction(View v) {
-		Toast.makeText(this, "that tickles", Toast.LENGTH_SHORT).show();
+		if (false) { //Favorite.find(code).length() > 0
+			// Favorite exists; delete it
+		} else {
+			// Set item as favorite
+			Favorite newFavorite = new Favorite();
+			newFavorite.setAirportCode(code);
+			newFavorite.save();
+			favoriteStatus.setImageResource(R.drawable.ic_star_filled);
+		}
 	}
 }

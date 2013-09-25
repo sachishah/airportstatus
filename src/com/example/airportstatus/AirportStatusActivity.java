@@ -41,23 +41,6 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
         setupLocationStorage();
         setupLocationListener();
         
-        /// DROP DOWN STUFF
-        
-        // Set up the action bar to show a dropdown list.
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        
-        ArrayList<Favorite> dropdownValues = Favorite.getAll();
-        
-        // Specify a SpinnerAdapter to populate the dropdown list.
-        FavoritesAdapter adapter = new FavoritesAdapter(actionBar.getThemedContext(), dropdownValues);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // Set up the dropdown list navigation in the action bar.
-        actionBar.setListNavigationCallbacks(adapter, this);
-        /// END DROP DOWN STUFF
-		
         setupButton();
         setupTextView();
     }
@@ -66,6 +49,26 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.airport_status, menu);
+        
+        
+        /// DROP DOWN STUFF
+        
+        // Set up the action bar to show a dropdown list.
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        
+        ArrayList<Favorite> dropdownValues = (ArrayList<Favorite>) Favorite.getAll();
+        
+        // Specify a SpinnerAdapter to populate the dropdown list.
+        FavoritesAdapter adapter = new FavoritesAdapter(actionBar.getThemedContext(), dropdownValues);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Set up the dropdown list navigation in the action bar.
+        actionBar.setListNavigationCallbacks(adapter, this);
+        /// END DROP DOWN STUFF
+        
+        
         return true;
     }
     
