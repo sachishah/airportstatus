@@ -3,6 +3,7 @@ package com.example.airportstatus;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
@@ -142,6 +143,45 @@ public class QueryActivity extends Activity implements Observer {
 				TravelTimeEstimate.getTransitTime(currentLocation.toString(), airportCode, this.handler);
 			}
 		});
+		
+		myTasks.addTask(new NetworkTask() {
+			@Override
+			public void setHandler() {
+				this.handler = new JsonHttpResponseHandler() {
+					@Override
+					public void onSuccess(JSONObject response) {
+						Log.d("WEATHER", response.toString());
+						String currentWeatherAtAirport;
+						try {
+							currentWeatherAtAirport = FlightStatsClient.getWeatherString(response);
+						} catch (Exception e) {
+							currentWeatherAtAirport = "";
+						}
+						try {
+							Double tempC = Double.valueOf(response.getString("temperatureCelsius")); // Result only comes back in C
+							Double tempF = (tempC * 1.8) + 32;
+							myTasks.addResult(StatusKeys.TEMPERATURE, String.valueOf(tempF));
+						} catch (JSONException j) {
+							Log.e("WEATHER", "Temperature field not found in response" + response.toString());
+						}
+						myTasks.finishWithResult(StatusKeys.WEATHER, currentWeatherAtAirport);
+						myTasks.finishOneTask();
+					}
+					
+					@Override
+					public void onFailure(Throwable error, JSONObject obj) {
+						Log.e("WEATHER", "NOOOO");
+						myTasks.finishOneTask();
+					}
+				};
+			}
+			
+			@Override
+			public void execute() {
+				FlightStatsClient.getWeatherConditions(airportCode, this.handler);
+			}
+		});
+		
 		/*
 		 * Add this back in when we have an API that's not giving so much trouble.
 		myTasks.addTask(new NetworkTask() {
