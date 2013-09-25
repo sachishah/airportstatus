@@ -77,7 +77,7 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
     }
     
     public void onClick(View v) {
-    	String textEntered = (String) tvAirportCode.getText().toString();
+    	String textEntered = tvAirportCode.getText().toString();
     	String code = AirportCodes.IATA_CODES.get(textEntered);
     	if (code != null) {
 	    	Toast.makeText(this, "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
