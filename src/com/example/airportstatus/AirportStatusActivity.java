@@ -50,15 +50,12 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.airport_status, menu);
         
-        
-        /// DROP DOWN STUFF
-        
         // Set up the action bar to show a dropdown list.
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         
-        ArrayList<Favorite> dropdownValues = (ArrayList<Favorite>) Favorite.getAll();
+        ArrayList<String> dropdownValues = Favorite.getAllCodes();
         
         // Specify a SpinnerAdapter to populate the dropdown list.
         FavoritesAdapter adapter = new FavoritesAdapter(actionBar.getThemedContext(), dropdownValues);
@@ -66,8 +63,6 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
 
         // Set up the dropdown list navigation in the action bar.
         actionBar.setListNavigationCallbacks(adapter, this);
-        /// END DROP DOWN STUFF
-        
         
         return true;
     }

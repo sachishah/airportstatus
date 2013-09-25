@@ -1,5 +1,6 @@
 package com.example.airportstatus.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.activeandroid.Model;
@@ -17,9 +18,14 @@ public class Favorite extends Model {
 		this.airportCode = code;
 	}
 	
-	public static List<Favorite> getAll() {
-		return new Select().from(Favorite.class)
+	public static ArrayList<String> getAllCodes() {
+		List<Favorite> favorited = new Select().from(Favorite.class)
 				.execute();
+		ArrayList<String> codes = new ArrayList<String>();
+		for (Favorite f : favorited) {
+			codes.add(f.airportCode);
+		}
+		return codes;
 	}
 	
 	public static boolean exists(String query) {
