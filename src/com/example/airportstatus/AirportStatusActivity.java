@@ -49,7 +49,7 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         
         ArrayList<Favorite> dropdownValues = Favorite.getAll();
-        /*
+        
         // Specify a SpinnerAdapter to populate the dropdown list.
         FavoritesAdapter adapter = new FavoritesAdapter(actionBar.getThemedContext(), dropdownValues);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -57,7 +57,7 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
         // Set up the dropdown list navigation in the action bar.
         actionBar.setListNavigationCallbacks(adapter, this);
         /// END DROP DOWN STUFF
-		*/
+		
         setupButton();
         setupTextView();
     }

@@ -1,9 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-	<item
-	android:id="@+id/menuFavorites"
-	android:showAsAction="ifRoom"
-	android:title="Favorites" />
-
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

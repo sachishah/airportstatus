@@ -127,4 +127,8 @@ public class StatusListActivity extends Activity {
 		Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
 		startActivity(intent);
 	}
+	
+	public void onFavoriteAction(View v) {
+		Toast.makeText(this, "that tickles", Toast.LENGTH_SHORT).show();
+	}
 }
