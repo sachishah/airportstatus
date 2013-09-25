@@ -157,11 +157,11 @@ public class QueryActivity extends Activity implements Observer {
 							currentWeatherAtAirport = "";
 						}
 						try {
-							Double tempC = Double.valueOf(response.getString("temperatureCelsius")); // Result only comes back in C
+							Double tempC = FlightStatsClient.getTempCelsius(response); // Result only comes back in degrees celsius
 							Double tempF = (tempC * 1.8) + 32;
 							myTasks.addResult(StatusKeys.TEMPERATURE, String.valueOf(tempF));
-						} catch (JSONException j) {
-							Log.e("WEATHER", "Temperature field not found in response" + response.toString());
+						} catch (Exception e) {
+							Log.e("WEATHER", e.getMessage() + " " + response.toString());
 						}
 						myTasks.finishWithResult(StatusKeys.WEATHER, currentWeatherAtAirport);
 					}

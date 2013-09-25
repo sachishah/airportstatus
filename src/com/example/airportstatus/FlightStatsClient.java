@@ -55,6 +55,18 @@ public class FlightStatsClient {
 		throw new Exception("No weather value found");
 	}
 	
+	public static double getTempCelsius(JSONObject response) throws Exception {
+		try {
+			return Double.valueOf(response.getJSONObject("metar").getString("temperatureCelsius"));
+		} catch (JSONException e) {
+			Log.e("WEATHER", "Key not found");
+			Log.e("WEATHER", e.getMessage());
+		}
+		
+		// No result was found, so raise an exception
+		throw new Exception("No temperatureCelsius value found");
+	}
+	
 	public static int getDelayIndex(JSONObject response) throws Exception {
 		try {
 			JSONObject delayData = response.getJSONArray("delayIndexes").getJSONObject(0);
