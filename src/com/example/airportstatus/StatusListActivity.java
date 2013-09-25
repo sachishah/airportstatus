@@ -28,6 +28,7 @@ public class StatusListActivity extends Activity {
 	Button securityWaitTimes;
 	ImageView favoriteStatus;
 	AirportStatus airportStatus;
+	boolean isFavorited;
 	Bundle intentData;
 	
 	@SuppressLint("DefaultLocale")
@@ -98,6 +99,8 @@ public class StatusListActivity extends Activity {
 			transitTimeEstimate.setText(data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
 			delays.setText(data.getString(StatusKeys.DELAYS));
 			weather.setText(data.getString(StatusKeys.WEATHER));
+			
+			setFavoritedStatus();
 		} catch (Exception e) {
 			Log.e("INVALID_INTENT_EXTRA", e.getMessage());
 		}
@@ -132,15 +135,26 @@ public class StatusListActivity extends Activity {
 		startActivity(intent);
 	}
 	
+	private void setFavoritedStatus() {
+		this.isFavorited = Favorite.exists(this.code);
+		if (this.isFavorited) {
+			favoriteStatus.setImageResource(R.drawable.ic_star_filled);
+		} else {
+			favoriteStatus.setImageResource(R.drawable.ic_star_empty);
+		}
+	}
+	
 	public void onFavoriteAction(View v) {
-		if (false) { //Favorite.find(code).length() > 0
+		if (this.isFavorited == true) {
+			Favorite.delete(code);
 			// Favorite exists; delete it
 		} else {
 			// Set item as favorite
 			Favorite newFavorite = new Favorite();
 			newFavorite.setAirportCode(code);
 			newFavorite.save();
-			favoriteStatus.setImageResource(R.drawable.ic_star_filled);
+			
 		}
+		this.setFavoritedStatus();
 	}
 }
