@@ -3,6 +3,8 @@ package com.example.airportstatus;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +13,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,14 +20,18 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class AirportStatusActivity extends Activity {
+import com.example.airportstatus.models.Favorite;
+
+public class AirportStatusActivity extends Activity implements OnNavigationListener {
 
 	Button btnGo;
 	AutoCompleteTextView tvAirportCode;
 	LocationManager locationManager;
 	LocationListener locationListener;
 	SharedPreferences locationPrefs;
+	FavoritesAdapter favoritesListAdapter;
 	
+	public static final String AIRPORT_CODE = "airport_code";
 	public static final String PREFS_NAME = "AirportStatusPrefs";
 	public static final String PREFS_LATITUDE = "LAT";
 	public static final String PREFS_LONGITUDE= "LON";
@@ -37,7 +42,7 @@ public class AirportStatusActivity extends Activity {
         setContentView(R.layout.activity_airport_status);
         setupLocationStorage();
         setupLocationListener();
-
+        
         setupButton();
         setupTextView();
     }
@@ -46,6 +51,22 @@ public class AirportStatusActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.airport_status, menu);
+        
+        // Set up the action bar to show a dropdown list.
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        
+        ArrayList<String> dropdownValues = Favorite.getAllCodes();
+        dropdownValues.add(0, getResources().getString(R.string.txtFavoritesPlaceholder));
+        
+        // Specify a SpinnerAdapter to populate the dropdown list.
+        favoritesListAdapter = new FavoritesAdapter(actionBar.getThemedContext(), dropdownValues);
+        favoritesListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Set up the dropdown list navigation in the action bar.
+        actionBar.setListNavigationCallbacks(favoritesListAdapter, this);
+        
         return true;
     }
     
@@ -57,12 +78,12 @@ public class AirportStatusActivity extends Activity {
     }
     
     public void onClick(View v) {
-    	String textEntered = (String) tvAirportCode.getText().toString();
+    	String textEntered = tvAirportCode.getText().toString();
     	String code = AirportCodes.IATA_CODES.get(textEntered);
     	if (code != null) {
 	    	Toast.makeText(this, "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
 	    	Intent i = new Intent(this, QueryActivity.class);
-	    	i.putExtra("airport_code", code);
+	    	i.putExtra(AIRPORT_CODE, code);
 	    	startActivity(i);
     	} else {
     		Toast.makeText(this,  "Could not find airport code " + textEntered, Toast.LENGTH_SHORT).show();
@@ -118,6 +139,18 @@ public class AirportStatusActivity extends Activity {
     	
     	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 0, locationListener);
     }
+
+	@Override
+	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+			String airportCode = favoritesListAdapter.getItem(itemPosition);
+		if (airportCode.length() == 3) {
+			Intent i = new Intent(this, QueryActivity.class);
+			i.putExtra(AIRPORT_CODE, airportCode);
+			startActivity(i);
+			return true;
+		}
+		return false;
+	}
     
     
 }

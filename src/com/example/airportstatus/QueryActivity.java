@@ -236,8 +236,8 @@ public class QueryActivity extends Activity implements Observer {
 	private AirportStatusLocation getCurrentLocation() {
 		try {
 			SharedPreferences settings = getSharedPreferences(AirportStatusActivity.PREFS_NAME, MODE_PRIVATE);
-			double lat = (double) settings.getFloat(AirportStatusActivity.PREFS_LATITUDE, -1);
-			double lon = (double) settings.getFloat(AirportStatusActivity.PREFS_LONGITUDE, -1);
+			double lat = settings.getFloat(AirportStatusActivity.PREFS_LATITUDE, -1);
+			double lon = settings.getFloat(AirportStatusActivity.PREFS_LONGITUDE, -1);
 				
 			if (lat < 0 || lon < 0) {
 				throw new Exception("No location preferences have been set");
