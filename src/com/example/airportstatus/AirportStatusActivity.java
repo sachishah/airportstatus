@@ -29,7 +29,9 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
 	LocationManager locationManager;
 	LocationListener locationListener;
 	SharedPreferences locationPrefs;
+	FavoritesAdapter favoritesListAdapter;
 	
+	public static final String AIRPORT_CODE = "airport_code";
 	public static final String PREFS_NAME = "AirportStatusPrefs";
 	public static final String PREFS_LATITUDE = "LAT";
 	public static final String PREFS_LONGITUDE= "LON";
@@ -59,11 +61,11 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
         dropdownValues.add(0, getResources().getString(R.string.txtFavoritesPlaceholder));
         
         // Specify a SpinnerAdapter to populate the dropdown list.
-        FavoritesAdapter adapter = new FavoritesAdapter(actionBar.getThemedContext(), dropdownValues);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        favoritesListAdapter = new FavoritesAdapter(actionBar.getThemedContext(), dropdownValues);
+        favoritesListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Set up the dropdown list navigation in the action bar.
-        actionBar.setListNavigationCallbacks(adapter, this);
+        actionBar.setListNavigationCallbacks(favoritesListAdapter, this);
         
         return true;
     }
@@ -81,7 +83,7 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
     	if (code != null) {
 	    	Toast.makeText(this, "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
 	    	Intent i = new Intent(this, QueryActivity.class);
-	    	i.putExtra("airport_code", code);
+	    	i.putExtra(AIRPORT_CODE, code);
 	    	startActivity(i);
     	} else {
     		Toast.makeText(this,  "Could not find airport code " + textEntered, Toast.LENGTH_SHORT).show();
@@ -140,7 +142,13 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		// TODO Auto-generated method stub
+			String airportCode = favoritesListAdapter.getItem(itemPosition);
+		if (airportCode.length() == 3) {
+			Intent i = new Intent(this, QueryActivity.class);
+			i.putExtra(AIRPORT_CODE, airportCode);
+			startActivity(i);
+			return true;
+		}
 		return false;
 	}
     
