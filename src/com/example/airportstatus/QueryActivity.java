@@ -3,6 +3,7 @@ package com.example.airportstatus;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
@@ -142,51 +143,74 @@ public class QueryActivity extends Activity implements Observer {
 				TravelTimeEstimate.getTransitTime(currentLocation.toString(), airportCode, this.handler);
 			}
 		});
-		/*
-		 * Add this back in when we have an API that's not giving so much trouble.
+		
 		myTasks.addTask(new NetworkTask() {
 			@Override
 			public void setHandler() {
 				this.handler = new JsonHttpResponseHandler() {
 					@Override
 					public void onSuccess(JSONObject response) {
-						AirportStatus airportStatus = AirportStatus.fromJson(response);
-						myTasks.addResult(StatusKeys.WEATHER, airportStatus.getWeather() + " (visibility: " + airportStatus.getVisibility() + ")");
-						
-						String delays;
-			    		if (!airportStatus.getDelay()) {
-			    			delays = "None reported";
-			    		} else {
-			    			delays = "Average Delay: " + airportStatus.getAvgDelay();
-			    			delays += "\nDelay Type: " + airportStatus.getDelayType();
-			    			String closureBegin = airportStatus.getClosureBegin();
-			    			if (closureBegin != "") {
-			    				delays += "\nClosure Begin Time: " + closureBegin;
-			    				delays += "\nClosure End Time: " + airportStatus.getClosureEnd();
-			    			} else {
-			    				delays += "\nEnd Time: " + airportStatus.getEndTime();
-			    			}
-			    		}
-			    		myTasks.finishWithResult(StatusKeys.DELAYS, delays);
+						String currentWeatherAtAirport;
+						try {
+							currentWeatherAtAirport = FlightStatsClient.getWeatherString(response);
+						} catch (Exception e) {
+							currentWeatherAtAirport = "";
+						}
+						try {
+							Double tempC = FlightStatsClient.getTempCelsius(response); // Result only comes back in degrees celsius
+							Double tempF = (tempC * 1.8) + 32;
+							myTasks.addResult(StatusKeys.TEMPERATURE, String.valueOf(tempF));
+						} catch (Exception e) {
+							Log.e("WEATHER", e.getMessage() + " " + response.toString());
+						}
+						myTasks.finishWithResult(StatusKeys.WEATHER, currentWeatherAtAirport);
 					}
 					
 					@Override
 					public void onFailure(Throwable error, JSONObject obj) {
-						myTasks.addResult(StatusKeys.WEATHER, "");
-						myTasks.finishWithResult(StatusKeys.DELAYS, "");
-						Log.e("FAA_API_ERROR", obj.toString());
+						Log.e("WEATHER", error.getMessage());
+						myTasks.finishOneTask();
 					}
 				};
 			}
 			
 			@Override
 			public void execute() {
-				AsyncHttpClient client = new AsyncHttpClient();
-				client.setTimeout(10 * 1000);
-				client.get("http://services.faa.gov/airport/status/" + Uri.encode(airportCode) + "?format=application/json", this.handler);
+				FlightStatsClient.getWeatherConditions(airportCode, this.handler);
 			}
 		});
-		*/
+		
+		myTasks.addTask(new NetworkTask() {
+			@Override
+			public void setHandler() {
+				this.handler = new JsonHttpResponseHandler() {
+					@Override
+					public void onSuccess(JSONObject response) {
+						Log.d("DELAYS", response.toString());
+						String[] outcomes = getResources().getStringArray(R.array.txtDelayLabels);
+						try {
+							int delaySeverityIndex = FlightStatsClient.getDelayIndex(response);
+							Log.d("DELAY SEVERITY", outcomes[delaySeverityIndex]);
+							myTasks.finishWithResult(StatusKeys.DELAYS, outcomes[delaySeverityIndex]);
+						} catch (Exception e) {
+							myTasks.finishWithResult(StatusKeys.DELAYS, getResources().getString(R.string.txtDelaysError));
+						}
+					}
+					
+					@Override
+					public void onFailure(Throwable error, JSONObject obj) {
+						Log.e("DELAYS", error.getMessage());
+						myTasks.finishOneTask();
+					}
+				};
+			}
+			
+			@Override
+			public void execute() {
+				FlightStatsClient.getDelayDegree(airportCode, this.handler);
+			}
+		});
+		
 		myTasks.startAll();
 	} 
 

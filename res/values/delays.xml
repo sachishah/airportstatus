@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="txtDelayLabels">
+        <item>@string/txtDelays0</item>
+        <item>@string/txtDelays1</item>
+        <item>@string/txtDelays2</item>
+        <item>@string/txtDelays3</item>
+        <item>@string/txtDelays4</item>
+    </string-array>  
+</resources>
