@@ -27,6 +27,11 @@
 
     <string name="txtTransitMapButton">Button to navigate to Google Maps transit directions</string>
     <string name="txtDrivingMapButton">Button to navigate to Google Maps driving directions</string>
-    <string name="txtFavoritesPlaceholder">Favorites</string>
-
+    <string name="txtFavoritesPlaceholder">Favorites</string>    
+	<string name="txtDelaysError">Unknown</string>
+    <string name="txtDelays0">No Delays</string>
+    <string name="txtDelays1">Few Delays</string>
+	<string name="txtDelays2">Moderate Delays</string>
+	<string name="txtDelays3">High Risk of Delays</string>
+	<string name="txtDelays4">All Flights Delayed</string>
 </resources>
