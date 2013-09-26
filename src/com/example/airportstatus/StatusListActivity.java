@@ -11,10 +11,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.airportstatus.models.AirportStatus;
+import com.example.airportstatus.models.Favorite;
 import com.example.airportstatus.models.TravelTimeEstimate;
 
 public class StatusListActivity extends Activity {
@@ -24,7 +26,9 @@ public class StatusListActivity extends Activity {
 	TextView delays;
 	TextView drivingTimeEstimate, transitTimeEstimate;
 	Button securityWaitTimes;
+	ImageView favoriteStatus;
 	AirportStatus airportStatus;
+	boolean isFavorited;
 	Bundle intentData;
 	
 	@SuppressLint("DefaultLocale")
@@ -74,6 +78,7 @@ public class StatusListActivity extends Activity {
 		delays = (TextView) findViewById(R.id.tvDelays);
 		drivingTimeEstimate = (TextView) findViewById(R.id.tvTransitValue1);
 		transitTimeEstimate = (TextView) findViewById(R.id.tvTransitValue2);
+		favoriteStatus = (ImageView) findViewById(R.id.ivFavorite);
  	}
 	
 	@Override
@@ -94,6 +99,8 @@ public class StatusListActivity extends Activity {
 			transitTimeEstimate.setText(data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
 			delays.setText(data.getString(StatusKeys.DELAYS));
 			weather.setText(data.getString(StatusKeys.WEATHER));
+			
+			setFavoritedStatus();
 		} catch (Exception e) {
 			Log.e("INVALID_INTENT_EXTRA", e.getMessage());
 		}
@@ -126,5 +133,27 @@ public class StatusListActivity extends Activity {
 		}
 		Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
 		startActivity(intent);
+	}
+	
+	private void setFavoritedStatus() {
+		this.isFavorited = Favorite.exists(this.code);
+		if (this.isFavorited) {
+			favoriteStatus.setImageResource(R.drawable.ic_star_filled);
+		} else {
+			favoriteStatus.setImageResource(R.drawable.ic_star_empty);
+		}
+	}
+	
+	public void onFavoriteAction(View v) {
+		if (this.isFavorited == true) {
+			Favorite.delete(code);
+			// Favorite exists; delete it
+		} else {
+			// Set item as favorite
+			Favorite newFavorite = new Favorite();
+			newFavorite.setAirportCode(code);
+			newFavorite.save();
+		}
+		this.setFavoritedStatus();
 	}
 }

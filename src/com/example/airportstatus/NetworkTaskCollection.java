@@ -1,6 +1,5 @@
 package com.example.airportstatus;
 
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Observable;
 

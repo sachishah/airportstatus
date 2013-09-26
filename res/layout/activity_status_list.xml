@@ -8,13 +8,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".StatusListActivity" >
     
-
+	<ImageView
+        android:id="@+id/ivFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:clickable="true"
+        android:onClick="onFavoriteAction"
+        android:src="@drawable/ic_star_empty" />
+    
     <TextView
         android:id="@+id/tvHeaderDelays"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/ivFavorite"
         android:text="@string/txtHeaderDelays"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
@@ -163,5 +172,7 @@
             android:textSize="12sp" />
 
         </RelativeLayout>
+
+    
 
 </RelativeLayout>
