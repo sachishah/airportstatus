@@ -14,7 +14,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -53,21 +52,22 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.airport_status, menu);
         
-        // Set up the action bar to show a dropdown list.
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        
-        ArrayList<String> dropdownValues = Favorite.getAllCodes();
-        dropdownValues.add(0, getResources().getString(R.string.txtFavoritesPlaceholder));
-        
-        // Specify a SpinnerAdapter to populate the dropdown list.
-        favoritesListAdapter = new FavoritesAdapter(actionBar.getThemedContext(), dropdownValues);
-        favoritesListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // Set up the dropdown list navigation in the action bar.
-        actionBar.setListNavigationCallbacks(favoritesListAdapter, this);
-        
+        if (Favorite.getAllCodes().size() > 0) {
+	        // Set up the action bar to show a dropdown list.
+	        final ActionBar actionBar = getActionBar();
+	        actionBar.setDisplayShowTitleEnabled(false);
+	        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+	        
+	        ArrayList<String> dropdownValues = Favorite.getAllCodes();
+	        dropdownValues.add(0, getResources().getString(R.string.txtFavoritesPlaceholder));
+	        
+	        // Specify a SpinnerAdapter to populate the dropdown list.
+	        favoritesListAdapter = new FavoritesAdapter(actionBar.getThemedContext(), dropdownValues);
+	        favoritesListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	
+	        // Set up the dropdown list navigation in the action bar.
+	        actionBar.setListNavigationCallbacks(favoritesListAdapter, this);
+        }
         return true;
     }
 
