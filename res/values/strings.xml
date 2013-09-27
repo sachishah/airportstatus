@@ -34,4 +34,6 @@
 	<string name="txtDelays2">Moderate Delays</string>
 	<string name="txtDelays3">High Risk of Delays</string>
 	<string name="txtDelays4">All Flights Delayed</string>
+	
+	<string name="action_search">Search</string>
 </resources>
