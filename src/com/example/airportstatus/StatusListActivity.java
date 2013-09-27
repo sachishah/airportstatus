@@ -84,6 +84,9 @@ public class StatusListActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
+	    case R.id.action_search:
+	    	finish();
+	    	return true;
 	    case android.R.id.home:
 	    	finish();
 	        return true;
