@@ -118,8 +118,8 @@
 
             <ImageView
                 android:id="@+id/imgDrivingMapButton"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:padding="2dp"
                 android:clickable="true"
                 android:onClick="onClickDrivingMapButton"
@@ -152,8 +152,8 @@
             
             <ImageView
                 android:id="@+id/imgTransitMapButton"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:padding="2dp"
                 android:clickable="true"
                 android:onClick="onClickTransitMapButton"

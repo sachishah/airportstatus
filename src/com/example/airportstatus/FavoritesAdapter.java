@@ -28,7 +28,6 @@ public class FavoritesAdapter extends ArrayAdapter<String> {
 		}
 		TextView tv = (TextView) view.findViewById(android.R.id.text1);
 		tv.setText(itemText);
-		
 		return view;
 	}
 }
