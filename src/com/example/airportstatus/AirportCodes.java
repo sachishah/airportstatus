@@ -1,11 +1,15 @@
 package com.example.airportstatus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class AirportCodes {
 	
+	//need to add more airport codes
+	//http://www.tsa.gov/data/apcp.xml
+	//if you add an airport code to IATA_CODES you MUST
+	//add its website address to WEBSITES at the same index
 	public static final HashMap<String, String> IATA_CODES = new HashMap<String, String>() {
-
 	{
 	    put("Hartsfield-Jackson Atlanta International - ATL", "ATL");
 	    put("Ted Stevens Anchorage International Airport - ANC", "ANC");
@@ -61,6 +65,63 @@ public final class AirportCodes {
 		put("Ronald Reagan Washington National - DCA", "DCA");
 	    
 	}};;
+	
+	public static final ArrayList<String> WEBSITES = new ArrayList<String>() {
+		{
+		    add("atlanta-airport.com");
+		    add("dot.alaska.gov/anc");
+		    add("austintexas.gov/airport");
+		    add("bwiairport.com");
+		    add("massport.com");
+		    add("charlotteairport.com");
+		    add("flychicago.com/midway‎");
+		    add("flychicago.com/ohare");
+		    add("cvgairport.com");
+			add("clevelandairport.com");
+			add("flycolumbus.com");
+			add("dfwairport.com");
+			add("flydenver.com");
+			add("metroairport.com");
+			add("fll.net");
+			add("flylcpa.com");
+			add("bradleyairport.com");
+			add("hawaii.gov/hnl‎");
+			add("fly2houston.com");
+			add("fly2houston.com");
+			add("indianapolisairport.com");
+			add("flykci.com");
+			add("mccarran.com");
+			add("awa.org/welcomeLAX.aspx‎");
+			add("mscaa.com");
+			add("miami-airport.com");
+			add("mspairport.com");
+			add("flynashville.com");
+			add("flymsy.com");
+			add("panynj.gov/airports/jfk.html‎");
+			add("panynj.gov/airports/laguardia.html‎");
+			add("panynj.gov/airports/newark-liberty.html‎");
+			add("flyoakland.com");
+			add("lawa.org/welcomeont.aspx‎");
+			add("orlandoairports.net");
+			add("phl.org");
+			add("skyharbor.com");
+			add("flypittsburgh.com");
+			add("pdx.com");
+			add("rdu.com");
+			add("sacramento.aero/smf");
+			add("slcairport.com");
+			add("sanantonio.gov");
+			add("san.org");
+			add("flysfo.com");
+			add("flysanjose.com");
+			add("ocair.com");
+			add("portseattle.org/Sea-Tac");
+			add("flystl.com");
+			add("tampaairport.com");
+			add("metwashairports.com/dulles‎");
+			add("metwashairports.com/reagan");
+		    
+		}};;
 	
 	
 
