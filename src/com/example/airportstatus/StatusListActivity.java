@@ -1,5 +1,6 @@
 package com.example.airportstatus;
 
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -56,8 +57,14 @@ public class StatusListActivity extends Activity {
 	}
 	
 	public void onSecurityWaitTimeClick(View v) {
-		startActivity(new Intent(this, SecurityWaitTimeActivity.class));
+		
+		Intent i = new Intent(this, SecurityWaitTimeActivity.class);
+    	i.putExtra("airport_code", code);
+    	startActivity(i);
+		
 	}
+	
+	
 	
 	private boolean isCodeValid() {
 		return true;
