@@ -54,9 +54,6 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		Tab tabStatus= actionBar.newTab().setText("Status")
 				.setTag("StatusFragment")
 				.setTabListener(this);
-		/*Tab tabNearby= actionBar.newTab().setText("Nearby")
-				.setTag("NearbyFragment")
-				.setTabListener(this);*/
 		Tab tabSaved = actionBar.newTab().setText("Saved")
 				.setTag("SavedFragment")
 				.setTabListener(this);
@@ -64,34 +61,16 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 				.setTag("SearchFragment")
 				.setTabListener(this);
 		actionBar.addTab(tabStatus);
-		//actionBar.addTab(tabNearby);
 		actionBar.addTab(tabSaved);
 		actionBar.addTab(tabFind);
 		actionBar.selectTab(tabStatus);
 		
 	}
 	
-
-
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    /*switch (item.getItemId()) {
-	    case R.id.action_search:
-	    	finish();
-	    	return true;
-	    case android.R.id.home:
-	    	finish();
-	        return true;
-	    default:
-	        return super.onOptionsItemSelected(item);
-	    }*/
 		return true;
 	}
-	
-	
-	
-	
 
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
