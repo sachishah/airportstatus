@@ -56,6 +56,12 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btnDelay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="On Time" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

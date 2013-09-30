@@ -4,10 +4,14 @@ package com.example.airportstatus.fragments;
 
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -21,7 +25,10 @@ import android.widget.TextView;
 import com.example.airportstatus.Airport;
 import com.example.airportstatus.R;
 import com.example.airportstatus.StatusKeys;
+import com.example.airportstatus.models.AirportStatus;
 import com.example.airportstatus.models.Favorite;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 
 public class StatusFragment extends Fragment {
@@ -36,6 +43,9 @@ public class StatusFragment extends Fragment {
 	boolean isFavorited;
 	Button btnDrivingTime;
 	Button btnTransitTime;
+	Button delayButton;
+	boolean delay;
+	AirportStatus airportStatus;
 	
 	@Override
 	public View onCreateView(LayoutInflater inf, ViewGroup parent, Bundle savedInstanceState) {
@@ -107,5 +117,30 @@ public class StatusFragment extends Fragment {
 			newFavorite.save();
 		}
 		this.setFavoritedStatus();
+	}
+	
+	@SuppressLint("ResourceAsColor")
+	public void setDelayButton() {
+		delayButton.setBackgroundColor(android.R.color.holo_green_light);
+		AsyncHttpClient client = new AsyncHttpClient();
+		client.get("http://services.faa.gov/airport/status/" + Uri.encode(code) + "?format=application/json", new JsonHttpResponseHandler() {
+			@Override
+			public void onSuccess(JSONObject response) {
+				airportStatus = AirportStatus.fromJson(response);
+				if (airportStatus.getDelay()) {
+					delay = true;
+					delayButton.setBackgroundColor(android.R.color.holo_red_light);
+					delayButton.setText("Status: Delayed");
+				}
+			}
+		});
+	}
+
+
+	public void onDelayButtonClick() {
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.replace(R.id.frame_container, new DelayFragment());
+		ft.addToBackStack(null);
+		ft.commit();
 	}
 }
