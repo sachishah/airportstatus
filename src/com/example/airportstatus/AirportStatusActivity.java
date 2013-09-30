@@ -22,14 +22,13 @@ import android.widget.Toast;
 
 import com.example.airportstatus.models.Favorite;
 
-public class AirportStatusActivity extends Activity implements OnNavigationListener {
+public class AirportStatusActivity extends Activity {
 
 	Button btnGo;
 	AutoCompleteTextView tvAirportCode;
 	LocationManager locationManager;
 	LocationListener locationListener;
 	SharedPreferences locationPrefs;
-	FavoritesAdapter favoritesListAdapter;
 	
 	public static final String AIRPORT_CODE = "airport_code";
 
@@ -57,13 +56,6 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
 	        
 	        ArrayList<String> dropdownValues = Favorite.getAllCodes();
 	        dropdownValues.add(0, getResources().getString(R.string.txtFavoritesPlaceholder));
-	        
-	        // Specify a SpinnerAdapter to populate the dropdown list.
-	        favoritesListAdapter = new FavoritesAdapter(actionBar.getThemedContext(), dropdownValues);
-	        favoritesListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	
-	        // Set up the dropdown list navigation in the action bar.
-	        actionBar.setListNavigationCallbacks(favoritesListAdapter, this);
         }
         return true;
     }
@@ -137,18 +129,5 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
     	
     	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10, 0, locationListener);
     }
-
-	@Override
-	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-			String airportCode = favoritesListAdapter.getItem(itemPosition);
-		if (airportCode.length() == 3) {
-			Intent i = new Intent(this, QueryActivity.class);
-			i.putExtra(AIRPORT_CODE, airportCode);
-			startActivity(i);
-			return true;
-		}
-		return false;
-	}
-    
     
 }
