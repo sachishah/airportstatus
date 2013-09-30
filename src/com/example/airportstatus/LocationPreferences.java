@@ -11,8 +11,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.airportstatus.models.AirportStatusLocation;
-
 public class LocationPreferences {
 	public static final String PREFS_NAME = "AirportStatusPrefs";
 	public static final String PREFS_LATITUDE = "LAT";
@@ -168,12 +166,15 @@ public class LocationPreferences {
 		editor.commit();
 	}
 	
-	public static AirportStatusLocation getLastLocationPreferences(Context context) throws Exception {
+	public static Location getLastLocationPreferences(Context context) throws Exception {
 		SharedPreferences locationPrefs = context.getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE);
+		Location tmpLocation = new Location("app");
 		try {
 			double lat = Double.valueOf(locationPrefs.getString(PREFS_LATITUDE, null));
 			double lon = Double.valueOf(locationPrefs.getString(PREFS_LONGITUDE, null));
-			return new AirportStatusLocation(lat, lon);
+			tmpLocation.setLatitude(lat);
+			tmpLocation.setLongitude(lon);
+			return tmpLocation;
 		} catch(Exception e) {
 			throw new Exception("No location preferences have been set");
 		}

@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -15,14 +16,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.airportstatus.models.AirportStatusLocation;
 import com.example.airportstatus.models.TravelTimeEstimate;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class QueryActivity extends Activity implements Observer {
 	private NetworkTaskCollection myTasks;
 	private String airportCode, airportIndex;
-	private AirportStatusLocation currentLocation;
+	private Location currentLocation;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
