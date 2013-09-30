@@ -9,6 +9,11 @@ public class AirportStatusLocation extends BaseModel {
 		this.longitude = longitude;
 	}
 	
+	public AirportStatusLocation(String latitude, String longitude) {
+		this.latitude = Double.valueOf(latitude);
+		this.longitude = Double.valueOf(longitude);
+	}
+	
 	@Override
 	public String toString() {
 		return Double.toString(this.latitude) + "," + Double.toString(this.longitude);
