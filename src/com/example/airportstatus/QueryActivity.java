@@ -111,7 +111,7 @@ public class QueryActivity extends Activity implements Observer {
 			
 			@Override
 			public void execute() {
-				TravelTimeEstimate.getDrivingTime(currentLocation.toString(), airportCode, this.handler);
+				TravelTimeEstimate.getDrivingTime(TravelTimeEstimate.getCoordinates(currentLocation), airportCode, this.handler);
 			}
 		});
 		
@@ -141,7 +141,7 @@ public class QueryActivity extends Activity implements Observer {
 			
 			@Override
 			public void execute() {
-				TravelTimeEstimate.getTransitTime(currentLocation.toString(), airportCode, this.handler);
+				TravelTimeEstimate.getTransitTime(TravelTimeEstimate.getCoordinates(currentLocation), airportCode, this.handler);
 			}
 		});
 		
@@ -158,7 +158,7 @@ public class QueryActivity extends Activity implements Observer {
 							currentWeatherAtAirport = "";
 						}
 						try {
-							Double tempC = FlightStatsClient.getTempCelsius(response); // Result only comes back in degrees celsius
+							Double tempC = FlightStatsClient.getTempCelsius(response); // Result only comes back in degrees Celsius
 							Double tempF = (tempC * 1.8) + 32;
 							myTasks.addResult(StatusKeys.TEMPERATURE, String.valueOf(tempF));
 						} catch (Exception e) {
@@ -217,7 +217,6 @@ public class QueryActivity extends Activity implements Observer {
 
 	@Override
 	public void update(Observable observable, Object response) {
-		Log.d("TASK COMPLETE", response.toString());
 		Bundle bundle = (Bundle) response;
 		// Test here that the value returned from the observed NetworkTaskCollection 
 		// is the one that signals success
