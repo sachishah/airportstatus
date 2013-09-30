@@ -4,12 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public final class Airport {
+public class Airport {
+	String code;
+	int index;
 	
-	//need to add more airport codes
-	//http://www.tsa.gov/data/apcp.xml
-	//if you add an airport code to IATA_CODES you MUST
-	//add its web site address to WEBSITES at the same index
+	public Airport(String iataCode, int index) {
+		this.code = iataCode;
+		this.index = index;
+	}
+	
+	// need to add more airport codes
+	// http://www.tsa.gov/data/apcp.xml
+	// if you add an airport code to IATA_CODES you MUST
+	// add its web site address to WEBSITES at the same index
 	public static final LinkedHashMap<String, String> IATA_CODES = new LinkedHashMap<String, String>() {
 	{
 	    put("Hartsfield-Jackson Atlanta International - ATL", "ATL");
@@ -57,7 +64,7 @@ public final class Airport {
 		put("San Antonio International - SAT", "SAT");
 		put("Lindbergh Field International - SAN", "SAN");
 		put("San Francisco International - SFO", "SFO");
-		put("Mineta San José International - SJC", "SJC");
+		put("Mineta San Jose International - SJC", "SJC");
 		put("John Wayne Airport, Orange County - SNA", "SNA");
 		put("Seattle-Tacoma International - Seatac Airport - SEA", "SEA");
 		put("Lambert-St. Louis International - STL", "STL");
@@ -75,7 +82,7 @@ public final class Airport {
 		    add("bwiairport.com");
 		    add("massport.com");
 		    add("charlotteairport.com");
-		    add("flychicago.com/midway‎");
+		    add("flychicago.com/midway/");
 		    add("flychicago.com/ohare");
 		    add("cvgairport.com");
 			add("clevelandairport.com");
@@ -86,23 +93,23 @@ public final class Airport {
 			add("fll.net");
 			add("flylcpa.com");
 			add("bradleyairport.com");
-			add("hawaii.gov/hnl‎");
+			add("hawaii.gov/hnl");
 			add("fly2houston.com");
 			add("fly2houston.com");
 			add("indianapolisairport.com");
 			add("flykci.com");
 			add("mccarran.com");
-			add("awa.org/welcomeLAX.aspx‎");
+			add("awa.org/welcomeLAX.aspx");
 			add("mscaa.com");
 			add("miami-airport.com");
 			add("mspairport.com");
 			add("flynashville.com");
 			add("flymsy.com");
-			add("panynj.gov/airports/jfk.html‎");
-			add("panynj.gov/airports/laguardia.html‎");
-			add("panynj.gov/airports/newark-liberty.html‎");
+			add("panynj.gov/airports/jfk.html");
+			add("panynj.gov/airports/laguardia.html");
+			add("panynj.gov/airports/newark-liberty.html");
 			add("flyoakland.com");
-			add("lawa.org/welcomeont.aspx‎");
+			add("lawa.org/welcomeont.aspx");
 			add("orlandoairports.net");
 			add("phl.org");
 			add("skyharbor.com");
@@ -119,7 +126,7 @@ public final class Airport {
 			add("portseattle.org/Sea-Tac");
 			add("flystl.com");
 			add("tampaairport.com");
-			add("metwashairports.com/dulles‎");
+			add("metwashairports.com/dulles");
 			add("metwashairports.com/reagan");
 		    
 		}};;
