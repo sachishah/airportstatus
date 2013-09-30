@@ -80,7 +80,7 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
     
     public void onClick(View v) {
     	String textEntered = tvAirportCode.getText().toString();
-    	String code = AirportCodes.IATA_CODES.get(textEntered);
+    	String code = Airport.IATA_CODES.get(textEntered);
     	if (code != null) {
 	    	Toast.makeText(this, "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
 	    	Intent i = new Intent(this, QueryActivity.class);
@@ -98,7 +98,7 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
     }
 
     private void setupTextView() {
-    	ArrayList<String> codes = new ArrayList<String> (AirportCodes.IATA_CODES.keySet());
+    	ArrayList<String> codes = new ArrayList<String> (Airport.IATA_CODES.keySet());
     	ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, codes);
     	tvAirportCode = (AutoCompleteTextView) findViewById(R.id.tvAirportCode);
