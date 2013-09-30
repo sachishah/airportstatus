@@ -35,24 +35,9 @@
         android:background="@drawable/bg_white_rounded"
         android:padding="8dp" >
 
-        <AutoCompleteTextView
-            android:id="@+id/tvAirportCode"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:hint="@string/airportCodeHint"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+        
 
-        <Button
-            android:id="@+id/btnGo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvAirportCode"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="4dp"
-            android:onClick="onClick"
-            android:text="@string/go" />
+        
     </RelativeLayout>
         </RelativeLayout>
     
