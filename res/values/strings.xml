@@ -4,7 +4,7 @@
     <string name="app_name">Airport Status</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_status_list">StatusList</string>
+    <string name="title_activity_status_list">Airport Status</string>
     <string name="airportCodeHint">Enter an airport code or city&#8230;</string>
     <string name="txtHeaderDelays">Delays</string>
     <string name="txtHeaderSecurity">Security</string>
@@ -22,7 +22,7 @@
     <string name="txtTravelTimeError">No route available</string>
     <string name="txtRoutingError">No route available</string>
     <string name="go">Go</string>
-    <string name="title_activity_query">QueryActivity</string>
+    <string name="title_activity_query">Loading</string>
     <string name="txtWaiting">YODA SAYS: Wait, you must. Hmmmmmm.</string>
     <string name="txtTransitMapButton">Button to navigate to Google Maps transit directions</string>
     <string name="txtDrivingMapButton">Button to navigate to Google Maps driving directions</string>
