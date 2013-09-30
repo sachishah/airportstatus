@@ -10,7 +10,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.airportstatus.Airport;
-import com.example.airportstatus.FavoritesAdapter;
 import com.example.airportstatus.QueryActivity;
 import com.example.airportstatus.R;
 
@@ -31,7 +29,6 @@ public class SearchFragment extends Fragment {
 	LocationManager locationManager;
 	LocationListener locationListener;
 	SharedPreferences locationPrefs;
-	FavoritesAdapter favoritesListAdapter;
 	
 	public static final String AIRPORT_CODE = "airport_code";
 	public static final String PREFS_NAME = "AirportStatusPrefs";
@@ -64,7 +61,7 @@ public class SearchFragment extends Fragment {
     	locationListener = new LocationListener() {
     		@Override
     		public void onLocationChanged(Location location) {
-    			SharedPreferences locationPrefs = getActivity().getSharedPreferences(PREFS_NAME, getActivity().MODE_PRIVATE);
+    			SharedPreferences locationPrefs = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     			SharedPreferences.Editor editor = locationPrefs.edit();
     			editor.putFloat(PREFS_LATITUDE, (float) location.getLatitude());
     			editor.putFloat(PREFS_LONGITUDE, (float) location.getLongitude());
