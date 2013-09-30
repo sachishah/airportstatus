@@ -3,31 +3,29 @@ package com.example.airportstatus;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
 public class LandingActivity extends Activity {
-	Integer airportIndex;
+	int airportIndex;
+	Context context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_landing);
-		getLocation();
-		
+		context = this;
 	}
 	
 	@Override
 	protected void onResume(){
 		super.onResume();
 		getLocation();
-		
 	}
 	
 	
@@ -40,59 +38,43 @@ public class LandingActivity extends Activity {
 	}
 	
 	private void getLocation() {
-		LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-		boolean enabled = locationManager
-		  .isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-		// Check if enabled and if not send user to the GSP settings
-		// Better solution would be to display a dialog and suggesting to 
-		// go to the settings
-		if (!enabled) {
-		  //if gps is not enabled we should ask for it
-		  Log.d("DEBUG", "not enabled");
-		} 
-		
-		Criteria criteria = new Criteria();
-	    String provider = locationManager.getBestProvider(criteria, false);
-	    Location location = locationManager.getLastKnownLocation(provider);
-		
-		if (location != null ) {
-			Log.d("DEBUG","locaton is " + location.toString());
-			String airportCode = findClosestAirport(location);
-			if (airportCode != null) {
-		    	Toast.makeText(this, "Loading status for " + airportCode + "...", Toast.LENGTH_SHORT).show();
-		    	Intent i = new Intent(this, QueryActivity.class);
-		    	i.putExtra("airport_code", airportCode);
-		    	i.putExtra("airport_index", airportIndex.toString());
-		    	startActivity(i);
-	    	} else {
-	    		Log.d("DEBUG", "Did not find nearby airport");
-	    	}
-			
-		} else {
-			Log.d("DEBUG", "location is null");
-		}
-		
+		LocationResult locationResult = new LocationResult() {
+			@Override
+			public void receivedLocation(Location location) {
+				Log.d("LOCATION_RECEIVED", location.toString());
+				LocationPreferences.setLastLocationPreferences(context, location.getLatitude(), location.getLongitude());
+				Airport airportDetails = findClosestAirport(location);
+				if (airportDetails.code != null) {
+			    	Toast.makeText(context, "Loading status for " + airportDetails.code + "...", Toast.LENGTH_SHORT).show();
+			    	Intent i = new Intent(context, QueryActivity.class);
+			    	i.putExtra("airport_code", airportDetails.code);
+			    	i.putExtra("airport_index", String.valueOf(airportDetails.index));
+			    	startActivity(i);
+		    	} else {
+		    		Log.d("DEBUG", "Did not find nearby airport");
+		    	}
+			}
+		};
+		LocationPreferences locPrefs = new LocationPreferences();
+		locPrefs.getCurrentLocation(this.getBaseContext(), locationResult);
 	}
 	
-	private String findClosestAirport(Location location) {
-	  String airportCode = null;
-	  //set initial distance at 120 miles or 193121 meters
-	  Float minDistance = Float.parseFloat("193121");
-	  Integer index = 0;
-	  for(String[] airportLocation : Airport.LOCATIONS ) {
-		  Location tempLocation = new Location("app");
-		  tempLocation.setLatitude(Double.parseDouble(airportLocation[0]));
-		  tempLocation.setLongitude(Double.parseDouble(airportLocation[1]));
-		  Float distanceToAirport = location.distanceTo(tempLocation);
-		  if (distanceToAirport < minDistance) {
-		        minDistance = distanceToAirport;
-		        airportCode = new ArrayList<String>(Airport.IATA_CODES.values()).get(index);
-		        airportIndex = index;
-		    }
-		  index++;
+	private Airport findClosestAirport(Location location) {
+		Airport result = null;
+		//set initial distance at 120 miles or 193121 meters
+		Float minDistance = Float.parseFloat("193121");
+		Integer index = 0;
+		for (String[] airportLocation : Airport.LOCATIONS) {
+			Location tempLocation = new Location("app");
+			tempLocation.setLatitude(Double.parseDouble(airportLocation[0]));
+			tempLocation.setLongitude(Double.parseDouble(airportLocation[1]));
+			Float distanceToAirport = location.distanceTo(tempLocation);
+			if (distanceToAirport < minDistance) {
+				minDistance = distanceToAirport;
+				result = new Airport(new ArrayList<String>(Airport.IATA_CODES.values()).get(index), index);
+			}
+			index++;
 		}
-	  return airportCode;
+		return result;
 	}
-
 }
