@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
 
@@ -110,5 +111,9 @@ public class TravelTimeEstimate {
 				"dirflg=" + Uri.encode("r") +
 				"&saddr=" + Uri.encode(origin) +
 				"&daddr=" + Uri.encode(destination);
+	}
+	
+	public static String getCoordinates(Location loc) {
+		return String.valueOf(loc.getLatitude()) + "," + String.valueOf(loc.getLongitude());
 	}
 }

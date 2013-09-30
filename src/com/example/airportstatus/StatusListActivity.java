@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.airportstatus.fragments.SearchFragment;
 import com.example.airportstatus.fragments.StatusFragment;
 import com.example.airportstatus.models.TravelTimeEstimate;
 
@@ -26,6 +27,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 	
 	String code;
 	Bundle intentData;
+	SearchFragment searchFragment;
 	
 	@SuppressLint("DefaultLocale")
 	@Override
@@ -34,6 +36,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		setContentView(R.layout.activity_status_list);
 		intentData = getIntent().getBundleExtra("data");
 		code = intentData.getString("airport_code").toUpperCase();
+		searchFragment = new SearchFragment();
 		setupNavigationTabs();
 		
 	}
@@ -58,7 +61,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 				.setTag("SavedFragment")
 				.setTabListener(this);
 		Tab tabFind = actionBar.newTab().setText("Find")
-				.setTag("FindFragment")
+				.setTag("SearchFragment")
 				.setTabListener(this);
 		actionBar.addTab(tabStatus);
 		//actionBar.addTab(tabNearby);
@@ -102,8 +105,8 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
 		if (tab.getTag() == "StatusFragment") {
 			fts.replace(R.id.frame_container, new StatusFragment());
-		} else {
-			fts.replace(R.id.frame_container, new StatusFragment());
+		} else if (tab.getTag() == "SearchFragment") {
+			fts.replace(R.id.frame_container, searchFragment);
 		}
 		fts.commit();
 		
@@ -143,4 +146,10 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
 		startActivity(intent);
 	}
+	
+	public void onSearchBtnClick(View v) {
+    	searchFragment.onSearchBtnClick(v);
+    }
+	
+	
 }

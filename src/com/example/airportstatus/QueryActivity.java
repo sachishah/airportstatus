@@ -3,16 +3,12 @@ package com.example.airportstatus;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -20,22 +16,27 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.airportstatus.models.AirportStatusLocation;
 import com.example.airportstatus.models.TravelTimeEstimate;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class QueryActivity extends Activity implements Observer {
 	private NetworkTaskCollection myTasks;
-	private String airportCode;
-	private AirportStatusLocation currentLocation;
+	private String airportCode, airportIndex;
+	private Location currentLocation;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_query);
 		
-		airportCode = getIntent().getStringExtra("airport_code");
-		currentLocation = getCurrentLocation();
+		Intent current = getIntent();
+		airportCode = current.getStringExtra("airport_code");
+		airportIndex = current.getStringExtra("airport_index");
+		try {
+			currentLocation = LocationPreferences.getLastLocationPreferences(this);
+		} catch (Exception e) {
+			Log.e("LOCATION_MISSING", e.getMessage());
+		}
 		
 		// Show the Up button in the action bar.
 		setupActionBar();
@@ -110,7 +111,7 @@ public class QueryActivity extends Activity implements Observer {
 			
 			@Override
 			public void execute() {
-				TravelTimeEstimate.getDrivingTime(currentLocation.toString(), airportCode, this.handler);
+				TravelTimeEstimate.getDrivingTime(TravelTimeEstimate.getCoordinates(currentLocation), airportCode, this.handler);
 			}
 		});
 		
@@ -140,7 +141,7 @@ public class QueryActivity extends Activity implements Observer {
 			
 			@Override
 			public void execute() {
-				TravelTimeEstimate.getTransitTime(currentLocation.toString(), airportCode, this.handler);
+				TravelTimeEstimate.getTransitTime(TravelTimeEstimate.getCoordinates(currentLocation), airportCode, this.handler);
 			}
 		});
 		
@@ -157,7 +158,7 @@ public class QueryActivity extends Activity implements Observer {
 							currentWeatherAtAirport = "";
 						}
 						try {
-							Double tempC = FlightStatsClient.getTempCelsius(response); // Result only comes back in degrees celsius
+							Double tempC = FlightStatsClient.getTempCelsius(response); // Result only comes back in degrees Celsius
 							Double tempF = (tempC * 1.8) + 32;
 							myTasks.addResult(StatusKeys.TEMPERATURE, String.valueOf(tempF));
 						} catch (Exception e) {
@@ -216,7 +217,6 @@ public class QueryActivity extends Activity implements Observer {
 
 	@Override
 	public void update(Observable observable, Object response) {
-		Log.d("TASK COMPLETE", response.toString());
 		Bundle bundle = (Bundle) response;
 		// Test here that the value returned from the observed NetworkTaskCollection 
 		// is the one that signals success
@@ -224,7 +224,7 @@ public class QueryActivity extends Activity implements Observer {
 			Intent i = new Intent(this, StatusListActivity.class);
 			bundle.putString("origin", currentLocation.toString());
 			bundle.putString("airport_code", airportCode);
-			bundle.putString("airport_index", getIntent().getStringExtra("airport_index"));
+			bundle.putString("airport_index", airportIndex);
 			i.putExtra("data", bundle);
 	    	startActivity(i);
 	    	finish();
@@ -232,36 +232,5 @@ public class QueryActivity extends Activity implements Observer {
 		
 		// Otherwise, go back to the starting activity and show an error
 		
-	}
-	
-	private AirportStatusLocation getCurrentLocation() {
-		try {
-			SharedPreferences settings = getSharedPreferences(AirportStatusActivity.PREFS_NAME, MODE_PRIVATE);
-			double lat = settings.getFloat(AirportStatusActivity.PREFS_LATITUDE, -1);
-			double lon = settings.getFloat(AirportStatusActivity.PREFS_LONGITUDE, -1);
-				
-			if (lat < 0 || lon < 0) {
-				throw new Exception("No location preferences have been set");
-			}
-			return new AirportStatusLocation(lat, lon);
-		} catch (Exception e) {
-			Log.e("LOCATION_PREFERENCES_ERROR", e.getMessage());
-			LocationManager m = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-			Location current = m.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			if (current == null) {
-				return new AirportStatusLocation(37.76030, -122.41051);
-			}
-			
-			updateLastLocationPreferences(current.getLatitude(), current.getLongitude());
-			return new AirportStatusLocation(current.getLatitude(), current.getLongitude());
-		}	
-	}
-	
-	private void updateLastLocationPreferences(double lat, double lon) {
-		SharedPreferences locationPrefs = getSharedPreferences(AirportStatusActivity.PREFS_NAME, MODE_PRIVATE);
-		SharedPreferences.Editor editor = locationPrefs.edit();
-		editor.putFloat(AirportStatusActivity.PREFS_LATITUDE, (float) lat);
-		editor.putFloat(AirportStatusActivity.PREFS_LONGITUDE, (float) lon);
-		editor.commit();
 	}
 }
