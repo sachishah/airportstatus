@@ -30,36 +30,14 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tvHeaderDelays" >
     </TextView>
-
-    <TextView
-        android:id="@+id/tvHeaderSecurity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvDelays"
-        android:text="@string/txtHeaderSecurity"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Button
-        android:id="@+id/btnSecurityWaitTimes"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_marginTop="5dp"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/tvHeaderSecurity"
-        android:onClick="onSecurityWaitTimeClick"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/txtSecurityDetailsButton" />
     
     <TextView
         android:id="@+id/tvHeaderWeather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/btnSecurityWaitTimes"
+        android:layout_below="@+id/tvDelays"
+        android:layout_marginTop="12dp"
         android:text="@string/txtHeaderWeather"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     

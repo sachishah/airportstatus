@@ -3,7 +3,6 @@ package com.example.airportstatus.fragments;
 
 
 import com.example.airportstatus.R;
-import com.example.airportstatus.SecurityWaitTimeActivity;
 import com.example.airportstatus.StatusKeys;
 import com.example.airportstatus.models.Favorite;
 import com.example.airportstatus.models.TravelTimeEstimate;
@@ -53,8 +52,6 @@ public class StatusFragment extends Fragment {
 	@SuppressLint("InlinedApi")
 	private void setupViews() {
 		weather = (TextView) getActivity().findViewById(R.id.tvWeather);
-		Button securityWaitTimes = (Button) getActivity().findViewById(R.id.btnSecurityWaitTimes);
-		securityWaitTimes.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
 		delays = (TextView) getActivity().findViewById(R.id.tvDelays);
 		drivingTimeEstimate = (TextView) getActivity().findViewById(R.id.tvTransitValue1);
 		transitTimeEstimate = (TextView) getActivity().findViewById(R.id.tvTransitValue2);
@@ -84,13 +81,7 @@ public class StatusFragment extends Fragment {
 		}
 	}
 	
-    public void onSecurityWaitTimeClick(View v) {
-		
-		Intent i = new Intent(getActivity(), SecurityWaitTimeActivity.class);
-    	i.putExtra("airport_code", code);
-    	startActivity(i);
-		
-	}
+    
     
     public void onClickDrivingMapButton(View v) {
 		if (!intentData.containsKey("origin")) {
