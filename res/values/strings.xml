@@ -35,5 +35,6 @@
     <string name="txtDelays4">All Flights Delayed</string>
     <string name="action_search">Search</string>
     <string name="title_activity_landing">Airport Status</string>
+    <string name="txtErrorSavedEmpty">No airports have been added to your favorites yet.</string>
 
 </resources>
