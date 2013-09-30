@@ -3,33 +3,22 @@ package com.example.airportstatus;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.airportstatus.models.AirportStatus;
-import com.example.airportstatus.models.Favorite;
-import com.example.airportstatus.models.TravelTimeEstimate;
+import com.example.airportstatus.fragments.StatusFragment;
 
-public class StatusListActivity extends Activity {
+
+
+public class StatusListActivity extends FragmentActivity implements TabListener {
 	
 	String code;
-	TextView weather;
-	TextView delays;
-	TextView drivingTimeEstimate, transitTimeEstimate;
-	Button securityWaitTimes;
-	ImageView favoriteStatus;
-	AirportStatus airportStatus;
-	boolean isFavorited;
 	Bundle intentData;
 	
 	@SuppressLint("DefaultLocale")
@@ -40,13 +29,8 @@ public class StatusListActivity extends Activity {
 		intentData = getIntent().getBundleExtra("data");
 		code = intentData.getString("airportCode").toUpperCase();
 		setupActionBar();
-		setupViews();
-		if (isCodeValid()) {
-			setTemplateData(getIntent());
-			// loadResults();
-		} else {
-			Toast.makeText(this, "Airport code not found", Toast.LENGTH_LONG).show();
-		}
+		setupNavigationTabs();
+		
 	}
 
 	@Override
@@ -55,20 +39,31 @@ public class StatusListActivity extends Activity {
 		getMenuInflater().inflate(R.menu.status_list, menu);
 		return true;
 	}
-	
-	public void onSecurityWaitTimeClick(View v) {
-		
-		Intent i = new Intent(this, SecurityWaitTimeActivity.class);
-    	i.putExtra("airport_code", code);
-    	startActivity(i);
+	private void setupNavigationTabs() {
+		ActionBar actionBar= getActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		actionBar.setDisplayShowTitleEnabled(true);
+		Tab tabStatus= actionBar.newTab().setText("Status")
+				.setTag("StatusFragment")
+				.setTabListener(this);
+		Tab tabNearby= actionBar.newTab().setText("Nearby")
+				.setTag("NearbyFragment")
+				.setTabListener(this);
+		Tab tabSaved = actionBar.newTab().setText("Saved")
+				.setTag("SavedFragment")
+				.setTabListener(this);
+		Tab tabFind = actionBar.newTab().setText("Find")
+				.setTag("FindFragment")
+				.setTabListener(this);
+		actionBar.addTab(tabStatus);
+		actionBar.addTab(tabNearby);
+		actionBar.addTab(tabSaved);
+		actionBar.addTab(tabFind);
+		actionBar.selectTab(tabStatus);
 		
 	}
 	
-	
-	
-	private boolean isCodeValid() {
-		return true;
-	}
+
 	
 	@SuppressLint("NewApi")
 	private void setupActionBar() {
@@ -77,16 +72,7 @@ public class StatusListActivity extends Activity {
 		bar.setDisplayHomeAsUpEnabled(true);
 	}
 	
-	@SuppressLint("InlinedApi")
-	private void setupViews() {
-		weather = (TextView) findViewById(R.id.tvWeather);
-		securityWaitTimes = (Button) findViewById(R.id.btnSecurityWaitTimes);
-		securityWaitTimes.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
-		delays = (TextView) findViewById(R.id.tvDelays);
-		drivingTimeEstimate = (TextView) findViewById(R.id.tvTransitValue1);
-		transitTimeEstimate = (TextView) findViewById(R.id.tvTransitValue2);
-		favoriteStatus = (ImageView) findViewById(R.id.ivFavorite);
- 	}
+	
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -102,68 +88,32 @@ public class StatusListActivity extends Activity {
 	    }
 	}
 	
-	private void setTemplateData(Intent intent) {
-		try {
-			Bundle data = intent.getBundleExtra("data");
-			drivingTimeEstimate.setText(data.getString(StatusKeys.TRAVEL_TIME_DRIVING));
-			transitTimeEstimate.setText(data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
-			delays.setText(data.getString(StatusKeys.DELAYS));
-			weather.setText(data.getString(StatusKeys.WEATHER));
-			
-			setFavoritedStatus();
-		} catch (Exception e) {
-			Log.e("INVALID_INTENT_EXTRA", e.getMessage());
-		}
-	}
 	
-	public void onClickDrivingMapButton(View v) {
-		if (!intentData.containsKey("origin")) {
-			Toast.makeText(getApplicationContext(), "Missing origin data", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		String origin = intentData.getString("origin");
-		launchMapIntent(TravelTimeEstimate.getDrivingMapUrl(origin, code));
-	}
 	
-	public void onClickTransitMapButton(View v) {
-		if (!intentData.containsKey("origin")) {
-			Toast.makeText(getApplicationContext(), "Missing origin data", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		String origin = intentData.getString("origin");
-		launchMapIntent(TravelTimeEstimate.getTransitMapUrl(origin, code));
-	}
 	
-	private void launchMapIntent(String url) {
-		try {
-			
-		} catch (Exception e) {
-			Log.e("MAP_LAUNCHER", e.getMessage());
-			Toast.makeText(getApplicationContext(), R.string.txtRoutingError, Toast.LENGTH_SHORT).show();
-		}
-		Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
-		startActivity(intent);
+
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
 	}
-	
-	private void setFavoritedStatus() {
-		this.isFavorited = Favorite.exists(this.code);
-		if (this.isFavorited) {
-			favoriteStatus.setImageResource(R.drawable.ic_star_filled);
+
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		FragmentManager manager = getSupportFragmentManager();
+		android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
+		if (tab.getTag() == "StatusFragment") {
+			fts.replace(R.id.frame_container, new StatusFragment());
 		} else {
-			favoriteStatus.setImageResource(R.drawable.ic_star_empty);
+			fts.replace(R.id.frame_container, new StatusFragment());
 		}
+		fts.commit();
+		
 	}
-	
-	public void onFavoriteAction(View v) {
-		if (this.isFavorited == true) {
-			Favorite.delete(code);
-			// Favorite exists; delete it
-		} else {
-			// Set item as favorite
-			Favorite newFavorite = new Favorite();
-			newFavorite.setAirportCode(code);
-			newFavorite.save();
-		}
-		this.setFavoritedStatus();
+
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -24,6 +24,7 @@ public class LandingActivity extends Activity {
 	
 	@Override
 	protected void onResume(){
+		super.onResume();
 		getLocation();
 		
 	}

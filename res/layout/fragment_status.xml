@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <ImageView
+        android:id="@+id/ivFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:clickable="true"
+        android:onClick="onFavoriteAction"
+        android:src="@drawable/ic_star_empty" />
+    
+    <TextView
+        android:id="@+id/tvHeaderDelays"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/ivFavorite"
+        android:text="@string/txtHeaderDelays"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <TextView
+        android:id="@+id/tvDelays"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvHeaderDelays" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/tvHeaderSecurity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvDelays"
+        android:text="@string/txtHeaderSecurity"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/btnSecurityWaitTimes"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/tvHeaderSecurity"
+        android:onClick="onSecurityWaitTimeClick"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/txtSecurityDetailsButton" />
+    
+    <TextView
+        android:id="@+id/tvHeaderWeather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/btnSecurityWaitTimes"
+        android:text="@string/txtHeaderWeather"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <TextView
+        android:id="@+id/tvWeather"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvHeaderWeather"
+        android:text="@string/txtWeather"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <RelativeLayout
+        android:id="@+id/layoutTransitTimes"
+        android:layout_below="@id/tvWeather"
+        android:layout_marginTop="12dp"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+	    
+        <TextView
+                android:id="@+id/tvHeaderTransit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txtHeaderTransit"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+        <LinearLayout
+            android:id="@+id/layoutTransit1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/tvHeaderTransit"
+            android:layout_alignParentLeft="true">
+
+            <TextView
+                android:id="@+id/tvHeaderTransit1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.3"
+                android:text="@string/txtHeaderTransit1" />
+
+            <TextView
+                android:id="@+id/tvTransitValue1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/txtTravelTimeError" />
+
+            <ImageView
+                android:id="@+id/imgDrivingMapButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="2dp"
+                android:clickable="true"
+                android:onClick="onClickDrivingMapButton"
+                android:contentDescription="@string/txtDrivingMapButton"
+                android:src="@drawable/ic_right_arrow" />
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/layoutTransit2"
+            android:layout_below="@id/layoutTransit1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true" >
+
+            <TextView
+                android:id="@+id/tvHeaderTransit2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.3"
+                android:text="@string/txtHeaderTransit2" />
+
+            <TextView
+                android:id="@+id/tvTransitValue2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:text="@string/txtTravelTimeError" />
+            
+            <ImageView
+                android:id="@+id/imgTransitMapButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="2dp"
+                android:clickable="true"
+                android:onClick="onClickTransitMapButton"
+                android:src="@drawable/ic_right_arrow"
+                android:contentDescription="@string/txtTransitMapButton" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTransitAnnotation"
+            android:layout_marginTop="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layoutTransit2"
+            android:layout_gravity="center_vertical"
+            android:text="@string/txtTransitAnnotation"
+            android:textSize="12sp" />
+
+        </RelativeLayout>
+    
+
+</RelativeLayout>
