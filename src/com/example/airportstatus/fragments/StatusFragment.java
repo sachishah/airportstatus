@@ -2,11 +2,7 @@ package com.example.airportstatus.fragments;
 
 
 
-import com.example.airportstatus.R;
-import com.example.airportstatus.StatusKeys;
-import com.example.airportstatus.models.Favorite;
-import com.example.airportstatus.models.TravelTimeEstimate;
-
+import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -17,10 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.airportstatus.Airport;
+import com.example.airportstatus.R;
+import com.example.airportstatus.StatusKeys;
+import com.example.airportstatus.models.Favorite;
+import com.example.airportstatus.models.TravelTimeEstimate;
 
 
 public class StatusFragment extends Fragment {
@@ -30,6 +31,7 @@ public class StatusFragment extends Fragment {
 	TextView delays;
 	TextView weather;
 	String code;
+	Integer airportIndex;
 	Bundle intentData;
 	ImageView favoriteStatus;
 	boolean isFavorited;
@@ -44,13 +46,20 @@ public class StatusFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		intentData = getActivity().getIntent().getBundleExtra("data");
-		code = intentData.getString("airportCode").toUpperCase();
+		code = intentData.getString("airport_code").toUpperCase();
+		airportIndex = Integer.parseInt(intentData.getString("airport_index"));
 		setupViews();
 		setTemplateData(getActivity().getIntent());
 	}
 	
 	@SuppressLint("InlinedApi")
 	private void setupViews() {
+		String airportName = new ArrayList<String>(Airport.IATA_CODES.keySet()).get(airportIndex);
+		((TextView)getActivity().findViewById(R.id.tvAirportName))
+		  .setText(airportName);
+		((TextView)getActivity().findViewById(R.id.tvBigAirportCode)).setText(code);
+		((TextView)getActivity().findViewById(R.id.tvWebsite))
+		  .setText(Airport.WEBSITES.get(airportIndex));
 		weather = (TextView) getActivity().findViewById(R.id.tvWeather);
 		delays = (TextView) getActivity().findViewById(R.id.tvDelays);
 		drivingTimeEstimate = (TextView) getActivity().findViewById(R.id.tvTransitValue1);

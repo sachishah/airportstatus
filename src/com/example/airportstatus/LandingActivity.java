@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.widget.Toast;
 
 public class LandingActivity extends Activity {
+	Integer airportIndex;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class LandingActivity extends Activity {
 		    	Toast.makeText(this, "Loading status for " + airportCode + "...", Toast.LENGTH_SHORT).show();
 		    	Intent i = new Intent(this, QueryActivity.class);
 		    	i.putExtra("airport_code", airportCode);
+		    	i.putExtra("airport_index", airportIndex.toString());
 		    	startActivity(i);
 	    	} else {
 	    		Log.d("DEBUG", "Did not find nearby airport");
@@ -86,6 +88,7 @@ public class LandingActivity extends Activity {
 		  if (distanceToAirport < minDistance) {
 		        minDistance = distanceToAirport;
 		        airportCode = new ArrayList<String>(Airport.IATA_CODES.values()).get(index);
+		        airportIndex = index;
 		    }
 		  index++;
 		}

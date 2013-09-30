@@ -27,7 +27,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_status_list);
 		intentData = getIntent().getBundleExtra("data");
-		code = intentData.getString("airportCode").toUpperCase();
+		code = intentData.getString("airport_code").toUpperCase();
 		setupActionBar();
 		setupNavigationTabs();
 		
