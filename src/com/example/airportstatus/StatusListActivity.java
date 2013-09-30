@@ -92,7 +92,6 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		if (tab.getTag() == "StatusFragment") {			
 			fts.replace(R.id.frame_container, statusFragment);
 		} else if (tab.getTag() == "SavedFragment") {
-			Toast.makeText(this, "SAVED", Toast.LENGTH_LONG).show();
 			fts.replace(R.id.frame_container, savedFragment);
 		} else if (tab.getTag() == "SearchFragment") {
 			fts.replace(R.id.frame_container, searchFragment);
