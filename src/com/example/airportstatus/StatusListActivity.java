@@ -9,6 +9,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.airportstatus.fragments.SavedFragment;
 import com.example.airportstatus.fragments.SearchFragment;
 import com.example.airportstatus.fragments.StatusFragment;
 import com.example.airportstatus.models.TravelTimeEstimate;
@@ -28,6 +30,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 	String code;
 	Bundle intentData;
 	SearchFragment searchFragment;
+	SavedFragment savedFragment;
 	
 	@SuppressLint("DefaultLocale")
 	@Override
@@ -37,6 +40,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		intentData = getIntent().getBundleExtra("data");
 		code = intentData.getString("airport_code").toUpperCase();
 		searchFragment = new SearchFragment();
+		savedFragment = new SavedFragment();
 		setupNavigationTabs();
 		
 	}
@@ -82,8 +86,11 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		FragmentManager manager = getSupportFragmentManager();
 		android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
-		if (tab.getTag() == "StatusFragment") {
+		if (tab.getTag() == "StatusFragment") {			
 			fts.replace(R.id.frame_container, new StatusFragment());
+		} else if (tab.getTag() == "SavedFragment") {
+			Toast.makeText(this, "SAVED", Toast.LENGTH_LONG).show();
+			fts.replace(R.id.frame_container, savedFragment);
 		} else if (tab.getTag() == "SearchFragment") {
 			fts.replace(R.id.frame_container, searchFragment);
 		}
