@@ -129,34 +129,6 @@ public class LocationPreferences {
 			
 		}
     };
-    
-    
-	/*
-	public static AirportStatusLocation getCurrentLocation(Context context, LocationResult result) {
-		locationResult 
-		try {
-			SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE);
-			double lat = settings.getFloat(PREFS_LATITUDE, -1);
-			double lon = settings.getFloat(PREFS_LONGITUDE, -1);
-				
-			if (lat < 0 || lon < 0) {
-				throw new Exception("No location preferences have been set");
-			}
-			return new AirportStatusLocation(lat, lon);
-		} catch (Exception e) {
-			Log.e("LOCATION_PREFERENCES_ERROR", e.getMessage());
-			LocationManager m = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-			Location current = m.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			if (current == null) {
-				Log.e("LOCATION_FAIL", "Current location should not be null");
-				return new AirportStatusLocation(37.76030, -122.41051);
-			}
-			
-			updateLastLocationPreferences(context, current.getLatitude(), current.getLongitude());
-			return new AirportStatusLocation(current.getLatitude(), current.getLongitude());
-		}	
-	}
-	*/
   
 	public static void setLastLocationPreferences(Context context, double lat, double lon) {
 		SharedPreferences locationPrefs = context.getSharedPreferences(PREFS_NAME, android.content.Context.MODE_PRIVATE);
