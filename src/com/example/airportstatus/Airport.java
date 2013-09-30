@@ -82,7 +82,7 @@ public class Airport {
 		    add("bwiairport.com");
 		    add("massport.com");
 		    add("charlotteairport.com");
-		    add("flychicago.com/midway/");
+		    add("flychicago.com/midway");
 		    add("flychicago.com/ohare");
 		    add("cvgairport.com");
 			add("clevelandairport.com");
