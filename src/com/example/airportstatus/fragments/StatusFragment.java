@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -18,13 +17,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.airportstatus.Airport;
 import com.example.airportstatus.R;
 import com.example.airportstatus.StatusKeys;
 import com.example.airportstatus.models.Favorite;
-import com.example.airportstatus.models.TravelTimeEstimate;
 
 
 public class StatusFragment extends Fragment {
@@ -99,39 +96,6 @@ public class StatusFragment extends Fragment {
 		}
 	}
 	
-    
-    
-    public void onClickDrivingMapButton(View v) {
-		if (!intentData.containsKey("origin")) {
-			Toast.makeText(getActivity().getApplicationContext(), "Missing origin data", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		String origin = intentData.getString("origin");
-		launchMapIntent(TravelTimeEstimate.getDrivingMapUrl(origin, code));
-	}
-	
-	public void onClickTransitMapButton(View v) {
-		if (!intentData.containsKey("origin")) {
-			Toast.makeText(getActivity().getApplicationContext(), "Missing origin data", Toast.LENGTH_SHORT).show();
-			return;
-		}
-		String origin = intentData.getString("origin");
-		launchMapIntent(TravelTimeEstimate.getTransitMapUrl(origin, code));
-	}
-	
-	private void launchMapIntent(String url) {
-		try {
-			
-		} catch (Exception e) {
-			Log.e("MAP_LAUNCHER", e.getMessage());
-			Toast.makeText(getActivity().getApplicationContext(), R.string.txtRoutingError, Toast.LENGTH_SHORT).show();
-		}
-		Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
-		startActivity(intent);
-	}
-	
-	
-	
 	public void onFavoriteAction(View v) {
 		if (this.isFavorited == true) {
 			Favorite.delete(code);
@@ -144,5 +108,4 @@ public class StatusFragment extends Fragment {
 		}
 		this.setFavoritedStatus();
 	}
-
 }
