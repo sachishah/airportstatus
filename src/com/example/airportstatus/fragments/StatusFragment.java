@@ -36,6 +36,7 @@ public class StatusFragment extends Fragment {
 	boolean isFavorited;
 	Button btnDrivingTime;
 	Button btnTransitTime;
+	Button btnDelays;
 	
 	@Override
 	public View onCreateView(LayoutInflater inf, ViewGroup parent, Bundle savedInstanceState) {
@@ -57,8 +58,10 @@ public class StatusFragment extends Fragment {
 	private void setupViews() {
 		btnDrivingTime = (Button) getActivity().findViewById(R.id.btnDrivingTime);
 		btnTransitTime = (Button) getActivity().findViewById(R.id.btnTransitTime);
+		btnDelays = (Button) getActivity().findViewById(R.id.btnDelays);
 		btnDrivingTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
 		btnTransitTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
+		btnDelays.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
 		String airportName = new ArrayList<String>(Airport.IATA_CODES.keySet()).get(airportIndex);
 		((TextView)getActivity().findViewById(R.id.tvAirportName))
 		  .setText(airportName);
@@ -78,7 +81,8 @@ public class StatusFragment extends Fragment {
 			Bundle data = intent.getBundleExtra("data");
 			btnDrivingTime.setText("Driving Directions: " + data.getString(StatusKeys.TRAVEL_TIME_DRIVING));
 			btnTransitTime.setText("Transit Directions: " + data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
-			delays.setText(data.getString(StatusKeys.DELAYS));
+			//delays.setText(data.getString(StatusKeys.DELAYS));
+			btnDelays.setText("Status: " + data.getString(StatusKeys.DELAYS));
 			weather.setText(data.getString(StatusKeys.WEATHER));
 			
 			setFavoritedStatus();
