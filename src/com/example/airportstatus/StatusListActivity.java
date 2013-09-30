@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.airportstatus.fragments.SavedFragment;
 import com.example.airportstatus.fragments.SearchFragment;
 import com.example.airportstatus.fragments.StatusFragment;
+import com.example.airportstatus.models.Favorite;
 import com.example.airportstatus.models.TravelTimeEstimate;
 
 
@@ -29,6 +30,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 	
 	String code;
 	Bundle intentData;
+	StatusFragment statusFragment;
 	SearchFragment searchFragment;
 	SavedFragment savedFragment;
 	
@@ -39,6 +41,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		setContentView(R.layout.activity_status_list);
 		intentData = getIntent().getBundleExtra("data");
 		code = intentData.getString("airport_code").toUpperCase();
+		statusFragment = new StatusFragment();
 		searchFragment = new SearchFragment();
 		savedFragment = new SavedFragment();
 		setupNavigationTabs();
@@ -87,7 +90,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		FragmentManager manager = getSupportFragmentManager();
 		android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
 		if (tab.getTag() == "StatusFragment") {			
-			fts.replace(R.id.frame_container, new StatusFragment());
+			fts.replace(R.id.frame_container, statusFragment);
 		} else if (tab.getTag() == "SavedFragment") {
 			Toast.makeText(this, "SAVED", Toast.LENGTH_LONG).show();
 			fts.replace(R.id.frame_container, savedFragment);
@@ -95,7 +98,6 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 			fts.replace(R.id.frame_container, searchFragment);
 		}
 		fts.commit();
-		
 	}
 
 	@Override
@@ -136,6 +138,10 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 	public void onSearchBtnClick(View v) {
     	searchFragment.onSearchBtnClick(v);
     }
+	
+	public void onFavoriteAction(View v) {
+		statusFragment.onFavoriteAction(v);
+	}
 	
 	
 }

@@ -111,5 +111,5 @@ public class StatusFragment extends Fragment {
 			newFavorite.save();
 		}
 		this.setFavoritedStatus();
-	}
+	} 
 }
