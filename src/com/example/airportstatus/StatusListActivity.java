@@ -6,13 +6,19 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.airportstatus.fragments.StatusFragment;
+import com.example.airportstatus.models.TravelTimeEstimate;
 
 
 
@@ -115,5 +121,34 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void onClickDrivingMapButton(View v) {
+		if (!intentData.containsKey("origin")) {
+			Toast.makeText(getApplicationContext(), "Missing origin data", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		String origin = intentData.getString("origin");
+		launchMapIntent(TravelTimeEstimate.getDrivingMapUrl(origin, code));
+	}
+	
+	public void onClickTransitMapButton(View v) {
+		if (!intentData.containsKey("origin")) {
+			Toast.makeText(getApplicationContext(), "Missing origin data", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		String origin = intentData.getString("origin");
+		launchMapIntent(TravelTimeEstimate.getTransitMapUrl(origin, code));
+	}
+	
+	private void launchMapIntent(String url) {
+		try {
+			
+		} catch (Exception e) {
+			Log.e("MAP_LAUNCHER", e.getMessage());
+			Toast.makeText(getApplicationContext(), R.string.txtRoutingError, Toast.LENGTH_SHORT).show();
+		}
+		Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+		startActivity(intent);
 	}
 }
