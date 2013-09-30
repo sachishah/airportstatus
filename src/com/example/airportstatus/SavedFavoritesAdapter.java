@@ -3,6 +3,7 @@ package com.example.airportstatus;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class SavedFavoritesAdapter extends ArrayAdapter<String> {
-
 	public SavedFavoritesAdapter(Context context, int resource,
 			int textViewResourceId) {
 		super(context, resource, textViewResourceId);
@@ -32,9 +32,23 @@ public class SavedFavoritesAdapter extends ArrayAdapter<String> {
 		}
 		
 		String code = getItem(position);
+		String locator = null;
+		for (String key : Airport.IATA_CODES.keySet()) {
+			String airportTag = key;
+			
+			if (airportTag.contains(code)) {
+				locator = airportTag;
+				locator = locator.substring(0, locator.length() - 6); // Trim off code and hyphen
+			}
+		}
 		
 		TextView tvAirportName = (TextView) view.findViewById(R.id.tvFavoriteAirportCode);
 		tvAirportName.setText(code);
+
+		if (locator != null) {
+			TextView tvAirportDetail = (TextView) view.findViewById(R.id.tvFavoriteAirportDetail);
+			tvAirportDetail.setText(locator);
+		}
 		
 		return view;
 	}
