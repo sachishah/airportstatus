@@ -32,9 +32,6 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
 	FavoritesAdapter favoritesListAdapter;
 	
 	public static final String AIRPORT_CODE = "airport_code";
-	public static final String PREFS_NAME = "AirportStatusPrefs";
-	public static final String PREFS_LATITUDE = "LAT";
-	public static final String PREFS_LONGITUDE= "LON";
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +103,7 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
     }
     
     private void setupLocationStorage() {
-        locationPrefs = getSharedPreferences(PREFS_NAME, 0);    	
+        locationPrefs = getSharedPreferences(LocationPreferences.PREFS_NAME, 0);    	
     }
     
     private void setupLocationListener() {
@@ -114,10 +111,10 @@ public class AirportStatusActivity extends Activity implements OnNavigationListe
     	locationListener = new LocationListener() {
     		@Override
     		public void onLocationChanged(Location location) {
-    			SharedPreferences locationPrefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+    			SharedPreferences locationPrefs = getSharedPreferences(LocationPreferences.PREFS_NAME, MODE_PRIVATE);
     			SharedPreferences.Editor editor = locationPrefs.edit();
-    			editor.putFloat(PREFS_LATITUDE, (float) location.getLatitude());
-    			editor.putFloat(PREFS_LONGITUDE, (float) location.getLongitude());
+    			editor.putFloat(LocationPreferences.PREFS_LATITUDE, (float) location.getLatitude());
+    			editor.putFloat(LocationPreferences.PREFS_LONGITUDE, (float) location.getLongitude());
     			editor.commit();
     		}
 
