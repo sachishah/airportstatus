@@ -50,7 +50,8 @@
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginTop="10dp"
-                android:autoLink="web" />
+                android:autoLink="web"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -90,9 +91,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:textColor="#fff"
-        android:text="Button"
+        android:textColor="#BB000000"
         android:layout_marginTop="20dp"
+        android:textSize="16sp"
         android:onClick="onClickDrivingMapButton" />
 
     <Button
@@ -101,8 +102,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginTop="20dp"
-        android:textColor="#fff"
-        android:text="Button"
+		android:textColor="#BB000000"
+		android:textSize="16sp"
         android:onClick="onClickTransitMapButton" />
 
 </LinearLayout>
