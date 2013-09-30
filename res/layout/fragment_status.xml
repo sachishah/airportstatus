@@ -87,23 +87,13 @@
     </LinearLayout>
 
     <Button
+        style="@style/DirectionsButton"
         android:id="@+id/btnDrivingTime"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:textColor="#BB000000"
-        android:layout_marginTop="20dp"
-        android:textSize="16sp"
         android:onClick="onClickDrivingMapButton" />
 
     <Button
+		style="@style/DirectionsButton"
         android:id="@+id/btnTransitTime"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="20dp"
-		android:textColor="#BB000000"
-		android:textSize="16sp"
         android:onClick="onClickTransitMapButton" />
 
 </LinearLayout>
