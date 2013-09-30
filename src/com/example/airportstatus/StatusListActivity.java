@@ -34,7 +34,6 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		setContentView(R.layout.activity_status_list);
 		intentData = getIntent().getBundleExtra("data");
 		code = intentData.getString("airport_code").toUpperCase();
-		setupActionBar();
 		setupNavigationTabs();
 		
 	}
@@ -52,9 +51,9 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		Tab tabStatus= actionBar.newTab().setText("Status")
 				.setTag("StatusFragment")
 				.setTabListener(this);
-		Tab tabNearby= actionBar.newTab().setText("Nearby")
+		/*Tab tabNearby= actionBar.newTab().setText("Nearby")
 				.setTag("NearbyFragment")
-				.setTabListener(this);
+				.setTabListener(this);*/
 		Tab tabSaved = actionBar.newTab().setText("Saved")
 				.setTag("SavedFragment")
 				.setTabListener(this);
@@ -62,7 +61,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 				.setTag("FindFragment")
 				.setTabListener(this);
 		actionBar.addTab(tabStatus);
-		actionBar.addTab(tabNearby);
+		//actionBar.addTab(tabNearby);
 		actionBar.addTab(tabSaved);
 		actionBar.addTab(tabFind);
 		actionBar.selectTab(tabStatus);
@@ -70,19 +69,11 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 	}
 	
 
-	
-	@SuppressLint("NewApi")
-	private void setupActionBar() {
-		ActionBar bar = getActionBar();
-		bar.setTitle("Airport Status: " + code);
-		bar.setDisplayHomeAsUpEnabled(true);
-	}
-	
-	
+
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
+	    /*switch (item.getItemId()) {
 	    case R.id.action_search:
 	    	finish();
 	    	return true;
@@ -91,7 +82,8 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 	        return true;
 	    default:
 	        return super.onOptionsItemSelected(item);
-	    }
+	    }*/
+		return true;
 	}
 	
 	

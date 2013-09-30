@@ -61,6 +61,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
+        <Button
+            android:id="@+id/btnDelays"
+            android:layout_width="185dp"
+            android:layout_height="50dp"
+            android:textColor="#fff"
+            android:text="Button" />
+
         <TextView
             android:id="@+id/tvDelays"
             android:layout_width="match_parent"
@@ -73,7 +80,8 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:onClick="onFavoriteAction"
-            android:src="@drawable/ic_star_empty" />
+            android:src="@drawable/ic_star_empty"
+            android:layout_marginLeft="35dp" />
 
     </LinearLayout>
 
@@ -84,6 +92,7 @@
         android:layout_gravity="center_vertical"
         android:textColor="#fff"
         android:text="Button"
+        android:layout_marginTop="20dp"
         android:onClick="onClickDrivingMapButton" />
 
     <Button
