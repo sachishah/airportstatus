@@ -9,10 +9,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,8 +29,7 @@ import com.example.airportstatus.models.TravelTimeEstimate;
 
 public class StatusFragment extends Fragment {
 	
-	TextView drivingTimeEstimate;
-	TextView transitTimeEstimate;
+	
 	TextView delays;
 	TextView weather;
 	String code;
@@ -35,6 +37,8 @@ public class StatusFragment extends Fragment {
 	Bundle intentData;
 	ImageView favoriteStatus;
 	boolean isFavorited;
+	Button btnDrivingTime;
+	Button btnTransitTime;
 	
 	@Override
 	public View onCreateView(LayoutInflater inf, ViewGroup parent, Bundle savedInstanceState) {
@@ -52,26 +56,31 @@ public class StatusFragment extends Fragment {
 		setTemplateData(getActivity().getIntent());
 	}
 	
-	@SuppressLint("InlinedApi")
+	@SuppressLint({ "InlinedApi", "ResourceAsColor" })
 	private void setupViews() {
+		btnDrivingTime = (Button) getActivity().findViewById(R.id.btnDrivingTime);
+		btnTransitTime = (Button) getActivity().findViewById(R.id.btnTransitTime);
+		btnDrivingTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
+		btnTransitTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
 		String airportName = new ArrayList<String>(Airport.IATA_CODES.keySet()).get(airportIndex);
 		((TextView)getActivity().findViewById(R.id.tvAirportName))
 		  .setText(airportName);
 		((TextView)getActivity().findViewById(R.id.tvBigAirportCode)).setText(code);
-		((TextView)getActivity().findViewById(R.id.tvWebsite))
-		  .setText(Airport.WEBSITES.get(airportIndex));
+		String website = Airport.WEBSITES.get(airportIndex);
+		String formattedWebsite = "<a href='http://"+website+"'>"+website+"</a>";
+		TextView tvWebsite = ((TextView)getActivity().findViewById(R.id.tvWebsite));
+		tvWebsite.setText(Html.fromHtml(formattedWebsite));
+		tvWebsite.setMovementMethod(LinkMovementMethod.getInstance());
 		weather = (TextView) getActivity().findViewById(R.id.tvWeather);
 		delays = (TextView) getActivity().findViewById(R.id.tvDelays);
-		drivingTimeEstimate = (TextView) getActivity().findViewById(R.id.tvTransitValue1);
-		transitTimeEstimate = (TextView) getActivity().findViewById(R.id.tvTransitValue2);
 		favoriteStatus = (ImageView) getActivity().findViewById(R.id.ivFavorite);
  	}
 	
 	private void setTemplateData(Intent intent) {
 		try {
 			Bundle data = intent.getBundleExtra("data");
-			drivingTimeEstimate.setText(data.getString(StatusKeys.TRAVEL_TIME_DRIVING));
-			transitTimeEstimate.setText(data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
+			btnDrivingTime.setText("Driving Directions: " + data.getString(StatusKeys.TRAVEL_TIME_DRIVING));
+			btnTransitTime.setText("Transit Directions: " + data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
 			delays.setText(data.getString(StatusKeys.DELAYS));
 			weather.setText(data.getString(StatusKeys.WEATHER));
 			

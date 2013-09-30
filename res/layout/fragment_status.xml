@@ -26,13 +26,14 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginLeft="15dp" >
+            android:layout_marginLeft="25dp" >
 
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Weather Conditions:" />
+                android:text="Weather Conditions:"
+                android:layout_marginTop="18dp" />
 
             <TextView
                 android:id="@+id/tvWeather"
@@ -47,7 +48,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_marginTop="10dp"
+                android:autoLink="web" />
 
         </LinearLayout>
 
@@ -74,87 +77,23 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/layoutTransitTimes"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnDrivingTime"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp" >
+        android:layout_gravity="center_vertical"
+        android:textColor="#fff"
+        android:text="Button"
+        android:onClick="onClickDrivingMapButton" />
 
-        <TextView
-            android:id="@+id/tvHeaderTransit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/txtHeaderTransit"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <LinearLayout
-            android:id="@+id/layoutTransit1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/tvHeaderTransit"
-            android:layout_marginTop="5dp" >
-
-            <TextView
-                android:id="@+id/tvHeaderTransit1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.3"
-                android:text="@string/txtHeaderTransit1" />
-
-            <TextView
-                android:id="@+id/tvTransitValue1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.5"
-                android:text="@string/txtTravelTimeError" />
-
-            <ImageView
-                android:id="@+id/imgDrivingMapButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:clickable="true"
-                android:contentDescription="@string/txtDrivingMapButton"
-                android:onClick="onClickDrivingMapButton"
-                android:padding="2dp"
-                android:src="@drawable/ic_right_arrow" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layoutTransit2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/layoutTransit1" >
-
-            <TextView
-                android:id="@+id/tvHeaderTransit2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.3"
-                android:text="@string/txtHeaderTransit2" />
-
-            <TextView
-                android:id="@+id/tvTransitValue2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.5"
-                android:text="@string/txtTravelTimeError" />
-
-            <ImageView
-                android:id="@+id/imgTransitMapButton"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:clickable="true"
-                android:contentDescription="@string/txtTransitMapButton"
-                android:onClick="onClickTransitMapButton"
-                android:padding="2dp"
-                android:src="@drawable/ic_right_arrow" />
-        </LinearLayout>
-    </RelativeLayout>
+    <Button
+        android:id="@+id/btnTransitTime"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="20dp"
+        android:textColor="#fff"
+        android:text="Button"
+        android:onClick="onClickTransitMapButton" />
 
 </LinearLayout>
