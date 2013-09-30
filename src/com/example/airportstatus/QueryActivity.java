@@ -223,7 +223,8 @@ public class QueryActivity extends Activity implements Observer {
 		if (bundle.containsKey("success")) {
 			Intent i = new Intent(this, StatusListActivity.class);
 			bundle.putString("origin", currentLocation.toString());
-			bundle.putString("airportCode", airportCode);
+			bundle.putString("airport_code", airportCode);
+			bundle.putString("airport_index", getIntent().getStringExtra("airport_index"));
 			i.putExtra("data", bundle);
 	    	startActivity(i);
 	    	finish();
