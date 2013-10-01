@@ -81,8 +81,6 @@ public class QueryActivity extends Activity implements Observer {
 		// NetworkTaskCollection becomes ArrayList of NetworkTasks
 		// NetworkTaskCollection is Observable
 		// NetworkTask has success handler that pushes data to bundle
-		
-		
 		myTasks = new NetworkTaskCollection();
 		myTasks.addObserver(this);
 		myTasks.addTask(new NetworkTask() {

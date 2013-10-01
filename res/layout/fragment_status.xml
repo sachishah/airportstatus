@@ -50,7 +50,8 @@
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_marginTop="10dp"
-                android:autoLink="web" />
+                android:autoLink="web"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -86,23 +87,13 @@
     </LinearLayout>
 
     <Button
+        style="@style/DirectionsButton"
         android:id="@+id/btnDrivingTime"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:textColor="#fff"
-        android:text="Button"
-        android:layout_marginTop="20dp"
         android:onClick="onClickDrivingMapButton" />
 
     <Button
+		style="@style/DirectionsButton"
         android:id="@+id/btnTransitTime"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="20dp"
-        android:textColor="#fff"
-        android:text="Button"
         android:onClick="onClickTransitMapButton" />
 
 </LinearLayout>
