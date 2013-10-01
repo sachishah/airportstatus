@@ -106,7 +106,6 @@ public class SearchFragment extends Fragment {
     	String code = Airport.IATA_CODES.get(textEntered);
     	int index = new ArrayList<String>(Airport.IATA_CODES.values()).indexOf(code);
     	if (code != null) {
-	    	Toast.makeText(getActivity(), "Searching for " + code + "...", Toast.LENGTH_SHORT).show();
 	    	Intent i = new Intent(getActivity(), QueryActivity.class);
 	    	i.putExtra(AIRPORT_CODE, code);
 	    	i.putExtra("airport_index", String.valueOf(index));

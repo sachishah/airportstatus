@@ -69,8 +69,6 @@ public class SavedFavoritesAdapter extends ArrayAdapter<String> {
 		
 		@Override
 		public void onClick(View v) {
-			Toast.makeText(getContext(), this.airportCode, Toast.LENGTH_LONG).show();
-			
 			int index = new ArrayList<String>(Airport.IATA_CODES.values()).indexOf(this.airportCode);
 	    	if (this.airportCode != null) {
 		    	Intent i = new Intent(this.context, QueryActivity.class);
