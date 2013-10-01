@@ -8,12 +8,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".QueryActivity" >
 
+    <ProgressBar
+        android:id="@+id/pbLoadingSpinner"
+        style="@style/GenericProgressIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
     <TextView
         android:id="@+id/tvLoadingIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/pbLoadingSpinner"
+        android:gravity="center"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:text="@string/txtWaiting" />
 
 </RelativeLayout>
