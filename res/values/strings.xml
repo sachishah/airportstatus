@@ -23,7 +23,7 @@
     <string name="txtRoutingError">No route available</string>
     <string name="go">Get Airport Status</string>
     <string name="title_activity_query">Loading</string>
-    <string name="txtWaiting">YODA SAYS: Wait, you must. Hmmmmmm.</string>
+    <string name="txtWaiting">Loading&#8230;</string>
     <string name="txtTransitMapButton">Button to navigate to Google Maps transit directions</string>
     <string name="txtDrivingMapButton">Button to navigate to Google Maps driving directions</string>
     <string name="txtFavoritesPlaceholder">Favorites</string>

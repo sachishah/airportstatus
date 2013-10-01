@@ -45,7 +45,6 @@ public class LandingActivity extends Activity {
 				LocationPreferences.setLastLocationPreferences(context, location.getLatitude(), location.getLongitude());
 				Airport airportDetails = findClosestAirport(location);
 				if (airportDetails.code != null) {
-			    	Toast.makeText(context, "Loading status for " + airportDetails.code + "...", Toast.LENGTH_SHORT).show();
 			    	Intent i = new Intent(context, QueryActivity.class);
 			    	i.putExtra("airport_code", airportDetails.code);
 			    	i.putExtra("airport_index", String.valueOf(airportDetails.index));
