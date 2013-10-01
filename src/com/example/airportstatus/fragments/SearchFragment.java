@@ -49,7 +49,6 @@ public class SearchFragment extends Fragment {
         
         setupButton();
         setupTextView();
-		
 	}
 	
 	private void setupLocationStorage() {
