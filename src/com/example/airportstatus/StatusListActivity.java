@@ -142,5 +142,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		statusFragment.onFavoriteAction(v);
 	}
 	
-	
+	public void onClickRefresh(View v) {
+		Toast.makeText(getApplicationContext(), "refreshing", Toast.LENGTH_SHORT).show();
+	}
 }

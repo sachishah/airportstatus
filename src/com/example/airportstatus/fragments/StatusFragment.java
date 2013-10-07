@@ -1,7 +1,5 @@
 package com.example.airportstatus.fragments;
 
-
-
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
