@@ -98,16 +98,17 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" >
 
         <Button
             android:id="@+id/btnRefresh"
-            android:layout_width="wrap_content"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:onClick="onClickRefresh"
-            android:text="Button" />
+            android:text="@string/txtRefresh" />
 
         <ProgressBar
             android:id="@+id/pbSmallSpinner"
