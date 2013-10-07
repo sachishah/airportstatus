@@ -14,25 +14,6 @@ import com.example.airportstatus.models.TravelTimeEstimate;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public abstract class NetworkTaskCollectionRunner implements Observer {
-	private abstract class Batch implements Observer {
-		NetworkTaskCollection myTasks;
-		Context context;
-		
-		public Batch(Context c) {
-			context = c;
-		}
-		
-		protected void execute() {
-			myTasks.addObserver(this);
-			
-		}
-
-		public void update(Observable observable, Object response) {
-			handleResultInner((Bundle) response);
-		}
-		
-		protected abstract void handleResultInner(Bundle response);
-	}
 	
 	NetworkTaskCollection myTasks;
 	Context context;
@@ -81,6 +62,36 @@ public abstract class NetworkTaskCollectionRunner implements Observer {
 			}
 		});
 		
+		myTasks.addTask(new NetworkTask() {
+			@Override
+			public void setHandler() {
+				this.handler = new JsonHttpResponseHandler() {
+					@Override
+					public void onSuccess(JSONObject response) {
+						int totalTripMins;
+						try {
+							totalTripMins = TravelTimeEstimate.parseDirections(response);
+							myTasks.finishWithResult(StatusKeys.TRAVEL_TIME_TRANSIT, TravelTimeEstimate.getFormattedDuration(totalTripMins));
+						} catch (Exception e) {
+							myTasks.finishOneTask();
+							Log.e("TASK", "Task failed 2 ");							
+							e.printStackTrace();
+						}
+					}
+					
+					@Override
+					public void onFailure(Throwable error, JSONObject obj) {
+						myTasks.finishOneTask();
+					}
+				};
+			}
+			
+			@Override
+			public void execute() {
+				TravelTimeEstimate.getTransitTime(TravelTimeEstimate.getCoordinates(location), airportCode, this.handler);
+			}
+		});
+		
 		myTasks.startAll();
 		Log.d("NetworkTaskCollectionRunner", "got this far");
 		/*
@@ -91,35 +102,7 @@ public abstract class NetworkTaskCollectionRunner implements Observer {
 		myTasks.addObserver(this);
 		
 				
-				myTasks.addTask(new NetworkTask() {
-					@Override
-					public void setHandler() {
-						this.handler = new JsonHttpResponseHandler() {
-							@Override
-							public void onSuccess(JSONObject response) {
-								int totalTripMins;
-								try {
-									totalTripMins = TravelTimeEstimate.parseDirections(response);
-									myTasks.finishWithResult(StatusKeys.TRAVEL_TIME_TRANSIT, TravelTimeEstimate.getFormattedDuration(totalTripMins));
-								} catch (Exception e) {
-									myTasks.finishOneTask();
-									Log.e("TASK", "Task failed 2 ");							
-									e.printStackTrace();
-								}
-							}
-							
-							@Override
-							public void onFailure(Throwable error, JSONObject obj) {
-								myTasks.finishOneTask();
-							}
-						};
-					}
-					
-					@Override
-					public void execute() {
-						TravelTimeEstimate.getTransitTime(TravelTimeEstimate.getCoordinates(currentLocation), airportCode, this.handler);
-					}
-				});
+				
 				
 				myTasks.addTask(new NetworkTask() {
 					@Override

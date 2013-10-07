@@ -1,10 +1,5 @@
 package com.example.airportstatus;
 
-import java.util.Observable;
-import java.util.Observer;
-
-import org.json.JSONObject;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,10 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.airportstatus.models.TravelTimeEstimate;
-import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class QueryActivity extends Activity {
-	private NetworkTaskCollection myTasks;
 	private String airportCode, airportIndex;
 	private Location currentLocation;
 	
