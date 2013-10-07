@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -14,9 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.airportstatus.Airport;
+import com.example.airportstatus.LocationPreferences;
+import com.example.airportstatus.LocationResult;
+import com.example.airportstatus.NetworkTaskCollectionRunner;
 import com.example.airportstatus.R;
 import com.example.airportstatus.StatusKeys;
 import com.example.airportstatus.models.Favorite;
@@ -35,6 +40,7 @@ public class StatusFragment extends Fragment {
 	Button btnDrivingTime;
 	Button btnTransitTime;
 	Button btnDelays;
+	ProgressBar pb;
 	
 	@Override
 	public View onCreateView(LayoutInflater inf, ViewGroup parent, Bundle savedInstanceState) {
@@ -54,6 +60,7 @@ public class StatusFragment extends Fragment {
 	
 	@SuppressLint({ "InlinedApi", "ResourceAsColor" })
 	private void setupViews() {
+		pb = (ProgressBar) getActivity().findViewById(R.id.pbSmallSpinner);
 		btnDrivingTime = (Button) getActivity().findViewById(R.id.btnDrivingTime);
 		btnTransitTime = (Button) getActivity().findViewById(R.id.btnTransitTime);
 		btnDelays = (Button) getActivity().findViewById(R.id.btnDelays);
@@ -79,7 +86,6 @@ public class StatusFragment extends Fragment {
 			Bundle data = intent.getBundleExtra("data");
 			btnDrivingTime.setText("Driving Directions: " + data.getString(StatusKeys.TRAVEL_TIME_DRIVING));
 			btnTransitTime.setText("Transit Directions: " + data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
-			//delays.setText(data.getString(StatusKeys.DELAYS));
 			btnDelays.setText("Status: " + data.getString(StatusKeys.DELAYS));
 			weather.setText(data.getString(StatusKeys.WEATHER));
 			
@@ -109,5 +115,44 @@ public class StatusFragment extends Fragment {
 			newFavorite.save();
 		}
 		this.setFavoritedStatus();
-	} 
+	}
+	
+	public void onClickRefresh(View v) {
+		// Set loading spinner state
+		pb.setVisibility(View.VISIBLE);
+		
+		// Get updated user location
+		LocationResult locationResult = new LocationResult() {
+			@Override
+			public void receivedLocation(Location location) {
+				Log.d("LOCATION_RECEIVED", location.toString());
+				LocationPreferences.setLastLocationPreferences(getActivity(), location.getLatitude(), location.getLongitude());
+				
+				// Once user location has been refreshed, run the rest of the network tasks
+				NetworkTaskCollectionRunner n = new NetworkTaskCollectionRunner(getActivity()) {
+					@Override
+					public void handleResult(Bundle bundle) {
+						updateViews(bundle);
+					}
+				};
+				n.setData(code, location);
+				n.run();
+			}
+		};
+		LocationPreferences locPrefs = new LocationPreferences();
+		locPrefs.getCurrentLocation(getActivity(), locationResult);
+	}
+	
+	private void updateViews(Bundle bundle) {
+		// Test here that the value returned from the observed NetworkTaskCollection 
+		// is the one that signals success
+		if (bundle.containsKey("success")) {
+			btnDrivingTime.setText("Driving Directions: " + bundle.getString(StatusKeys.TRAVEL_TIME_DRIVING));
+			btnTransitTime.setText("Transit Directions: " + bundle.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
+			btnDelays.setText("Status: " + bundle.getString(StatusKeys.DELAYS));
+			weather.setText(bundle.getString(StatusKeys.WEATHER));
+		} 
+		
+		pb.setVisibility(View.INVISIBLE);
+	}
 }

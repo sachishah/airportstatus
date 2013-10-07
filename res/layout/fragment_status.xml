@@ -109,6 +109,14 @@
             android:onClick="onClickRefresh"
             android:text="Button" />
 
+        <ProgressBar
+            android:id="@+id/pbSmallSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/btnRefresh"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
 </LinearLayout>

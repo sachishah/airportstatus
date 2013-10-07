@@ -90,6 +90,4 @@ public class QueryActivity extends Activity {
 		n.setData(airportCode, currentLocation);
 		n.run();
 	}
-	
-	protected void onReceiveResults() {}
 }
