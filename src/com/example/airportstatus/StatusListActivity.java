@@ -144,5 +144,6 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 	
 	public void onClickRefresh(View v) {
 		Toast.makeText(getApplicationContext(), "refreshing", Toast.LENGTH_SHORT).show();
+		
 	}
 }
