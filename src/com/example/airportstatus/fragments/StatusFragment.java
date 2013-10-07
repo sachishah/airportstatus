@@ -84,9 +84,9 @@ public class StatusFragment extends Fragment {
 	private void setTemplateData(Intent intent) {
 		try {
 			Bundle data = intent.getBundleExtra("data");
-			btnDrivingTime.setText("Driving Directions: " + data.getString(StatusKeys.TRAVEL_TIME_DRIVING));
-			btnTransitTime.setText("Transit Directions: " + data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
-			btnDelays.setText("Status: " + data.getString(StatusKeys.DELAYS));
+			updateDrivingButton(data.getString(StatusKeys.TRAVEL_TIME_DRIVING));
+			updateTransitButton(data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
+			updateDelaysButton(data.getString(StatusKeys.DELAYS));
 			weather.setText(data.getString(StatusKeys.WEATHER));
 			
 			setFavoritedStatus();
@@ -147,12 +147,24 @@ public class StatusFragment extends Fragment {
 		// Test here that the value returned from the observed NetworkTaskCollection 
 		// is the one that signals success
 		if (bundle.containsKey("success")) {
-			btnDrivingTime.setText("Driving Directions: " + bundle.getString(StatusKeys.TRAVEL_TIME_DRIVING));
-			btnTransitTime.setText("Transit Directions: " + bundle.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
-			btnDelays.setText("Status: " + bundle.getString(StatusKeys.DELAYS));
+			updateDrivingButton(bundle.getString(StatusKeys.TRAVEL_TIME_DRIVING));
+			updateTransitButton(bundle.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
+			updateDelaysButton(bundle.getString(StatusKeys.DELAYS));
 			weather.setText(bundle.getString(StatusKeys.WEATHER));
 		} 
 		
 		pb.setVisibility(View.INVISIBLE);
+	}
+	
+	private void updateDrivingButton(String time) {
+		btnDrivingTime.setText("Driving Directions: " + time);
+	}
+	
+	private void updateTransitButton(String time) {
+		btnTransitTime.setText("Transit Directions: " + time);
+	}
+	
+	private void updateDelaysButton(String time) {
+		btnDelays.setText("Status: " + time);
 	}
 }
