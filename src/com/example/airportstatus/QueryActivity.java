@@ -185,7 +185,6 @@ public class QueryActivity extends Activity implements Observer {
 				this.handler = new JsonHttpResponseHandler() {
 					@Override
 					public void onSuccess(JSONObject response) {
-						Log.d("DELAYS", response.toString());
 						String[] outcomes = getResources().getStringArray(R.array.txtDelayLabels);
 						try {
 							int delaySeverityIndex = FlightStatsClient.getDelayIndex(response);
@@ -220,15 +219,12 @@ public class QueryActivity extends Activity implements Observer {
 		// is the one that signals success
 		if (bundle.containsKey("success")) {
 			Intent i = new Intent(this, StatusListActivity.class);
-			bundle.putString("origin", currentLocation.toString());
+			bundle.putString("origin", TravelTimeEstimate.getCoordinates(currentLocation));
 			bundle.putString("airport_code", airportCode);
 			bundle.putString("airport_index", airportIndex);
 			i.putExtra("data", bundle);
 	    	startActivity(i);
 	    	finish();
 		} 
-		
-		// Otherwise, go back to the starting activity and show an error
-		
 	}
 }

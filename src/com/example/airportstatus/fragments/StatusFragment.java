@@ -59,8 +59,8 @@ public class StatusFragment extends Fragment {
 		btnDrivingTime = (Button) getActivity().findViewById(R.id.btnDrivingTime);
 		btnTransitTime = (Button) getActivity().findViewById(R.id.btnTransitTime);
 		btnDelays = (Button) getActivity().findViewById(R.id.btnDelays);
-		btnDrivingTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
-		btnTransitTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
+		btnDrivingTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
+		btnTransitTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
 		btnDelays.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
 		String airportName = new ArrayList<String>(Airport.IATA_CODES.keySet()).get(airportIndex);
 		((TextView)getActivity().findViewById(R.id.tvAirportName))
