@@ -9,7 +9,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import com.example.airportstatus.fragments.SavedFragment;
 import com.example.airportstatus.fragments.SearchFragment;
 import com.example.airportstatus.fragments.StatusFragment;
-import com.example.airportstatus.models.Favorite;
 import com.example.airportstatus.models.TravelTimeEstimate;
 
 
@@ -142,5 +140,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		statusFragment.onFavoriteAction(v);
 	}
 	
-	
+	public void onClickRefresh(View v) {
+		statusFragment.onClickRefresh(v);
+	}
 }

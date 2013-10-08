@@ -1,11 +1,11 @@
 package com.example.airportstatus.fragments;
 
-
-
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -16,9 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.airportstatus.Airport;
+import com.example.airportstatus.LocationPreferences;
+import com.example.airportstatus.LocationResult;
+import com.example.airportstatus.NetworkTaskCollectionRunner;
 import com.example.airportstatus.R;
 import com.example.airportstatus.StatusKeys;
 import com.example.airportstatus.models.Favorite;
@@ -34,9 +38,8 @@ public class StatusFragment extends Fragment {
 	Bundle intentData;
 	ImageView favoriteStatus;
 	boolean isFavorited;
-	Button btnDrivingTime;
-	Button btnTransitTime;
-	Button btnDelays;
+	Button btnDrivingTime, btnTransitTime, btnDelays, btnRefresh;
+	ProgressBar pb;
 	
 	@Override
 	public View onCreateView(LayoutInflater inf, ViewGroup parent, Bundle savedInstanceState) {
@@ -56,11 +59,14 @@ public class StatusFragment extends Fragment {
 	
 	@SuppressLint({ "InlinedApi", "ResourceAsColor" })
 	private void setupViews() {
-		btnDrivingTime = (Button) getActivity().findViewById(R.id.btnDrivingTime);
-		btnTransitTime = (Button) getActivity().findViewById(R.id.btnTransitTime);
-		btnDelays = (Button) getActivity().findViewById(R.id.btnDelays);
-		btnDrivingTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
-		btnTransitTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_bright));
+		Activity activity = getActivity();
+		pb = (ProgressBar) activity.findViewById(R.id.pbSmallSpinner);
+		btnDrivingTime = (Button) activity.findViewById(R.id.btnDrivingTime);
+		btnTransitTime = (Button) activity.findViewById(R.id.btnTransitTime);
+		btnRefresh = (Button) activity.findViewById(R.id.btnRefresh);
+		btnDelays = (Button) activity.findViewById(R.id.btnDelays);
+		btnDrivingTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
+		btnTransitTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
 		btnDelays.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
 		String airportName = new ArrayList<String>(Airport.IATA_CODES.keySet()).get(airportIndex);
 		((TextView)getActivity().findViewById(R.id.tvAirportName))
@@ -68,21 +74,20 @@ public class StatusFragment extends Fragment {
 		((TextView)getActivity().findViewById(R.id.tvBigAirportCode)).setText(code);
 		String website = Airport.WEBSITES.get(airportIndex);
 		String formattedWebsite = "<a href='http://"+website+"'>"+website+"</a>";
-		TextView tvWebsite = ((TextView)getActivity().findViewById(R.id.tvWebsite));
+		TextView tvWebsite = ((TextView) activity.findViewById(R.id.tvWebsite));
 		tvWebsite.setText(Html.fromHtml(formattedWebsite));
 		tvWebsite.setMovementMethod(LinkMovementMethod.getInstance());
-		weather = (TextView) getActivity().findViewById(R.id.tvWeather);
-		delays = (TextView) getActivity().findViewById(R.id.tvDelays);
-		favoriteStatus = (ImageView) getActivity().findViewById(R.id.ivFavorite);
+		weather = (TextView) activity.findViewById(R.id.tvWeather);
+		delays = (TextView) activity.findViewById(R.id.tvDelays);
+		favoriteStatus = (ImageView) activity.findViewById(R.id.ivFavorite);
  	}
 	
 	private void setTemplateData(Intent intent) {
 		try {
 			Bundle data = intent.getBundleExtra("data");
-			btnDrivingTime.setText("Driving Directions: " + data.getString(StatusKeys.TRAVEL_TIME_DRIVING));
-			btnTransitTime.setText("Transit Directions: " + data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
-			//delays.setText(data.getString(StatusKeys.DELAYS));
-			btnDelays.setText("Status: " + data.getString(StatusKeys.DELAYS));
+			updateDrivingButton(data.getString(StatusKeys.TRAVEL_TIME_DRIVING));
+			updateTransitButton(data.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
+			updateDelaysButton(data.getString(StatusKeys.DELAYS));
 			weather.setText(data.getString(StatusKeys.WEATHER));
 			
 			setFavoritedStatus();
@@ -111,5 +116,67 @@ public class StatusFragment extends Fragment {
 			newFavorite.save();
 		}
 		this.setFavoritedStatus();
-	} 
+	}
+	
+	public void onClickRefresh(View v) {
+		// Set loading spinner state
+		toggleRefreshButton();
+		pb.setVisibility(View.VISIBLE);
+		
+		// Get updated user location
+		LocationResult locationResult = new LocationResult() {
+			@Override
+			public void receivedLocation(Location location) {
+				Log.d("LOCATION_RECEIVED", location.toString());
+				LocationPreferences.setLastLocationPreferences(getActivity(), location.getLatitude(), location.getLongitude());
+				
+				// Once user location has been refreshed, run the rest of the network tasks
+				NetworkTaskCollectionRunner n = new NetworkTaskCollectionRunner(getActivity()) {
+					@Override
+					public void handleResult(Bundle bundle) {
+						updateViews(bundle);
+					}
+				};
+				n.setData(code, location);
+				n.run();
+			}
+		};
+		LocationPreferences locPrefs = new LocationPreferences();
+		locPrefs.getCurrentLocation(getActivity(), locationResult);
+	}
+	
+	private void updateViews(Bundle bundle) {
+		// Test here that the value returned from the observed NetworkTaskCollection 
+		// is the one that signals success
+		if (bundle.containsKey("success")) {
+			updateDrivingButton(bundle.getString(StatusKeys.TRAVEL_TIME_DRIVING));
+			updateTransitButton(bundle.getString(StatusKeys.TRAVEL_TIME_TRANSIT));
+			updateDelaysButton(bundle.getString(StatusKeys.DELAYS));
+			weather.setText(bundle.getString(StatusKeys.WEATHER));
+		} 
+		
+		toggleRefreshButton();
+		pb.setVisibility(View.INVISIBLE);
+	}
+	
+	private void updateDrivingButton(String time) {
+		btnDrivingTime.setText("Driving Directions: " + time);
+	}
+	
+	private void updateTransitButton(String time) {
+		btnTransitTime.setText("Transit Directions: " + time);
+	}
+	
+	private void updateDelaysButton(String time) {
+		btnDelays.setText("Status: " + time);
+	}
+	
+	private void toggleRefreshButton() {
+		if (btnRefresh.getText() == getResources().getText(R.string.txtRefresh)) {
+			btnRefresh.setText(R.string.txtRefreshing);
+		} else {
+			btnRefresh.setText(R.string.txtRefresh);
+		}
+
+	}
 }

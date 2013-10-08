@@ -1,10 +1,5 @@
 package com.example.airportstatus;
 
-import java.util.Observable;
-import java.util.Observer;
-
-import org.json.JSONObject;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,10 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.airportstatus.models.TravelTimeEstimate;
-import com.loopj.android.http.JsonHttpResponseHandler;
 
-public class QueryActivity extends Activity implements Observer {
-	private NetworkTaskCollection myTasks;
+public class QueryActivity extends Activity {
 	private String airportCode, airportIndex;
 	private Location currentLocation;
 	
@@ -78,157 +71,23 @@ public class QueryActivity extends Activity implements Observer {
 	}
 	
 	protected void setupNetworkQueries() {
-		// NetworkTaskCollection becomes ArrayList of NetworkTasks
-		// NetworkTaskCollection is Observable
-		// NetworkTask has success handler that pushes data to bundle
-		myTasks = new NetworkTaskCollection();
-		myTasks.addObserver(this);
-		myTasks.addTask(new NetworkTask() {
+		NetworkTaskCollectionRunner n = new NetworkTaskCollectionRunner(this) {
 			@Override
-			public void setHandler() {
-				this.handler = new JsonHttpResponseHandler() {
-					@Override
-					public void onSuccess(JSONObject response) {
-						int totalTripMins;
-						try {
-							totalTripMins = TravelTimeEstimate.parseDirections(response);
-							myTasks.finishWithResult(StatusKeys.TRAVEL_TIME_DRIVING, TravelTimeEstimate.getFormattedDuration(totalTripMins));
-						} catch (Exception e) {
-							myTasks.finishOneTask();
-							Log.e("TASK", "Task failed 1");							
-							e.printStackTrace();
-						}
-					}
-					
-					@Override
-					public void onFailure(Throwable error, JSONObject obj) {
-						myTasks.finishOneTask();
-					}
-				};
+			public void handleResult(Bundle bundle) {
+				// Test here that the value returned from the observed NetworkTaskCollection 
+				// is the one that signals success
+				if (bundle.containsKey("success")) {
+					Intent i = new Intent(this.context, StatusListActivity.class);
+					bundle.putString("origin", TravelTimeEstimate.getCoordinates(this.location));
+					bundle.putString("airport_code", airportCode);
+					bundle.putString("airport_index", airportIndex);
+					i.putExtra("data", bundle);
+					startActivity(i);
+					finish();
+				} 
 			}
-			
-			@Override
-			public void execute() {
-				TravelTimeEstimate.getDrivingTime(TravelTimeEstimate.getCoordinates(currentLocation), airportCode, this.handler);
-			}
-		});
-		
-		myTasks.addTask(new NetworkTask() {
-			@Override
-			public void setHandler() {
-				this.handler = new JsonHttpResponseHandler() {
-					@Override
-					public void onSuccess(JSONObject response) {
-						int totalTripMins;
-						try {
-							totalTripMins = TravelTimeEstimate.parseDirections(response);
-							myTasks.finishWithResult(StatusKeys.TRAVEL_TIME_TRANSIT, TravelTimeEstimate.getFormattedDuration(totalTripMins));
-						} catch (Exception e) {
-							myTasks.finishOneTask();
-							Log.e("TASK", "Task failed 2 ");							
-							e.printStackTrace();
-						}
-					}
-					
-					@Override
-					public void onFailure(Throwable error, JSONObject obj) {
-						myTasks.finishOneTask();
-					}
-				};
-			}
-			
-			@Override
-			public void execute() {
-				TravelTimeEstimate.getTransitTime(TravelTimeEstimate.getCoordinates(currentLocation), airportCode, this.handler);
-			}
-		});
-		
-		myTasks.addTask(new NetworkTask() {
-			@Override
-			public void setHandler() {
-				this.handler = new JsonHttpResponseHandler() {
-					@Override
-					public void onSuccess(JSONObject response) {
-						String currentWeatherAtAirport;
-						try {
-							currentWeatherAtAirport = FlightStatsClient.getWeatherString(response);
-						} catch (Exception e) {
-							currentWeatherAtAirport = "";
-						}
-						try {
-							Double tempC = FlightStatsClient.getTempCelsius(response); // Result only comes back in degrees Celsius
-							Double tempF = (tempC * 1.8) + 32;
-							myTasks.addResult(StatusKeys.TEMPERATURE, String.valueOf(tempF));
-						} catch (Exception e) {
-							Log.e("WEATHER", e.getMessage() + " " + response.toString());
-						}
-						myTasks.finishWithResult(StatusKeys.WEATHER, currentWeatherAtAirport);
-					}
-					
-					@Override
-					public void onFailure(Throwable error, JSONObject obj) {
-						Log.e("WEATHER", error.getMessage());
-						myTasks.finishOneTask();
-					}
-				};
-			}
-			
-			@Override
-			public void execute() {
-				FlightStatsClient.getWeatherConditions(airportCode, this.handler);
-			}
-		});
-		
-		myTasks.addTask(new NetworkTask() {
-			@Override
-			public void setHandler() {
-				this.handler = new JsonHttpResponseHandler() {
-					@Override
-					public void onSuccess(JSONObject response) {
-						Log.d("DELAYS", response.toString());
-						String[] outcomes = getResources().getStringArray(R.array.txtDelayLabels);
-						try {
-							int delaySeverityIndex = FlightStatsClient.getDelayIndex(response);
-							Log.d("DELAY SEVERITY", outcomes[delaySeverityIndex]);
-							myTasks.finishWithResult(StatusKeys.DELAYS, outcomes[delaySeverityIndex]);
-						} catch (Exception e) {
-							myTasks.finishWithResult(StatusKeys.DELAYS, getResources().getString(R.string.txtDelaysError));
-						}
-					}
-					
-					@Override
-					public void onFailure(Throwable error, JSONObject obj) {
-						Log.e("DELAYS", error.getMessage());
-						myTasks.finishOneTask();
-					}
-				};
-			}
-			
-			@Override
-			public void execute() {
-				FlightStatsClient.getDelayDegree(airportCode, this.handler);
-			}
-		});
-		
-		myTasks.startAll();
-	} 
-
-	@Override
-	public void update(Observable observable, Object response) {
-		Bundle bundle = (Bundle) response;
-		// Test here that the value returned from the observed NetworkTaskCollection 
-		// is the one that signals success
-		if (bundle.containsKey("success")) {
-			Intent i = new Intent(this, StatusListActivity.class);
-			bundle.putString("origin", currentLocation.toString());
-			bundle.putString("airport_code", airportCode);
-			bundle.putString("airport_index", airportIndex);
-			i.putExtra("data", bundle);
-	    	startActivity(i);
-	    	finish();
-		} 
-		
-		// Otherwise, go back to the starting activity and show an error
-		
+		};
+		n.setData(airportCode, currentLocation);
+		n.run();
 	}
 }
