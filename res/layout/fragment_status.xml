@@ -65,7 +65,7 @@
         <Button
             android:id="@+id/btnDelays"
             android:layout_width="185dp"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:textColor="#fff"
             android:text="Button" />
 
@@ -89,12 +89,14 @@
     <Button
         style="@style/DirectionsButton"
         android:id="@+id/btnDrivingTime"
-        android:onClick="onClickDrivingMapButton" />
+        android:onClick="onClickDrivingMapButton"
+        android:textColor="#fff" />
 
     <Button
 		style="@style/DirectionsButton"
         android:id="@+id/btnTransitTime"
-        android:onClick="onClickTransitMapButton" />
+        android:onClick="onClickTransitMapButton"
+        android:textColor="#fff" />
 
     <RelativeLayout
         android:layout_width="match_parent"
