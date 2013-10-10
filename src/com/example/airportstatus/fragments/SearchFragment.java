@@ -60,11 +60,13 @@ public class SearchFragment extends Fragment {
     	locationListener = new LocationListener() {
     		@Override
     		public void onLocationChanged(Location location) {
-    			SharedPreferences locationPrefs = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-    			SharedPreferences.Editor editor = locationPrefs.edit();
-    			editor.putFloat(PREFS_LATITUDE, (float) location.getLatitude());
-    			editor.putFloat(PREFS_LONGITUDE, (float) location.getLongitude());
-    			editor.commit();
+    			if (isAdded()) {
+	    			SharedPreferences locationPrefs = getActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+	    			SharedPreferences.Editor editor = locationPrefs.edit();
+	    			editor.putString(PREFS_LATITUDE, String.valueOf(location.getLatitude()));
+	    			editor.putString(PREFS_LONGITUDE, String.valueOf(location.getLongitude()));
+	    			editor.commit();
+    			}
     		}
 
 			@Override
