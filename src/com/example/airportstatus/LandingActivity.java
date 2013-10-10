@@ -6,9 +6,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 public class LandingActivity extends Activity {
@@ -38,24 +41,32 @@ public class LandingActivity extends Activity {
 	}
 	
 	private void getLocation() {
-		LocationResult locationResult = new LocationResult() {
-			@Override
-			public void receivedLocation(Location location) {
-				Log.d("LOCATION_RECEIVED", location.toString());
-				LocationPreferences.setLastLocationPreferences(context, location.getLatitude(), location.getLongitude());
-				Airport airportDetails = findClosestAirport(location);
-				if (airportDetails.code != null) {
-			    	Intent i = new Intent(context, QueryActivity.class);
-			    	i.putExtra("airport_code", airportDetails.code);
-			    	i.putExtra("airport_index", String.valueOf(airportDetails.index));
-			    	startActivity(i);
-		    	} else {
-		    		Log.d("DEBUG", "Did not find nearby airport");
-		    	}
-			}
-		};
-		LocationPreferences locPrefs = new LocationPreferences();
-		locPrefs.getCurrentLocation(this.getBaseContext(), locationResult);
+		if (isOnline()) {
+			LocationResult locationResult = new LocationResult() {
+				@Override
+				public void receivedLocation(Location location) {
+					Log.d("LOCATION_RECEIVED", location.toString());
+					LocationPreferences.setLastLocationPreferences(context, location.getLatitude(), location.getLongitude());
+					Airport airportDetails = findClosestAirport(location);
+					if (airportDetails.code != null) {
+				    	Intent i = new Intent(context, QueryActivity.class);
+				    	i.putExtra("airport_code", airportDetails.code);
+				    	i.putExtra("airport_index", String.valueOf(airportDetails.index));
+				    	startActivity(i);
+			    	} else {
+			    		Log.d("DEBUG", "Did not find nearby airport");
+			    	}
+				}
+			};
+			LocationPreferences locPrefs = new LocationPreferences();
+			locPrefs.getCurrentLocation(this.getBaseContext(), locationResult);
+		} else {
+			Toast.makeText(this, "Unable to connect to Internet. Please try again later", Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	public void getLocation(View v){
+		getLocation();
 	}
 	
 	private Airport findClosestAirport(Location location) {
@@ -75,5 +86,15 @@ public class LandingActivity extends Activity {
 			index++;
 		}
 		return result;
+	}
+	
+	protected boolean isOnline() {
+	    ConnectivityManager cm =
+	        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnected()) {
+	        return true;
+	    }
+	    return false;
 	}
 }
