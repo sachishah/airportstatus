@@ -39,10 +39,18 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		setContentView(R.layout.activity_status_list);
 		intentData = getIntent().getBundleExtra("data");
 		code = intentData.getString("airport_code").toUpperCase();
-		statusFragment = new StatusFragment();
-		searchFragment = new SearchFragment();
-		savedFragment = new SavedFragment();
-		setupNavigationTabs();
+		
+	    if (savedInstanceState != null) {
+	    	statusFragment = (StatusFragment) getSupportFragmentManager().findFragmentByTag("StatusFragment");
+	    	searchFragment = (SearchFragment) getSupportFragmentManager().findFragmentByTag("SearchFragment");
+	    	savedFragment = (SavedFragment) getSupportFragmentManager().findFragmentByTag("SavedFragment");
+	    	
+	    } else {
+	    	statusFragment = new StatusFragment();
+			searchFragment = new SearchFragment();
+			savedFragment = new SavedFragment();
+			setupNavigationTabs(); 
+	    }
 		
 	}
 
