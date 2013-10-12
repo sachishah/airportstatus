@@ -148,7 +148,7 @@ public class StatusListActivity extends FragmentActivity implements TabListener 
 		statusFragment.onFavoriteAction(v);
 	}
 	
-	public void onClickRefresh(View v) {
-		statusFragment.onClickRefresh(v);
+	public void onClickRefresh(MenuItem item) {
+		statusFragment.onClickRefresh(item);
 	}
 }

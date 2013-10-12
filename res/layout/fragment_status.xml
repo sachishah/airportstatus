@@ -103,21 +103,21 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp" >
 
-        <Button
-            android:id="@+id/btnRefresh"
-            android:layout_width="160dp"
+        <TextView
+            android:id="@+id/tvRefresh"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:onClick="onClickRefresh"
-            android:text="@string/txtRefresh" />
+            android:layout_marginLeft="100dp"
+            android:textColor="#6D736D"
+            android:textSize="25sp" />
 
         <ProgressBar
             android:id="@+id/pbSmallSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/btnRefresh"
+            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@+id/tvRefresh"
             android:visibility="invisible" />
 
     </RelativeLayout>
