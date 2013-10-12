@@ -12,6 +12,9 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,14 +34,14 @@ import com.example.airportstatus.models.Favorite;
 public class StatusFragment extends Fragment {
 	
 	
-	TextView delays;
+	TextView delays, tvRefresh;
 	TextView weather;
 	String code;
 	Integer airportIndex;
 	Bundle intentData;
 	ImageView favoriteStatus;
 	boolean isFavorited;
-	Button btnDrivingTime, btnTransitTime, btnDelays, btnRefresh;
+	Button btnDrivingTime, btnTransitTime, btnDelays;
 	ProgressBar pb;
 	
 	@Override
@@ -56,6 +59,17 @@ public class StatusFragment extends Fragment {
 		setupViews();
 		setTemplateData(getActivity().getIntent());
 	}
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+	  super.onCreate(savedInstanceState);
+	  setHasOptionsMenu(true);
+
+	}
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	   inflater.inflate(R.menu.fragment_status_detail, menu);
+	}
+
 	
 	@SuppressLint({ "InlinedApi", "ResourceAsColor" })
 	private void setupViews() {
@@ -63,7 +77,7 @@ public class StatusFragment extends Fragment {
 		pb = (ProgressBar) activity.findViewById(R.id.pbSmallSpinner);
 		btnDrivingTime = (Button) activity.findViewById(R.id.btnDrivingTime);
 		btnTransitTime = (Button) activity.findViewById(R.id.btnTransitTime);
-		btnRefresh = (Button) activity.findViewById(R.id.btnRefresh);
+		tvRefresh = (TextView) activity.findViewById(R.id.tvRefresh);
 		btnDelays = (Button) activity.findViewById(R.id.btnDelays);
 		btnDrivingTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
 		btnTransitTime.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
@@ -118,7 +132,7 @@ public class StatusFragment extends Fragment {
 		this.setFavoritedStatus();
 	}
 	
-	public void onClickRefresh(View v) {
+	public void onClickRefresh(MenuItem item) {
 		// Set loading spinner state
 		toggleRefreshButton();
 		pb.setVisibility(View.VISIBLE);
@@ -172,10 +186,10 @@ public class StatusFragment extends Fragment {
 	}
 	
 	private void toggleRefreshButton() {
-		if (btnRefresh.getText() == getResources().getText(R.string.txtRefresh)) {
-			btnRefresh.setText(R.string.txtRefreshing);
+		if (tvRefresh.getText() == "") {
+			tvRefresh.setText(R.string.txtRefreshing);
 		} else {
-			btnRefresh.setText(R.string.txtRefresh);
+			tvRefresh.setText("");
 		}
 
 	}
