@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LandingActivity extends Activity {
@@ -59,9 +60,15 @@ public class LandingActivity extends Activity {
 				}
 			};
 			LocationPreferences locPrefs = new LocationPreferences();
-			locPrefs.getCurrentLocation(this.getBaseContext(), locationResult);
+			Boolean ret_result = locPrefs.getCurrentLocation(this.getBaseContext(), locationResult);
+			if (!ret_result) {
+				((TextView)findViewById(R.id.tvMessage)).setText("Tap to Refresh");
+				Toast.makeText(this, "Unable to locate your location. Please ensure gps and network connectivity is turned on and try again later.", 
+						Toast.LENGTH_LONG).show();
+			}
 		} else {
-			Toast.makeText(this, "Unable to connect to Internet. Please try again later", Toast.LENGTH_LONG).show();
+			((TextView)findViewById(R.id.tvMessage)).setText("Tap to Refresh");
+			Toast.makeText(this, "Unable to connect to Internet. Please try again later.", Toast.LENGTH_LONG).show();
 		}
 	}
 	

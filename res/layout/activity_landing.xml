@@ -18,16 +18,17 @@
         android:src="@drawable/airport_logo" />
 
     <TextView
-        android:id="@+id/tvAirportName"
+        android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"
-        android:gravity="center"
-        android:hint="Tap to Refresh"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:clickable="true"
-        android:onClick="getLocation" />
+        android:gravity="center"
+        android:onClick="getLocation"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#6D736D"
+        android:textSize="30sp" />
 
 </RelativeLayout>
