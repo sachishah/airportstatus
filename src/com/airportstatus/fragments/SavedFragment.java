@@ -1,4 +1,4 @@
-package com.example.airportstatus.fragments;
+package com.airportstatus.fragments;
 
 import java.util.ArrayList;
 
@@ -11,9 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.airportstatus.R;
-import com.example.airportstatus.SavedFavoritesAdapter;
-import com.example.airportstatus.models.Favorite;
+import com.airportstatus.R;
+import com.airportstatus.adapters.SavedFavoritesAdapter;
+import com.airportstatus.models.Favorite;
 
 public class SavedFragment extends Fragment {
 	private ListView lv;

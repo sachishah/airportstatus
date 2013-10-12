@@ -1,4 +1,4 @@
-package com.example.airportstatus;
+package com.airportstatus.activities;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -11,7 +11,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.airportstatus.models.TravelTimeEstimate;
+import com.airportstatus.R;
+import com.airportstatus.helpers.LocationPreferences;
+import com.airportstatus.helpers.NetworkTaskCollectionRunner;
+import com.airportstatus.models.TravelTimeEstimate;
 
 public class QueryActivity extends Activity {
 	private String airportCode, airportIndex;
@@ -77,8 +80,8 @@ public class QueryActivity extends Activity {
 				// Test here that the value returned from the observed NetworkTaskCollection 
 				// is the one that signals success
 				if (bundle.containsKey("success")) {
-					Intent i = new Intent(this.context, StatusListActivity.class);
-					bundle.putString("origin", TravelTimeEstimate.getCoordinates(this.location));
+					Intent i = new Intent(this.getContext(), StatusListActivity.class);
+					bundle.putString("origin", TravelTimeEstimate.getCoordinates(this.getLocation()));
 					bundle.putString("airport_code", airportCode);
 					bundle.putString("airport_index", airportIndex);
 					i.putExtra("data", bundle);

@@ -1,9 +1,9 @@
-package com.example.airportstatus.models;
+package com.airportstatus.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AirportStatus extends BaseModel {
+public class AirportStatusModel extends BaseModel {
 	
 	public String getName() {
 		return getString("name");
@@ -53,8 +53,8 @@ public class AirportStatus extends BaseModel {
     	return getStatusValue("minDelay");
     }
 
-    public static AirportStatus fromJson(JSONObject json) {
-        AirportStatus airport = new AirportStatus();
+    public static AirportStatusModel fromJson(JSONObject json) {
+        AirportStatusModel airport = new AirportStatusModel();
 
         try {
             airport.jsonObject = json;

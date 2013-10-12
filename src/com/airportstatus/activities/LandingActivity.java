@@ -1,6 +1,11 @@
-package com.example.airportstatus;
+package com.airportstatus.activities;
 
 import java.util.ArrayList;
+
+import com.airportstatus.R;
+import com.airportstatus.helpers.LocationPreferences;
+import com.airportstatus.helpers.LocationResult;
+import com.airportstatus.models.Airport;
 
 import android.app.Activity;
 import android.content.Context;
@@ -46,13 +51,13 @@ public class LandingActivity extends Activity {
 			LocationResult locationResult = new LocationResult() {
 				@Override
 				public void receivedLocation(Location location) {
-					Log.d("LOCATION_RECEIVED", location.toString());
+					//Log.d("LOCATION_RECEIVED", location.toString());
 					LocationPreferences.setLastLocationPreferences(context, location.getLatitude(), location.getLongitude());
 					Airport airportDetails = findClosestAirport(location);
-					if (airportDetails.code != null) {
+					if (airportDetails.getCode() != null) {
 				    	Intent i = new Intent(context, QueryActivity.class);
-				    	i.putExtra("airport_code", airportDetails.code);
-				    	i.putExtra("airport_index", String.valueOf(airportDetails.index));
+				    	i.putExtra("airport_code", airportDetails.getCode());
+				    	i.putExtra("airport_index", String.valueOf(airportDetails.getIndex()));
 				    	startActivity(i);
 			    	} else {
 			    		Log.d("DEBUG", "Did not find nearby airport");

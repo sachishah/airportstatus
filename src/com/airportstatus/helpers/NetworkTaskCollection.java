@@ -1,7 +1,8 @@
-package com.example.airportstatus;
+package com.airportstatus.helpers;
 
 import java.util.ArrayList;
 import java.util.Observable;
+
 
 import android.os.Bundle;
 import android.util.Log;

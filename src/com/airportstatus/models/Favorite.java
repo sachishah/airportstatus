@@ -1,4 +1,4 @@
-package com.example.airportstatus.models;
+package com.airportstatus.models;
 
 import java.util.ArrayList;
 import java.util.List;

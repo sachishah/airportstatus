@@ -1,4 +1,4 @@
-package com.example.airportstatus.fragments;
+package com.airportstatus.fragments;
 
 import java.util.ArrayList;
 
@@ -18,9 +18,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.airportstatus.Airport;
-import com.example.airportstatus.QueryActivity;
-import com.example.airportstatus.R;
+import com.airportstatus.R;
+import com.airportstatus.activities.QueryActivity;
+import com.airportstatus.models.Airport;
 
 public class SearchFragment extends Fragment {
 	

@@ -1,4 +1,4 @@
-package com.example.airportstatus.fragments;
+package com.airportstatus.fragments;
 
 import java.util.ArrayList;
 
@@ -22,13 +22,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.airportstatus.Airport;
-import com.example.airportstatus.LocationPreferences;
-import com.example.airportstatus.LocationResult;
-import com.example.airportstatus.NetworkTaskCollectionRunner;
-import com.example.airportstatus.R;
-import com.example.airportstatus.StatusKeys;
-import com.example.airportstatus.models.Favorite;
+import com.airportstatus.R;
+import com.airportstatus.helpers.LocationPreferences;
+import com.airportstatus.helpers.LocationResult;
+import com.airportstatus.helpers.NetworkTaskCollectionRunner;
+import com.airportstatus.helpers.StatusKeys;
+import com.airportstatus.models.Airport;
+import com.airportstatus.models.Favorite;
 
 
 public class StatusFragment extends Fragment {
@@ -178,10 +178,14 @@ public class StatusFragment extends Fragment {
 	}
 	
 	private void updateTransitButton(String time) {
+		if (time == null)
+			time = "n/a";
 		btnTransitTime.setText("Transit Directions: " + time);
 	}
 	
 	private void updateDelaysButton(String time) {
+		if (time == null)
+			time = "n/a";
 		btnDelays.setText("Status: " + time);
 	}
 	

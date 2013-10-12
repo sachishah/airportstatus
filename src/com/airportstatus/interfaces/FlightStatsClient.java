@@ -1,4 +1,4 @@
-package com.example.airportstatus;
+package com.airportstatus.interfaces;
 
 import org.json.JSONArray;
 import org.json.JSONException;

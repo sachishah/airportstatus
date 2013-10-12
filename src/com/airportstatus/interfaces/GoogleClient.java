@@ -1,4 +1,4 @@
-package com.example.airportstatus;
+package com.airportstatus.interfaces;
 
 import com.loopj.android.http.*;
 

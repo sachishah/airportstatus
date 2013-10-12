@@ -1,4 +1,4 @@
-package com.example.airportstatus;
+package com.airportstatus.helpers;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 

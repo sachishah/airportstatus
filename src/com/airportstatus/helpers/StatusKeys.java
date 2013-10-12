@@ -1,4 +1,4 @@
-package com.example.airportstatus;
+package com.airportstatus.helpers;
 
 public class StatusKeys {
 	public static final String TRAVEL_TIME_DRIVING = "travelTimeDriving";

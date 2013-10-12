@@ -1,4 +1,4 @@
-package com.example.airportstatus;
+package com.airportstatus.helpers;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -10,24 +10,26 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.airportstatus.models.TravelTimeEstimate;
+import com.airportstatus.R;
+import com.airportstatus.interfaces.FlightStatsClient;
+import com.airportstatus.models.TravelTimeEstimate;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public abstract class NetworkTaskCollectionRunner implements Observer {
 	
 	NetworkTaskCollection myTasks;
-	Context context;
-	Location location; 
+	private Context context;
+	private Location location; 
 	String airportCode;
 	
 	public NetworkTaskCollectionRunner(Context c) {
-		 this.context = c;
+		 this.setContext(c);
 		 myTasks = new NetworkTaskCollection();
 	}
 	
 	public void setData(String airportCode, Location location) {
 		this.airportCode = airportCode;
-		this.location = location;
+		this.setLocation(location);
 	}
 	
 	public void run() {
@@ -58,7 +60,7 @@ public abstract class NetworkTaskCollectionRunner implements Observer {
 
 			@Override
 			public void execute() {
-				TravelTimeEstimate.getDrivingTime(TravelTimeEstimate.getCoordinates(location), airportCode, this.handler);
+				TravelTimeEstimate.getDrivingTime(TravelTimeEstimate.getCoordinates(getLocation()), airportCode, this.handler);
 			}
 		});
 		
@@ -88,7 +90,7 @@ public abstract class NetworkTaskCollectionRunner implements Observer {
 			
 			@Override
 			public void execute() {
-				TravelTimeEstimate.getTransitTime(TravelTimeEstimate.getCoordinates(location), airportCode, this.handler);
+				TravelTimeEstimate.getTransitTime(TravelTimeEstimate.getCoordinates(getLocation()), airportCode, this.handler);
 			}
 		});
 		
@@ -134,13 +136,13 @@ public abstract class NetworkTaskCollectionRunner implements Observer {
 				this.handler = new JsonHttpResponseHandler() {
 					@Override
 					public void onSuccess(JSONObject response) {
-						String[] outcomes = context.getResources().getStringArray(R.array.txtDelayLabels);
+						String[] outcomes = getContext().getResources().getStringArray(R.array.txtDelayLabels);
 						try {
 							int delaySeverityIndex = FlightStatsClient.getDelayIndex(response);
 							Log.d("DELAY SEVERITY", outcomes[delaySeverityIndex]);
 							myTasks.finishWithResult(StatusKeys.DELAYS, outcomes[delaySeverityIndex]);
 						} catch (Exception e) {
-							myTasks.finishWithResult(StatusKeys.DELAYS, context.getResources().getString(R.string.txtDelaysError));
+							myTasks.finishWithResult(StatusKeys.DELAYS, getContext().getResources().getString(R.string.txtDelaysError));
 						}
 					}
 					
@@ -168,5 +170,21 @@ public abstract class NetworkTaskCollectionRunner implements Observer {
 	@Override
 	public void update(Observable observable, Object response) {
 		this.handleResult((Bundle) response);
+	}
+
+	public Context getContext() {
+		return context;
+	}
+
+	public void setContext(Context context) {
+		this.context = context;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
 	} 
 }

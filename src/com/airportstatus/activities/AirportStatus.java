@@ -1,4 +1,4 @@
-package com.example.airportstatus;
+package com.airportstatus.activities;
 
 import android.content.Context;
 

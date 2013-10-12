@@ -1,4 +1,4 @@
-package com.example.airportstatus;
+package com.airportstatus.activities;
 
 
 import android.annotation.SuppressLint;
@@ -17,10 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.airportstatus.fragments.SavedFragment;
-import com.example.airportstatus.fragments.SearchFragment;
-import com.example.airportstatus.fragments.StatusFragment;
-import com.example.airportstatus.models.TravelTimeEstimate;
+import com.airportstatus.R;
+import com.airportstatus.fragments.SavedFragment;
+import com.airportstatus.fragments.SearchFragment;
+import com.airportstatus.fragments.StatusFragment;
+import com.airportstatus.models.TravelTimeEstimate;
 
 
 

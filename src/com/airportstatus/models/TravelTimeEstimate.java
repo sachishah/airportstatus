@@ -1,4 +1,4 @@
-package com.example.airportstatus.models;
+package com.airportstatus.models;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,7 +8,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
 
-import com.example.airportstatus.GoogleClient;
+import com.airportstatus.interfaces.GoogleClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 

@@ -1,7 +1,11 @@
-package com.example.airportstatus;
+package com.airportstatus.adapters;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.airportstatus.R;
+import com.airportstatus.activities.QueryActivity;
+import com.airportstatus.models.Airport;
 
 import android.content.Context;
 import android.content.Intent;

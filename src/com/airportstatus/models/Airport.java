@@ -1,18 +1,34 @@
-package com.example.airportstatus;
+package com.airportstatus.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class Airport {
-	String code;
-	int index;
+	private String code;
+	private int index;
 	
 	public Airport(String iataCode, int index) {
-		this.code = iataCode;
-		this.index = index;
+		this.setCode(iataCode);
+		this.setIndex(index);
 	}
 	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
 	// need to add more airport codes
 	// http://www.tsa.gov/data/apcp.xml
 	// if you add an airport code to IATA_CODES you MUST

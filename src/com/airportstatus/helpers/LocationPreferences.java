@@ -1,7 +1,8 @@
-package com.example.airportstatus;
+package com.airportstatus.helpers;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 import android.content.Context;
 import android.content.SharedPreferences;
